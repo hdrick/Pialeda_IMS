@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}" />
+    <title>Pialeda</title>
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <!-- Font awesome local -->
+    <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
+    <!--custom css for header-->
+    <!--    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/header.css}">-->
+    <!--custom css for vr-->
+    <!--    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/style.css}">-->
+    <!-- <style>
+      .div1 .div2 .div3 input,#total-amt,#addVat,#amtNetVat,#totalSalesVatInc{
+          border: none;
+          outline: none;
+    }
+    </style> -->
+</head>
+<body class="body">
+<div class="container">
+    <h2 style="margin-top: 2%;">List of Official Receipt</h2>
+    <!-- <label for="clientNameInput" style="font-weight: bolder;">Client Name:</label>
+    <input type="text" id="clientNameInput" placeholder="Enter client name">
+
+    <label for="supplierNameInput" style="font-weight: bolder;">Supplier Name:</label>
+    <input type="text" id="supplierNameInput" placeholder="Enter supplier name">
+
+
+    <label for="invoiceNumInput" style="font-weight: bolder;">Invoice Number:</label>
+    <input type="text" id="invoiceNumInput" placeholder="Enter invoice number">
+    <button id="searchButton" class="btn btn-primary">Search</button> -->
+
+    <div class="table-responsive">
+        <table id="invoicesTable" class="table table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Invoice Number</th>
+              <th>PO Number</th>
+              <th>Client Name</th>
+              <th>Client Address</th>
+              <th>Supplier Address</th>
+              <th>Supplier Name</th>
+              <th>Created Date</th>
+              <th>Contact Person</th>
+              <th>Total Amount</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- <tr th:each="inv: ${invoiceList}">
+              <td id="inv-id" th:text="${inv.id}" style="display: none;"></td>
+              <td th:text="${inv.invoiceNum}" style="font-weight: bolder;"></td>
+              <td th:text="${inv.poNum}" style="font-weight: bolder;"></td>
+              <td th:text="${inv.clientName}"></td>
+              <td th:text="${inv.clientAddress}"></td>
+              <td th:text="${inv.supplierAddress}"></td>
+              <td th:text="${inv.supplierName}"></td>
+              <td th:text="${inv.dateCreated}"></td>
+              <td th:text="${inv.clientContactPerson}"></td>
+              <td th:text="${inv.grandTotal}" style="font-weight: bolder; color:red;"></td>
+              <td>
+                Button trigger modal
+                <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" th:data-id="${inv.id}" onclick="fillModalFields(this.getAttribute('data-id'))"> Edit </a>
+              </td>
+            </tr> -->
+          </tbody>
+        </table>
+      </div>
+      
+</div>
+<!-- <div class="container">
+    <p>Total Invoice: [[${totalItem}]]</p>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li th:if="${currentPage !=0}" class="page-item">
+                <a class="page-link" th:href="@{'/page/'+${currentPage-1}}">Previous</a>
+            </li>
+            <li th:if="${currentPage > 5}" class="page-item">
+                <a class="page-link" th:href="@{'/page/0'}">1</a>
+            </li>
+            <li th:if="${currentPage > 6}" class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+            <li th:each="i:${#numbers.sequence(currentPage - 4, currentPage + 5)}" th:classappend="${currentPage==i-1? 'active': '' }" class="page-item" th:if="${i >= 1 and i <= totalPages}">
+                <a class="page-link" th:href="@{'/page/'+${i-1}}">[[${i}]]</a>
+            </li>
+            <li th:if="${currentPage < totalPages - 7}" class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+            <li th:if="${currentPage < totalPages - 6}" class="page-item">
+                <a class="page-link" th:href="@{'/page/'+${totalPages-1}}">[[${totalPages}]]</a>
+            </li>
+            <li th:if="${currentPage+1!=totalPages}" class="page-item">
+                <a class="page-link" th:href="@{'/page/'+${currentPage+1}}">Next</a>
+            </li>
+            <a  th:href="@{/marketing-invoice}" class="btn ml-auto btn-dark" style="color: white;">Go Back</a>
+        </ul>
+    </nav>
+
+</div> -->
+<!-- Bootstrap JavaScript -->
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+</body>
+</html>

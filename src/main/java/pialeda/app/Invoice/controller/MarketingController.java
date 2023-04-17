@@ -143,7 +143,17 @@ public class MarketingController {
         return supplierInfo;
     }
 
+    @GetMapping("/official-receipt-list")
+    public String officialReceiptList(){
+        // Page<Invoice> invoiceList= invoiceService.getInvoicesPaginated(pageno, 8);
 
+        // model.addAttribute("invoiceList", invoiceList);
+        // model.addAttribute("currentPage",pageno);
+        // model.addAttribute("totalPages",invoiceList.getTotalPages());
+        // model.addAttribute("totalItem", invoiceList.getTotalElements());
+
+        return "marketing/listofficialreceipt";
+    }
 
     @GetMapping("/invoice-view")
     public String invoiceView(Model model){
@@ -159,7 +169,6 @@ public class MarketingController {
             return destination = "redirect:/admin-dashboard";
         }
         return destination;
-
     }
 
     @GetMapping("/page/{pageno}")
@@ -184,11 +193,25 @@ public class MarketingController {
         result.put("invoiceNum", inv.getInvoiceNum());
         result.put("poNum", inv.getPoNum());
         result.put("dateCreated", inv.getDateCreated());
+
         result.put("supplierName", inv.getSupplierName());
+        result.put("supplierAddress", inv.getSupplierAddress());
+        result.put("supplierTin", inv.getSupplierTin());
+
+
+
         result.put("clientName", inv.getClientName());
+        result.put("clientBusStyle", inv.getClientBusStyle());
+        result.put("clientTerms", inv.getClientTerms());
+        result.put("clientAddress", inv.getClientAddress());
+        result.put("clientTin", inv.getClientTin());
+
         result.put("clientContactPerson", inv.getClientContactPerson());
         result.put("productList", prodList);
 
+        result.put("addVat", inv.getAddVat());
+        result.put("amountNetOfVat", inv.getAmountNetOfVat());
+        result.put("totalSalesVatInc", inv.getTotalSalesVatInc());
         return result;
     }
 
@@ -340,4 +363,7 @@ public class MarketingController {
         }
         return destination;
     }
+
+
+
 }

@@ -19,8 +19,19 @@ function fillModalFields(invId) {
             $('#inv-num').val(data.invoiceNum);
             $('#po-num').val(data.poNum);
             $('#date-created').val(data.dateCreated);
+
             $('#supp-name').val(data.supplierName);
+            $('#supp-address').val(data.supplierAddress);
+            $('#supp-tin').val(data.supplierTin);
+
+
+
             $('#client-name').val(data.clientName);
+            $('#client-bStyle').val(data.clientBusStyle);
+            $('#client-terms').val(data.clientTerms);
+            $('#client-address').val(data.clientAddress);
+            $('#client-tin').val(data.clientTin);
+
             $('#client-cp').val(data.clientContactPerson);
 
             // Fill the invoice product table
@@ -48,6 +59,9 @@ function fillModalFields(invId) {
                 totalAmt += parseFloat(prodInfo.amount); // Add to total amount
             }
             $('#total-amt').val(totalAmt.toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2})); // Set the formatted value of the total amount input
+            $('#addVat').val(data.addVat.toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2})); // Set the formatted value of the total amount input
+            $('#amtNetVat').val(data.amountNetOfVat.toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2})); // Set the formatted value of the total amount input
+            $('#totalSalesVatInc').val(data.totalSalesVatInc.toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2})); // Set the formatted value of the total amount input
 
             // Update the input values when the contenteditable td is changed
             $('#product-table tbody td[contenteditable="true"]').on('input', function() {
