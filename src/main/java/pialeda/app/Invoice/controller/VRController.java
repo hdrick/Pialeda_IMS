@@ -491,10 +491,23 @@ public class VRController {
         return "vr-staff/vr";
     }
 
-    @GetMapping("/vr/user/invoice/getinvoice")
-    public String viewInvoice(){
+    @GetMapping("/vr/user/invoice/invoiceDetails/{invoiceNum}")
+    public String viewInvoice(Model model, @PathVariable("invoiceNum") String invoiceNum)
+    {
         String role = GlobalUser.getUserRole();
-        String newRole = GlobalUser.setUserRole(null);
+
+        if(role == null)
+        {
+            String jsCode = "<script>window.close();</script>";
+            model.addAttribute("jsCode", jsCode);
+            model.addAttribute("autoClose", true);
+            return "vr-staff/vr-invoice";
+        }
+
+        Invoice invoiceDetails = invoiceService.getInvoiceDetails(invoiceNum);
+
+        model.addAttribute("invoiceDetails", invoiceDetails);
+
         return "vr-staff/vr-invoice";
     }
 }
