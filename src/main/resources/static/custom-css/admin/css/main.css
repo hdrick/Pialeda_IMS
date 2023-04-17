@@ -1,0 +1,158 @@
+.main-con{
+    background-color: #00000;
+    height:100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* header Starts..*/
+.header-con{
+    background-color: white;
+    color: #003D2B;
+    border: solid 1px gray;
+    height: 80px;
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.header-con .left-con #bx1 img{
+    width: 100%;
+    height: 100%;
+margin-bottom: 10px;
+}
+
+.header-con .left-con{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+
+}
+
+.header-con .right-con{
+    margin-right: 2%;
+    display: flex;
+    flex-direction: row;
+
+}
+.header-con .right-con div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-con .right-con div a{
+    color: #003D2B;
+    text-decoration: none;
+}
+
+.header-con .left-con label{
+    font-family: sans-serif;
+    color:  #003D2B;
+    font-size: 2em;
+    font-weight: bolder;
+}
+.header-con .left-con #bx1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.header-con .left-con #bx2{
+    margin-left: -20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+/* header end..*/
+
+/* main-con2 start..*/
+.main-con2{
+   height: 100%;
+   width: 100%;
+
+   display: flex;
+}
+
+/* sidebar start..*/
+.sideBar-con{
+    background-color: #003D2B;
+    height: 100%;
+    width: 17%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+}
+
+.sideBar-con .sideBar-bx1 div{
+    padding: 8%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+}
+.sideBar-con .sideBar-bx1 div .label{
+    margin-left: 10%;
+    color: white;
+    font-size: 1rem;
+    font-style: normal;
+    font-weight: bolder;
+}
+
+.sideBar-con .sideBar-bx1 div .label a{
+    color: white;
+}
+
+
+.sideBar-con .sideBar-bx1 div i{
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+.sideBar-con .sideBar-bx2{
+     display: flex;
+     justify-content: center;
+
+}
+.sideBar-con .sideBar-bx2 i{
+    font-style: normal;
+    color: #f3f3f3;
+    font-weight: bolder;
+    font-size: 1.5rem;
+    margin-bottom: 15%;
+}
+
+.sideBar-con .sideBar-bx2 i{
+    font-style: normal;
+    color: #f3f3f3;
+    font-weight: bolder;
+    font-size: 1.5rem;
+    margin-bottom: 15%;
+}
+
+.sideBar-con .sideBar-bx1 div:hover{
+    background-color: #f3f3f3;
+    cursor: pointer;
+}
+
+
+
+.sideBar-con .sideBar-bx1 div:hover i,
+.sideBar-con .sideBar-bx1 div:hover a {
+    color: #003D2B;
+}
+
+
+
+
+
+
+

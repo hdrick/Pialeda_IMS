@@ -1,0 +1,26 @@
+
+/** Body **/
+.body
+{
+    background-color: #ddd;
+}
+.content-body
+{
+    margin: 50px 0 10px 0;
+    height: 100%;
+ }
+.view-panel
+{
+    background-color: #fff;
+    margin: 0 0 10px 0;
+    border: 1px solid #f3f3f3;
+    border-radius: 5px;
+    padding: 15px;
+    min-height: 548px;
+    width: 100%;
+    position: relative;
+    -webkit-box-shadow: 0 3px 5px rgb(57 63 72 / 30%);
+    -moz-box-shadow: 0 3px 5px rgba(57, 63, 72, 0.3);
+    box-shadow: 0 3px 5px rgb(57 63 72 / 30
+}
+

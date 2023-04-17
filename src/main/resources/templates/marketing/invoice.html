@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}"/>
+    <title>Pialeda</title>
+
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <!-- Font awesome local -->
+    <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
+    <!--custom css for header-->
+    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/header.css}">
+    <!--custom css for vr-->
+    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/style.css}">
+</head>
+<body class="body">
+<div class="main-con">
+    <!--Header starts-->
+    <div class="header-con">
+        <div class="left-con">
+            <div id="bx1">
+                <img id="h-logo" th:src="@{/icon/LOGO.png}" alt="Logo">
+            </div>
+            <div id="bx2">
+                <label id="logo-name">PIALEDA</label>
+            </div>
+        </div>
+        <div class="right-con">
+            <div>
+                <i class="fa-solid fa-user"></i>
+                <a class="m-2" ><span th:text="${fullName}"></span></a>
+                <a href="#" class="" data-toggle="modal" data-target="#logoutModal">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    <form id="myForm" th:action="@{/createInvoice}" th:object="${invoiceInfo}" method="POST">
+        <div class="main-con2" style="margin-top: 8%;">
+            <div class="main-bx1">
+                <!--Client List  -->
+                <select id="my-client" onchange="getClientInfo()" style="font-weight: bolder;" required>
+                    <option value="" selected>Select Client</option>
+                    <option th:each="client : ${clientList}" th:value="${client.name}" th:text="${client.name}" style="font-weight: bolder;"></option>
+                </select>
+                <!--Supplier List  -->
+                <select id="my-supplier" onchange="getSupplierInfo()" style="font-weight: bolder;" required>
+                    <option value="" selected>Select Supplier</option>
+                    <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}" style="font-weight: bolder;"></option>
+                </select>
+                <!--Supplier button  -->
+                <a id="btn-addSupplier" class="btn btn-success" data-toggle="modal" data-target="#supplierModal">Add Supplier</a>
+                <!--Client button  -->
+                <a id="btn-addClient" class="btn btn-success" data-toggle="modal" data-target="#clientModal">Add Client</a>
+                <!--button for create Official receipt  -->
+                <div>
+                    <a id="btn-OR" class="btn btn-warning" th:href="@{/marketing-officialreceipt}">Create OR</a>
+                    <a id="btn-CR" class="btn btn-dark" th:href="@{/marketing-collectionreceipt}">Create CR</a>
+                </div>
+
+                <div>
+                    <a id="add-row-btn" class="btn">Add Item</a>
+                    <a id="delete-row-btn" class="btn">Delete Item</a>
+                </div>
+            </div>
+            <div id="inv-con" class="" style="background-color: white; width: 8.5in; height: 11in; margin-bottom: 0.5in;">
+                <!--Supplier information  -->
+                <div id="header">
+                    <div class="col-12 text-center mb-3">
+                        <div class="align-items-center justify-content-between">
+                            <div class="d-flex align-items-center hstyle" style="justify-content: space-between;">
+                                <h2 id="logo-suppName" class="mt-2 mx-4" contenteditable="true" style="font-size: 18px; width: 10%;">Supplier</h2>
+                                <div id="supp-details">
+                                    <!-- Supplier Name-->
+                                    <h3 id="supp-name" class="mt-2 mx-4" contenteditable="true">Supplier Name</h3>
+                                    <input type="hidden" th:field="*{supplierName}" id="supp-name-input">
+                                    <!-- Supplier Address-->
+                                    <span id="supp-addrs" >Supplier Address</span>
+                                    <input type="hidden" th:field="*{supplierAddress}" id="supp-addrs-input">
+                                    <!-- Supplier TIN-->
+                                    <span id="supp-tin" >Supplier TIN</span>
+                                    <input type="hidden" th:field="*{supplierTin}" id="supp-tin-input">
+                                </div>
+                                <div style="font-weight: bolder;">
+                                    <div id="s-invo-con">
+                                        <label style="width: 150px;">SALES INVOICE:</label>
+                                        <span  id="invoice-number" style="color: red;" th:text="${generateInvNum}"></span>
+                                        <!-- <label id="invoice-number" style="color: red;" th:text="${generateInvNum}"></label> -->
+                                        <input type="hidden" th:field="*{invoiceNum}" id="invoice-number-input" >
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Client information  -->
+                <div id="header2">
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <div id="st-con">
+                                <div id="st-title" style="font-weight: bolder; margin-right: 6%; color:green;">Sold to:</div>
+                                <div id="st-value"><span id="client-name" contenteditable="true"></span></div>
+                                <input type="hidden" th:field="*{clientName}" id="client-name-input">
+                            </div>
+                            <div id="tin-con">
+                                <div id="tin-title" style="font-weight: bolder; margin-right: 12.5%; color:green;">TIN:</div>
+                                <div id="tin-value"><span  id="client-tin" contenteditable="true"></span></div>
+                                <input type="hidden" th:field="*{clientTin}" id="client-tin-input">
+                            </div>
+                            <div id="addrs-con">
+                                <div id="addrs-title" style="font-weight: bolder; margin-right: 4%; color:green;">Address:</div>
+                                <div id="addrs-value"><span  id="client-address" contenteditable="true"></span></div>
+                                <input type="hidden" th:field="*{clientAddress}" id="client-address-input">
+                            </div>
+                            <div id="bs-con">
+                                <div id="bs-title" style="font-weight: bolder; margin-right: 1%; color:green;">Bus. Style:</div>
+                                <div id="bs-value"><span  id="client-busStyle" contenteditable="true"></span></div>
+                                <input type="hidden" th:field="*{clientBusStyle}" id="client-busStyle-input">
+                            </div>
+
+                        </div>
+                        <div class="col-6 text-right">
+                            <div id="d-con">
+                                <div id="d-title" style="font-weight: bolder; margin-right: 15%; color:green;">Date:</div>
+                                <!-- <div id="d-value"><span  id="client-date" contenteditable="true"></span></div> -->
+                                <input  name="invDate" type="date" id="client-date-input" required>
+                            </div>
+                            <div id="tm-con">
+                                <div id="tm-title" style="font-weight: bolder; margin-right: 13%; color:green;">Terms:</div>
+                                <div id="tm-value"><span  id="client-terms" contenteditable="true"></span></div>
+                                <input type="hidden" th:field="*{clientTerms}" id="client-terms-input">
+                            </div>
+                            <div id="po-con">
+                                <div id="po-title" style="font-weight: bolder; margin-right: 9%; color:green;">P.O. No.:</div>
+                                <!-- <div id="po-value"><span id="client-poNumber"></span></div> -->
+                                <div id="po-value"><span id="client-poNumber" th:text="${generatePONum}"></span></div>
+                                <input type="hidden"  th:field="*{poNum}" id="client-poNumber-input">
+                            </div>
+                            <div id="cp-con">
+                                <div id="cp-title" style="font-weight: bolder; margin-right: 1%; color:green;">Con. Person:</div>
+                                <div id="cp-value"><span  id="client-conPerson" contenteditable="true"></span></div>
+                                <input type="hidden"  th:field="*{clientContactPerson}" id="client-conPerson-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="body">
+                    <div class="row">
+                        <div class="col-12 table-responsive" style="height: 650px;">
+                            <table id="myTable" class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th style="font-size: 12px; width: 10%; text-align: center; color: white;">QTY</th>
+                                    <th style="font-size: 12px; width: 10%; text-align: center;color: white;">UNIT</th>
+                                    <th style="font-size: 12px; width: 60%; text-align: center;color: white;">ARTICLES</th>
+                                    <th style="font-size: 12px; width: 10%; text-align: center;color: white;">U-PRICE</th>
+                                    <th style="font-size: 12px; width: 10%; text-align: center;color: white;">AMOUNT</th>
+                                </tr>
+                                </thead>
+                                <tbody id="table-body" class="scrollable-table">
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-12" style="display: flex; flex-direction: row; justify-content: end; padding-right: 50px;">
+                            <div style="font-size: 0.8em;">
+                                <div style="display: flex; justify-content: space-between">
+                                    <span style="font-weight: bolder">Total Sales(VAT Inclusive)</span>
+                                    <span id="totalSale-VatIncl" style="color:red;font-weight:bolder;">₱ 0.00</span>
+                                    <input type="hidden" th:field="*{totalSalesVatInc}" id="totalSalesVatInc-input">
+                                </div>
+                                <div style="display: flex; justify-content: space-between">
+                                    <span style="font-weight: bolder">Amount: Net of VAT</span>
+                                    <span id="amount-NOV" style="color:red;font-weight:bolder;">₱ 0.00</span>
+                                    <input type="hidden" th:field="*{amountNetOfVat}" id="amountNetOfVat-input">
+                                </div>
+                                <div style="display: flex; justify-content: space-between">
+                                    <span style="font-weight: bolder">Add: VAT</span>
+                                    <span id="add-VAT" style="color:red;font-weight:bolder;">₱ 0.00</span>
+                                    <input type="hidden" th:field="*{addVat}" id="addVat-input">
+                                </div>
+                                <div style="display: flex; justify-content: space-between">
+                                    <span style="font-weight: bolder">Total Amount Due:</span>
+                                    <span id="totalAmount-due" style="color:red;font-weight:bolder;">₱ 0.00</span>
+                                    <input type="hidden" th:field="*{grandTotal}" id="grandTotal-input">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="footer">
+                    <div>
+                        <div id="bx-1">
+                            <span  id="cashier-name" contenteditable="true" th:text="${fullName}"></span>
+                            <input type="hidden" th:field="*{cashier}" id="cashier-name-input">
+                            <div style="width: 200px; height: 1px; background-color: black;"></div>
+                        </div>
+                        <div id="bx-2">
+                            <label style="font-size: 10px; margin-left: 25.5px;">Cashier/Authorized Representative</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="main-bx2">
+                <!--            <a id="btn-Gen" class="btn btn-success" onclick="generateInvNum()">Generate</a>-->
+                <input id="btn-Create" type="submit" class="btn btn-success" value="Save Invoice">
+                <a id="btn-invoices" class="btn btn-success" th:href="@{/invoice-view}">List of Invoice</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Client Modal -->
+<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true" style="margin-top: 4%;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clientModalLabel">Client</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/createClient}" th:object="${clientInfo}" method="POST">
+                    <div class="mb-3">
+                        <label for="clientName" class="form-label">Client Name</label>
+                        <input th:field="*{name}" type="text" class="form-control" id="clientName" name="clientName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input th:field="*{address}" type="text" class="form-control" id="address" name="address" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cityAddress" class="form-label">City Address</label>
+                        <input th:field="*{cityAddress}" type="text" class="form-control" id="cityAddress" name="cityAddress" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="clientTIN" class="form-label">TIN #</label>
+                            <input th:field="*{tin}" type="text" class="form-control" id="clientTIN" name="clientTIN" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label  class="form-label">Agent</label>
+                            <input th:field="*{agent}" type="text" class="form-control" id="agent" name="agent" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label  class="form-label">Bus. Style</label>
+                            <input th:field="*{busStyle}" type="text" class="form-control" id="busStyle" name="busStyle">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label  class="form-label">Terms</label>
+                            <input th:field="*{terms}" type="text" class="form-control" id="terms" name="terms">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" style="background-color: #003D2B; border-color: #003D2B;">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Supplier Modal -->
+<div class="modal fade" id="supplierModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true" style="margin-top: 4%;">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="supplierModalLabel">Supplier</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/createSupplier}" th:object="${supplierInfo}" method="POST">
+                    <div class="mb-3">
+                        <label  class="form-label">Supplier Name</label>
+                        <input th:field="*{name}" type="text" class="form-control" id="supplierName" name="suppName" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input th:field="*{address}" type="text" class="form-control" id="suppAddress" name="suppAddress" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="cityAddress" class="form-label">City Address</label>
+                            <input th:field="*{cityAddress}" type="text" class="form-control" id="suppCityAddress" name="suppCityAddress" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label  class="form-label">TIN #</label>
+                            <input th:field="*{tin}" type="text" class="form-control" id="suppClientTIN" name="suppClientTIN" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label  class="form-label">Limit</label>
+                            <input  th:field="*{limit}" type="text" class="form-control" id="suppLimit" name="suppLimit" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label  class="form-label">SEC #</label>
+                        <input th:field="*{secNum}" type="text" class="form-control" id="suppSec" name="suppSec">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label  class="form-label">SEC YEAR</label>
+                            <input th:field="*{secYear}" type="text" class="form-control" id="suppSecYr" name="suppSecYr">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label  class="form-label">ATP</label>
+                            <input th:field="*{atp}" type="text" class="form-control" id="suppATP" name="suppATP">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">COR #</label>
+                            <input th:field="*{corNum}" type="text" class="form-control" id="suppCOR" name="suppCOR">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label  class="form-label">COR Date</label>
+                            <input th:field="*{corDate}" type="text" class="form-control" id="suppCORDate" name="suppCORDate">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" style="background-color: #003D2B; border-color: #003D2B;">Save changes</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Logout Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to logout?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn" style="background-color: #003D2B; color: white;" th:href="@{/logout}">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+
+<div class="modal fade" id="invoiceLimitModal" tabindex="-1" role="dialog" aria-labelledby="invoiceLimitModalLabel" aria-hidden="true" th:if="${hideDivError}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceLimitModalLabel" style="color:red;">Invoice Creation Limit Reached</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Unfortunately, you have reached the maximum amount limit and are unable to create a new invoice at this time. Please try again later or contact support for further assistance</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+
+<div class="modal fade" id="invoiceCreatedModal" tabindex="-1" role="dialog" aria-labelledby="invoiceCreatedModalLabel" aria-hidden="true" th:if="${hideDivSuccess}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceCreatedModalLabel" style="color:green">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Your invoice has been successfully created.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap JavaScript -->
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/custom-js/marketing/marketing-main.js}"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#invoiceLimitModal').modal('show');
+
+        $('#invoiceCreatedModal').modal('show');
+        setTimeout(function() {
+            $('#invoiceCreatedModal').modal('hide');
+        }, 3000);
+    });
+</script>
+</body>
+</html>

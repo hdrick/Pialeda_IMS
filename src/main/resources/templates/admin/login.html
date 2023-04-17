@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}"/>
+    <title>Pialeda</title>
+
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <!-- Login custom css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/login.css}">
+</head>
+<body>
+<!--    Main container-->
+<div class="main-con">
+
+    <!--        Header starts-->
+    <div class="header-con">
+        <div id="bx1">
+            <img id="h-logo" th:src="@{/icon/LOGO.png}" alt="Logo">
+        </div>
+        <div id="bx2">
+            <label id="logo-name">PIALEDA</label>
+        </div>
+    </div>
+    <!--        Login starts-->
+    <div class="container">
+        <div class="row justify-content-md-center">
+            <div class="col-xxl-6 col-xl-9 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="login-con">
+
+                    <form method="POST" id="loginForm" th:object="${login}" th:action="@{/loginUser}">
+                        <div class="form-title" style="margin-bottom: 30px;"><h1 >LOGIN</h1></div>
+                        <span th:if="${hideSpan}" class="alert alert-danger">
+                            Invalid Email or Password.
+                        </span>
+                        <div class="form-username">
+                            <input type="text" class="form-input" placeholder="Email" id="uname"
+                                   th:field="*{email}" required th:autofocus="true">
+                        </div>
+
+                        <div class="form-password">
+                            <input  type="password" class="form-input" placeholder="Password" id="password"
+                                    th:field="*{password}" required>
+                        </div>
+
+                        <div class="form-btn">
+                            <input type="submit" class="btn" onclick="checkCredential()" value="Sign in" >
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Bootstrap JavaScript -->
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+<script>
+<!--    function checkCredential()-->
+<!--    {-->
+<!--        var uname = $('#uname').val();-->
+<!--        var pass = $('#password').val();-->
+
+<!--        $.ajax({-->
+<!--            type: "GET",-->
+<!--            url: "/login/credential-validation",-->
+<!--            data: {-->
+<!--                email: uname,-->
+<!--                pass: pass-->
+<!--            },-->
+<!--            success: function(response) {-->
+<!--                alert(response);-->
+<!--                 window.location.href = "/login/success";-->
+
+<!--            }-->
+<!--        });-->
+<!--    }-->
+</script>
+</body>
+</html>

@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}"/>
+  <title>VR Staff</title>
+
+  <!--  <link rel="stylesheet" type="text/css" th:href="@{/custom-css/vr.css}">-->
+  <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
+  <!-- LOCAL bootstrap css-->
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+  <!--custom css for header-->
+  <link rel="stylesheet" type="text/css" th:href="@{/custom-css/vr-staff/header.css}">
+  <!--custom css for vr-->
+  <link rel="stylesheet" type="text/css" th:href="@{/custom-css/vr-staff/style.css}">
+
+  <!-- Font awesome local -->
+  <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
+
+  <style>
+    .left-panel
+    {
+        display: flex;
+        justify-content: initial;
+        flex-wrap: wrap;
+        align-items: stretch;
+        font-size: 15px;
+    }
+    .right-panel
+    {
+        display: flex;
+        justify-content: end;
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
+    .third-panel
+    {
+        font-size: 13px;
+        padding-left: 18px;
+    }
+    .left-panel select
+    {
+        width: 150px;
+        margin-right: 24px;
+        border: none;
+    }
+    .search-text
+    {
+        padding: 6px 4px 5px 18px;
+        font-size: 13px;
+        position: relative;
+        top: 7px;
+    }
+    .search-field
+    {
+        border: none;
+        height: 30px;
+        border-bottom: 2px solid #dce4ec;
+        font-size: 14px;
+        box-shadow: none;
+        background: none;
+        transition: border linear .2s, box-shadow linear .2s;
+        outline: none;
+        position: relative;
+        top: 10px;
+    }
+    .search-field:hover, .search-field:focus{
+    border-bottom: 2px solid #3ceeac;
+    }
+    .start-date, .end-date
+    {
+        border: none;
+    }
+    .date-warning
+    {
+        border: 2px solid red;
+    }
+    #my-table
+    {
+        min-height: 450px;
+        font-size: 13px;
+    }
+    #my-table-total
+    {
+        height: 33px;
+        font-size: 13px;
+        width: 100%;
+    }
+    #my-table-total th
+    {
+       color: #fff;
+       background-color: #343a40;
+       max-width: 80px;
+      min-width: 30px;
+      text-align: center;
+    }
+    #pagination
+    {
+        display: flex;
+        justify-content: center;
+        height: 40px;
+    }
+    .pagination
+    {
+      height: 100%;
+    }
+    .btn-light
+    {
+        margin: 0;
+        max-height: 40px;
+    }
+    .page-item
+    {
+      display: flex;
+    }
+    .pagination a
+    {
+      color: black;
+      padding: 8px 16px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color .3s;
+      max-height: 40px;
+    }
+    .disabled
+    {cursor: no-drop;}
+    .pagination a.active
+    {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .pagination a:hover:not(.active)
+    {
+        background-color: #ddd;
+    }
+    .hover
+    {
+    background-color: #ddd;
+    cursor: pointer;
+    }
+
+    .active
+    {
+      background-color: #a8efab;
+    }
+    .btn-logout
+    {
+        background-color: #25b389;
+        color: white;
+    }
+    #my-table th
+    {
+        min-width: 105px;
+        max-width: 200px;
+        text-align: center;
+    }
+    </style>
+</head>
+<body class="body">
+<!--        Header starts-->
+<div class="header-con">
+  <div class="left-con">
+    <div id="bx1">
+      <img id="h-logo" th:src="@{/icon/LOGO.png}" alt="Logo">
+    </div>
+    <div id="bx2">
+      <label id="logo-name">PIALEDA</label>
+    </div>
+  </div>
+
+  <div class="right-con">
+    <div >
+      <i class="fa-solid fa-user"></i>
+      <a class="m-2" ><span th:text="${fullName}"></span></a>
+      <a href="#" class="" data-toggle="modal" data-target="#logoutModal">
+        <i class="fas fa-sign-out-alt"></i>
+      </a>
+    </div>
+
+  </div>
+</div>
+<!-- Content Body Start here-->
+<div class="container">
+  <div class="row justify-content-md-center">
+    <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="content-body">
+        <div class="row">
+          <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 left-panel">
+            <select class="form-select" id="filterByClient">
+              <option value="default" selected>Filter by Client</option>
+              <option th:each="client : ${clients}" th:value="${client.name}" th:text="${client.name}"
+                      th:selected="${selectedClient == client.name}">
+              </option>
+
+            </select>
+            <select class="form-select" id="filterBySupplier">
+              <option value="default" selected>Filter by Supplier</option>
+              <option th:each="supplier : ${suppliers}" th:value="${supplier}" th:text="${supplier}"
+                      th:selected="${selectedSupplier == supplier}">
+              </option>
+            </select>
+          </div>
+          <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 right-panel">
+            <span class="search-text">Search</span>
+            <input type="text" class="search-field" id="search-input">
+          </div>
+          <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 third-panel">
+            <label for="start-date">Start Date:</label>
+            <input type="date" id="start-date" name="start-date" class="start-date" th:text="${startDate}">
+            &#8212;
+            <label for="end-date">End Date:</label>
+            <input type="date" id="end-date" name="end-date" class="end-date" th:text="${endDate}">
+          </div>
+        </div>
+
+
+        <div class="view-panel">
+          <table class="table table-sm table-bordered" id="my-table" th:value="${'invoices-'+selectedClient+'-'+selectedSupplier+'-'+selectedMonth+'-page-'+currentPage}">
+            <thead class="table-dark">
+            <tr>
+
+              <th>Invoice #</th>
+              <th>Client Name</th>
+              <th>Client Address</th>
+              <th>Client TIN</th>
+              <th>Supplier Name</th>
+              <th>Supplier Address</th>
+              <th>Supplier TIN</th>
+              <th>Amount Due</th>
+              <th>Date</th>
+            </tr>
+            </thead>
+            <tbody id="table-body">
+            <tr  class="table-row" th:each="invoice: ${invoices}">
+              <td th:text="${invoice.invoiceNum}"></td>
+              <td th:text="${invoice.clientName}"></td>
+              <td th:text="${invoice.clientAddress}"></td>
+              <td th:text="${invoice.clientTin}"></td>
+              <td th:text="${invoice.supplierName}"></td>
+              <td th:text="${invoice.supplierAddress}"></td>
+              <td th:text="${invoice.supplierTin}"></td>
+              <td th:text="${invoice.grandTotal}"></td>
+              <td th:text="${#temporals.format(invoice.dateCreated, 'MMMM d, yyyy')}"></td>
+            </tr>
+
+            </tbody>
+          </table>
+          <table th:if="${isSupplierPresent}" class="table table-sm table-bordered" id="my-table-total">
+            <tr>
+              <th>Invoices Total Amount</th>
+              <td th:text="${totalInvoicesAmount+'0'}"></td>
+              <!--              <th style="background-color: red">VAT</th>-->
+              <!--              <td><i>1200</i></td>-->
+              <!--              <th>Total Amount</th>-->
+              <!--              <td>1200</td>-->
+              <th>Supplier Reach</th>
+              <td th:text="${supplierReachAmount+'0'}"></td>
+              <th style="background-color: orange">Supplier Limit</th>
+              <b><td th:text="${supplierLimit+'0'}" style="font-weight: bold;"></td></b>
+            </tr>
+          </table>
+          <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div id="pagination">
+                <div th:if="${totalPages > 0 || totalItems > 0}" style="font-size: 13px; position: absolute; left: 1px; bottom: 1px;">
+                  <strong> Total Items: [[${totalItems}]] <br> <em>  Page [[${currentPage}]] of [[${totalPages}]] </em> </strong>
+                </div>
+                <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12"
+                     th:unless="${totalPages > 0 || totalItems > 0}" style="display: flex; justify-content: center; font-size: 13px">
+                  <strong>Total Items:  [[${totalItems}]] </strong>
+                </div>
+
+                <div th:if="${(!isClientPresent) && (!isSupplierPresent) && (!isDateString) && (isQueryPresent == null)}">
+                  <ul class="pagination" th:if="${totalPages > 0 || totalItems > 0}">
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(page=1)}">First</a>
+                    </li>
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(page=${currentPage - 1})}">Prev</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:class="${pageNumber+1 == currentPage ? 'page-item active' : 'page-item'}">
+                      <a th:href="@{/vr/user/invoices(page=${pageNumber+1})}" th:text="${pageNumber+1}"></a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(page=${currentPage + 1})}">Next</a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(page=${totalPages})}">Last</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div th:if="${(isClientPresent) && (!isSupplierPresent) && (!isDateString)}">
+                  <ul class="pagination" th:if="${totalPages > 0 || totalItems > 0}">
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, page=1)}">First</a>
+                    </li>
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, page=${currentPage - 1})}">Prev</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:class="${pageNumber+1 == currentPage ? 'page-item active' : 'page-item'}">
+                      <a th:href="@{/vr/user/invoices(client=${selectedClient}, page=${pageNumber+1})}" th:text="${pageNumber+1}"></a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, page=${currentPage + 1})}">Next</a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, page=${totalPages})}">Last</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div th:if="${(isClientPresent) && (isSupplierPresent) && (!isDateString)}">
+                  <ul class="pagination" th:if="${totalPages > 0 || totalItems > 0}">
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, supplier=${selectedSupplier}, page=1)}">First</a>
+                    </li>
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, supplier=${selectedSupplier}, page=${currentPage - 1})}">Prev</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:class="${pageNumber+1 == currentPage ? 'page-item active' : 'page-item'}">
+                      <a th:href="@{/vr/user/invoices(client=${selectedClient}, supplier=${selectedSupplier}, page=${pageNumber+1})}" th:text="${pageNumber+1}"></a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, supplier=${selectedSupplier}, page=${currentPage + 1})}">Next</a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, supplier=${selectedSupplier}, page=${totalPages})}">Last</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div th:if="${(!isClientPresent) && (isSupplierPresent) && (!isDateString)}">
+                  <ul class="pagination" th:if="${totalPages > 0 || totalItems > 0}">
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(supplier=${selectedSupplier}, page=1)}">First</a>
+                    </li>
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(supplier=${selectedSupplier}, page=${currentPage - 1})}">Prev</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:class="${pageNumber+1 == currentPage ? 'page-item active' : 'page-item'}">
+                      <a th:href="@{/vr/user/invoices(supplier=${selectedSupplier}, page=${pageNumber+1})}" th:text="${pageNumber+1}"></a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(supplier=${selectedSupplier}, page=${currentPage + 1})}">Next</a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(supplier=${selectedSupplier}, page=${totalPages})}">Last</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div th:if="${(isClientPresent) && (isSupplierPresent) && (isDateString)}">
+                  <ul class="pagination" th:if="${totalPages > 0 || totalItems > 0}">
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, supplier=${selectedSupplier}, startDate=${startDate},  endDate=${endDate}, page=1)}">First</a>
+                    </li>
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, supplier=${selectedSupplier}, startDate=${startDate},  endDate=${endDate}, page=${currentPage - 1})}">Prev</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:class="${pageNumber+1 == currentPage ? 'page-item active' : 'page-item'}">
+                      <a th:href="@{/vr/user/invoices(client=${selectedClient}, supplier=${selectedSupplier}, startDate=${startDate},  endDate=${endDate}, page=${pageNumber+1})}" th:text="${pageNumber+1}"></a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, supplier=${selectedSupplier}, startDate=${startDate},  endDate=${endDate}, page=${currentPage + 1})}">Next</a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, supplier=${selectedSupplier}, startDate=${startDate},  endDate=${endDate}, page=${totalPages})}">Last</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div th:if="${(isClientPresent) && (!isSupplierPresent) && (isDateString)}">
+                  <ul class="pagination" th:if="${totalPages > 0 || totalItems > 0}">
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, startDate=${startDate},  endDate=${endDate}, page=1)}">First</a>
+                    </li>
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, startDate=${startDate},  endDate=${endDate}, page=${currentPage - 1})}">Prev</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:class="${pageNumber+1 == currentPage ? 'page-item active' : 'page-item'}">
+                      <a th:href="@{/vr/user/invoices(client=${selectedClient}, startDate=${startDate},  endDate=${endDate}, page=${pageNumber+1})}" th:text="${pageNumber+1}"></a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, startDate=${startDate},  endDate=${endDate}, page=${currentPage + 1})}">Next</a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(client=${selectedClient}, startDate=${startDate},  endDate=${endDate}, page=${totalPages})}">Last</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div th:if="${(!isClientPresent) && (isSupplierPresent) && (isDateString)}">
+                  <ul class="pagination" th:if="${totalPages > 0 || totalItems > 0}">
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(supplier=${selectedSupplier}, startDate=${startDate},  endDate=${endDate}, page=1)}">First</a>
+                    </li>
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(supplier=${selectedSupplier}, startDate=${startDate},  endDate=${endDate}, page=${currentPage - 1})}">Prev</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:class="${pageNumber+1 == currentPage ? 'page-item active' : 'page-item'}">
+                      <a th:href="@{/vr/user/invoices(supplier=${selectedSupplier}, startDate=${startDate},  endDate=${endDate}, page=${pageNumber+1})}" th:text="${pageNumber+1}"></a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(supplier=${selectedSupplier}, startDate=${startDate},  endDate=${endDate}, page=${currentPage + 1})}">Next</a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices(supplier=${selectedSupplier}, startDate=${startDate},  endDate=${endDate}, page=${totalPages})}">Last</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div th:if="${isQueryPresent}">
+                  <ul class="pagination" th:if="${totalPages > 0 || totalItems > 0}">
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices/search(query=${selectedQuery}, page=1)}">First</a>
+                    </li>
+                    <li th:class="${currentPage <= 1} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices/search(query=${selectedQuery}, page=${currentPage - 1})}">Prev</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:class="${pageNumber+1 == currentPage ? 'page-item active' : 'page-item'}">
+                      <a th:href="@{/vr/user/invoices/search(query=${selectedQuery}, page=${pageNumber+1})}" th:text="${pageNumber+1}"></a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices/search(query=${selectedQuery}, page=${currentPage + 1})}">Next</a>
+                    </li>
+                    <li th:class="${totalPages == currentPage} ? 'page-item disabled' : 'page-item'">
+                      <a class="page-link" th:href="@{/vr/user/invoices/search(query=${selectedQuery}, page=${totalPages})}">Last</a>
+                    </li>
+                  </ul>
+                </div>
+
+                <div th:if="${totalPages > 0 || totalItems > 0}" style="font-size: 14px; position: absolute; right: 1px; bottom: 1px;">
+                  <button id="download-btn" type="button" class="btn btn-primary">Download</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Logout Modal -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to logout?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+          <a class="btn" style="background-color: #003D2B; color: white;" th:href="@{/logout}">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="popup-message" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p th:if="${isInvalidDate}" th:text="${errorMessage}"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JavaScript -->
+  <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+  <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+  <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script th:src="@{/custom-js/vr-staff/table.js}"></script>
+  <script th:src="@{/custom-js/vr-staff/excel.js}"></script>
+  <div th:if="${isInvalidDate}">
+    <script>
+        $(document).ready(function() {
+            $('#popup-message .modal-title').html('<h5 style="color: red">Error Message</h5>');
+            $('#popup-message').modal({
+                backdrop: 'static',
+                keyboard: false
+            });
+        });
+    </script>
+  </div>
+
+  <script>
+  $(document).ready(function() {
+  var baseURL = "/vr/user/invoices";
+
+    $('#filterByClient').on('change', function() {
+    event.preventDefault();
+
+    var clientName = $(this).find('option:selected').attr('value')
+    var supplierName = $('#filterBySupplier').find('option:selected').attr('value');
+
+    var filterClient = encodeURIComponent(clientName).replace(/%20/g, "%20");
+    var filterSupplier = encodeURIComponent(supplierName).replace(/%20/g, "%20");
+
+
+      if(supplierName == 'default')
+      {
+          if(clientName == 'default')
+          {
+             window.location.href = baseURL;
+          }
+          else
+          {
+            var cleanURL = baseURL + "?client=" + filterClient + "&page=1";
+            window.location.href = cleanURL;
+          }
+      }
+      else
+      {
+          if(clientName == 'default')
+          {
+             var cleanURL = baseURL  + "?supplier=" + filterSupplier + "&page=1";
+             window.location.href = cleanURL;
+          }
+          else
+          {
+              var cleanURL = baseURL + "?client=" + filterClient + "&supplier=" + filterSupplier + "&page=1";
+              window.location.href = cleanURL;
+          }
+      }
+    });
+
+    $('#filterBySupplier').on('change', function() {
+    event.preventDefault();
+
+    var supplierName = $(this).find('option:selected').attr('value')
+    var clientName = $('#filterByClient').find('option:selected').attr('value');
+
+    var filterClient = encodeURIComponent(clientName).replace(/%20/g, "%20");
+    var filterSupplier = encodeURIComponent(supplierName).replace(/%20/g, "%20");
+
+      if(clientName == 'default')
+      {
+          if(supplierName == 'default')
+          {
+             window.location.href = baseURL;
+          }
+          else
+          {
+            var cleanURL = baseURL + "?supplier=" + filterSupplier + "&page=1";
+            window.location.href = cleanURL;
+          }
+      }
+      else
+      {
+          if(supplierName == 'default')
+          {
+             var cleanURL = baseURL  + "?client=" + filterClient + "&page=1";
+             window.location.href = cleanURL;
+          }
+          else
+          {
+              var cleanURL = baseURL + "?client=" + filterClient + "&supplier=" + filterSupplier + "&page=1";
+              window.location.href = cleanURL;
+          }
+      }
+    });
+
+    $('#end-date').on('change', function()
+    {
+      var startDate = $('#start-date').val();
+      var endDate = $('#end-date').val();
+      var clientName = $('#filterByClient').find('option:selected').attr('value');
+
+      if (isValidDate(startDate, endDate))
+      {
+          console.log("Both date are valid.");
+          var supplierName = $('#filterBySupplier').find('option:selected').attr('value')
+          var clientName = $('#filterByClient').find('option:selected').attr('value');
+
+          var filterClient = encodeURIComponent(clientName).replace(/%20/g, "%20");
+          var filterSupplier = encodeURIComponent(supplierName).replace(/%20/g, "%20");
+
+          if(clientName != 'default' && supplierName != 'default')
+          {
+              var cleanURL = baseURL + "?client=" + filterClient + "&supplier=" + filterSupplier + "&startDate=" + startDate + "&endDate=" + endDate + "&page=1";
+              window.location.href = cleanURL;
+          }
+          else if(clientName != 'default' && supplierName == 'default')
+          {
+              var cleanURL = baseURL + "?client=" + filterClient + "&startDate=" + startDate + "&endDate=" + endDate + "&page=1";
+              window.location.href = cleanURL;
+          }
+          else if(clientName == 'default' && supplierName != 'default')
+          {
+              var cleanURL = baseURL + "?supplier=" + filterSupplier + "&startDate=" + startDate + "&endDate=" + endDate + "&page=1";
+              window.location.href = cleanURL;
+          }
+          else
+          {
+              window.location.href =  baseURL + "?startDate=" + startDate + "&endDate=" + endDate + "&page=1";
+          }
+      }
+      else
+      {
+        console.log("Invalid date.");
+        $('#popup-message .modal-title').html('<h5 style="color: red">Error Message</h5>');
+        $('#popup-message .modal-body').html('<p>Invalid start date or end date</p>');
+        $('#popup-message').modal({
+          backdrop: 'static',
+          keyboard: false
+        });
+      }
+    });
+
+    $('#search-input').keyup(function(event) {
+    event.preventDefault();
+        if (event.keyCode === 13) {
+            // Enter key pressed, trigger search
+            var keyword = $(this).val();
+            search(keyword);
+        }
+    });
+
+    function search(keyword)
+    {
+        var pattern = /^[a-zA-Z]+$/;
+         if (pattern.test(keyword))
+         {
+             console.log('String is valid');
+             var query = keyword.replace(/\s+/g, '%20');
+             window.location.href =  baseURL+"/search" + "?query=" + query + "&page=1";
+         }
+         else
+         {
+             console.log('String is invalid');
+              $('#popup-message .modal-title').html('<h5 style="color: red">Error Message</h5>');
+              $('#popup-message .modal-body').html('<p>Invalid search keyword! Please use letters only.</p>');
+              $('#popup-message').modal({
+                backdrop: 'static',
+                keyboard: false
+              });
+         }
+    }
+    function isValidDate(startDate, endDate)
+    {
+
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      var minYear = 2000;
+      var maxYear = 2050;
+
+      if (isNaN(start.getTime()) || isNaN(end.getTime()))
+      {
+        return false;
+      }
+
+      if (start > end)
+      {
+        return false;
+      }
+
+      const startYear = start.getFullYear();
+      if (startYear < minYear || startYear > maxYear)
+      {
+        return false;
+      }
+
+      const endYear = end.getFullYear();
+      if (endYear < minYear || endYear > maxYear)
+      {
+        return false;
+      }
+
+      // All checks passed, the dates are valid
+      return true;
+    }
+
+});
+
+
+</script>
+</body>
+</html>

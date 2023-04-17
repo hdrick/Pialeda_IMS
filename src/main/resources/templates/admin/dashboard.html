@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}"/>
+    <title>Pialeda</title>
+
+  <!-- Bootstrap css -->
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+  <!-- Font awesome local -->
+  <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
+  <!--    main css with header and sidebar-->
+  <link rel="stylesheet" type="text/css" th:href="@{/custom-css/admin/css/main.css}">
+  <!--    content css-->
+  <link rel="stylesheet" type="text/css" th:href="@{/custom-css/admin/css/dashboard.css}">
+</head>
+<body>
+<!--    Main container-->
+<div class="main-con">
+  <!--        Header starts-->
+  <div class="header-con">
+    <div class="left-con">
+      <div id="bx1">
+        <img id="h-logo" th:src="@{/icon/LOGO.png}" alt="Logo">
+      </div>
+      <div id="bx2">
+        <label id="logo-name">PIALEDA</label>
+      </div>
+    </div>
+
+    <div class="right-con">
+      <div>
+        <i class="fa-solid fa-user"></i>
+        <a class="m-2" ><span th:text="${fullName}"></span></a>
+        <a href="#" class="" data-toggle="modal" data-target="#logoutModal">
+          <i class="fas fa-sign-out-alt"></i>
+        </a>
+      </div>
+
+    </div>
+  </div>
+  <!--        Main container 2 starts-->
+  <div class="main-con2">
+    <!--        Sidebar starts-->
+    <div class="sideBar-con">
+      <div class="sideBar-bx1">
+        <div>
+          <i class="fa-solid fa-house"></i>
+          <i class="label"><a th:href="@{/admin-dashboard}">Dashboard</a></i>
+        </div>
+        <div>
+          <i class="fa-solid fa-user"></i>
+<!--          <i class="label"><a th:href="@{/admin-users}">Users</a></i>-->
+          <i id="admin-users-link" class="label"><a>Users</a></i>
+        </div>
+        <div>
+          <i class="fa-solid fa-audio-description"></i>
+          <i class="label">Audit trail</i>
+        </div>
+        <div>
+          <i class="fa-solid fa-database"></i>
+          <i class="label">Backup</i>
+        </div>
+      </div>
+      <div class="sideBar-bx2">
+        <i class="label">Admin</i>
+      </div>
+
+    </div>
+    <!--        content starts-->
+    <div class="content-con">
+      <h1>Dashboard</h1>
+
+      <div class="records-con">
+        <div class="invoice-con con">
+          <div>
+            <h6 th:text="${invoiceCount}"></h6>
+            <h4>Invoices</h4>
+          </div>
+          <div>
+            <i class="fa-solid fa-file-invoice"></i>
+          </div>
+        </div>
+        <div class="user-con con">
+          <div>
+            <h6 th:text="${userCount}"></h6>
+            <h4>User</h4>
+          </div>
+          <div>
+            <i class="fa-sharp fa-solid fa-user"></i>
+          </div>
+        </div>
+        <div class="supplier-con con">
+          <div>
+            <h6 th:text="${supplierCount}"></h6>
+            <h4>Supplier</h4>
+          </div>
+          <div>
+            <i class="fa-solid fa-users"></i>
+          </div>
+        </div>
+        <div class="client-con con">
+          <div>
+            <h6 th:text="${clientCount}"></h6>
+            <h4>Client</h4>
+          </div>
+          <div>
+            <i class="fa-solid fa-users"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Logout Modal -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to logout?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <a class="btn" style="background-color: #003D2B; color: white;" th:href="@{/logout}">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+
+<script>
+  $(document).ready(function() {
+    $("#admin-users-link").click(function(event) {
+      event.preventDefault();
+      $.ajax({
+        url: "/admin-users",
+        type: "GET",
+        success: function(response) {
+          window.location.href = "/admin-users";
+        }
+      });
+    });
+  });
+
+</script>
+
+</body>
+</html>

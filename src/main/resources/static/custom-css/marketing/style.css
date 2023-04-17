@@ -1,0 +1,291 @@
+
+ #content{
+     border: solid 1px red;
+     width: 100px;
+     height: 100px;
+     color: black;
+}
+/*Table */
+ .search-panel {
+     display: flex;
+     flex-wrap: wrap;
+     align-items: stretch;
+     width: 100%;
+}
+ .search-text {
+     padding: 6px 4px 5px 18px;
+     font-size: 14px;
+}
+ .search-field {
+     border-radius: 8px;
+     height: 30px;
+     border: 1px solid #aaa;
+     font-size: 14px;
+}
+ #pagination {
+     display: flex;
+     justify-content: center;
+     height: 40px;
+}
+ .btn-light {
+     margin: 0;
+     max-height: 40px;
+}
+ .pagination {
+     display: inline-block;
+     position: relative;
+     top: 9px;
+}
+ .pagination a {
+     color: black;
+     padding: 8px 16px;
+     text-decoration: none;
+     border-radius: 5px;
+     transition: background-color .3s;
+     max-height: 40px;
+}
+ .pagination a.active {
+     background-color: #4CAF50;
+     color: white;
+}
+ .pagination a:hover:not(.active) {
+     background-color: #ddd;
+}
+/*end of Table */
+ #supp-details{
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+}
+ #supp-name{
+     margin: 0;
+}
+ #supp-name p{
+     margin: 0;
+}
+ #supp-addrs{
+     margin: 0;
+     font-size: 12px;
+     width: 80%;
+}
+ #supp-tin{
+     margin: 0;
+     font-size: 12px;
+}
+/*start of client info and date,PO,CP */
+ #st-con{
+     display: flex;
+}
+ #tin-con{
+     display: flex;
+}
+ #addrs-con{
+     display: flex;
+}
+ #bs-con{
+     display: flex;
+}
+ #d-con{
+     display: flex;
+}
+ #tm-con{
+     display: flex;
+}
+ #po-con{
+     display: flex;
+}
+ #cp-con{
+     display: flex;
+}
+ #inv-con{
+     display: flex;
+     flex-grow: 1;
+     flex-direction: column;
+     padding: 1%;
+}
+ #s-invo-con{
+     display: flex;
+     flex-direction: column;
+}
+.hstyle{
+    color: green;
+}
+ #header2{
+}
+
+#header2 .col-6 span{
+    color: black;
+    font-weight: bolder;
+    font-family: Times New Roman;
+}
+ #body{
+     flex-grow: 1;
+     height: 50%;
+}
+ #footer{
+     display: flex;
+     flex-direction: row;
+     align-items: flex-end;
+     justify-content: center;
+     height: 10%;
+}
+ #bx-1{
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+}
+ #bx-2{
+     display: flex;
+     flex-direction: column;
+}
+ .main-con2{
+     display: flex;
+}
+ .main-bx1{
+     display: flex;
+     flex-direction: column;
+
+     align-items: center;
+     margin-right: 1%;
+     margin-left: 1%;
+}
+ .main-bx1 #my-client,#my-supplier{
+    padding: 5px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+ .main-bx1 #btn-addSupplier,#btn-addClient{
+    margin-top: 10px;
+    align-items: start;
+    width: 220px;
+    background-color: #003D2B;
+    color: white;
+    cursor:pointer;
+    font-weight: bolder;
+}
+ .main-bx1 #add-row-btn{
+    background-color: #2E7D32;
+    color: white;
+    font-weight: bolder;
+    font-size: 15px;
+    margin-top:20px;
+    cursor: pointer;
+}
+
+ .main-bx1 #delete-row-btn{
+    background-color: #757575;
+    color: white;
+    font-weight: bolder;
+    font-size: 15px;
+    margin-top:20px;
+    cursor: pointer;
+}
+
+.main-bx1 #btn-OR{
+
+
+    font-weight: bolder;
+    font-size: 15px;
+    margin-top:20px;
+    cursor: pointer;
+}
+.main-bx1 #btn-CR{
+
+
+    font-weight: bolder;
+    font-size: 15px;
+    margin-top:20px;
+    cursor: pointer;
+}
+
+
+
+ .main-bx2{
+     display: flex;
+     flex-direction: column;
+
+}
+ .main-bx2 #btn-Gen,#btn-Create,#btn-invoices{
+    margin: 5px;
+    align-items: start;
+    width: 100%;
+    background-color: #003D2B;
+    color: white;
+    cursor:pointer;
+    font-weight: bolder;
+}
+
+  /* Remove outline when <span> is focused */
+  span[contenteditable="true"]:focus {
+    outline: none;
+  }
+
+  /* TABLE */
+.table-responsive {
+  overflow-x: auto;
+  position: relative;
+}
+
+.table-responsive table {
+  margin: 0 auto;
+}
+
+.table-responsive tbody {
+  max-height: 250px;
+  overflow-y: scroll;
+}
+
+.table-responsive thead th {
+  background-color: #003D2B;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding:5px;
+}
+
+#table-body td{
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+    border: solid 1px gray;
+}
+
+#table-body td input{
+    font-size: 13px;
+    text-align: center;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+    padding:0;
+    border: 0;
+}
+
+  /* END OF TABLE */
+
+#cashier-name{
+    font-family: Open Sans;
+    color: black;
+    font-size: 15px;
+}
+
+#client-date-input{
+    align-items: center;
+    flex-grow: 1;
+    text-align: start;
+    outline: none;
+    box-shadow: none;
+    padding: 0 0 0 5px;
+    border: 0;
+    font-size: 12px;
+    font-weight: bolder;
+}
+
+tr.highlight {
+    background-color: #ffcccc;
+  }
+input.highlight {
+background-color: green;
+color: aliceblue;
+}

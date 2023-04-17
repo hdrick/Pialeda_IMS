@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice Details</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <style>
+    .invoice-details
+    {
+        background-color: #f5f5f5;
+        border: 1px solid #706b7033;
+        padding: 10px 10px 0 10px;
+        border-radius: 5px;
+    }
+    @media print
+    {
+      .panel .panel * {
+        visibility: visible;
+      }
+      #print-btn
+      {
+        visibility: hidden;
+      }
+    }
+
+    </style>
+</head>
+<body>
+<div class="col-md-12">
+        <!-- col-lg-12 start here -->
+        <div class="panel">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="invoice-from">
+                            <ul class="list-unstyled text-right">
+                                <li>Dash LLC</li>
+                                <li>2500 Ridgepoint Dr, Suite 105-C</li>
+                                <li>Austin TX 78754</li>
+                                <li>VAT Number EU826113958</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- col-lg-6 end here -->
+                    <div class="col-lg-12">
+                        <!-- col-lg-12 start here -->
+                        <div class="invoice-details">
+                            <div class="well">
+                                <ul class="list-unstyled">
+                                    <li><strong>Invoice</strong> #936988</li>
+                                    <li><strong>Invoice Date:</strong> Monday, October 10th, 2015</li>
+                                    <li><strong>Due Date:</strong> Thursday, December 1th, 2015</li>
+                                    <li style="color: red"><strong>Status:</strong> <span class="label label-danger">UNPAID</span></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="invoice-to">
+                            <ul class="list-unstyled">
+                                <li><strong>Invoiced To</strong></li>
+                                <li>Jakob Smith</li>
+                                <li>Roupark 37</li>
+                                <li>New York, NY, 2014</li>
+                                <li>USA</li>
+                            </ul>
+                        </div>
+                        <div class="invoice-items">
+                            <div class="table-responsive" style="overflow: hidden; outline: none;" tabindex="0">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th class="per70 text-center">Description</th>
+                                        <th class="per5 text-center">Qty</th>
+                                        <th class="per25 text-center">Total</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>1024MB Cloud 2.0 Server - elisium.dynamic.com (12/04/2014 - 01/03/2015)</td>
+                                        <td class="text-center">1</td>
+                                        <td class="text-center">$25.00 USD</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Logo design</td>
+                                        <td class="text-center">1</td>
+                                        <td class="text-center">$200.00 USD</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Backup - 1024MB Cloud 2.0 Server - elisium.dynamic.com</td>
+                                        <td class="text-center">12</td>
+                                        <td class="text-center">$12.00 USD</td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th colspan="2" class="text-right">Sub Total:</th>
+                                        <th class="text-center">$237.00 USD</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="2" class="text-right">20% VAT:</th>
+                                        <th class="text-center">$47.40 USD</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="2" class="text-right">Credit:</th>
+                                        <th class="text-center">$00.00 USD</th>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="2" class="text-right">Total:</th>
+                                        <th class="text-center">$284.4.40 USD</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="invoice-footer mt25">
+                            <p class="text-center">Generated on Monday, October 08th, 2015 <button id="print-btn">Print</button></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+<script>
+    $(document).ready(function() {
+  $('#print-btn').click(function() {
+    window.print();
+  });
+});
+</script>
+</body>
+</html>
