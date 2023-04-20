@@ -232,7 +232,7 @@
             </tr>
             </thead>
             <tbody id="table-body">
-            <tr  class="table-row" th:each="invoice: ${invoices}" th:value="${invoice.invoiceNum}">
+            <tr  class="table-row" th:each="invoice: ${invoices}">
               <td th:text="${invoice.invoiceNum}"></td>
               <td th:text="${invoice.clientName}"></td>
               <td th:text="${invoice.clientAddress}"></td>

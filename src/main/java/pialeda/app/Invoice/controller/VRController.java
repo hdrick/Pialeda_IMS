@@ -505,9 +505,8 @@ public class VRController {
         }
 
         Invoice invoiceDetails = invoiceService.getInvoiceDetails(invoiceNum);
-
         model.addAttribute("invoiceDetails", invoiceDetails);
-
+        
         return "vr-staff/vr-invoice";
     }
 }

@@ -42,8 +42,10 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="invoice-from">
-                        <ul class="list-unstyled text-right" th:each="word : ${#strings.arraySplit((invoiceDetails.clientAddress), ',')[0..5]}">
-                            <li th:text="${word}"></li>
+                        <ul class="list-unstyled text-right" >
+                            <li th:text="${invoiceDetails.getSupplierName()}"></li>
+                            <li th:text="${invoiceDetails.getGrandTotal()}"></li>
+                            <li th:text="${invoiceDetails.getClientContactPerson()}"></li>
                         </ul>
                     </div>
                 </div>
