@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import pialeda.app.Invoice.config.DateUtils;
 import pialeda.app.Invoice.model.Client;
 import pialeda.app.Invoice.model.Invoice;
+import pialeda.app.Invoice.model.InvoiceProductInfo;
+import pialeda.app.Invoice.model.Supplier;
 import pialeda.app.Invoice.service.ClientService;
 import pialeda.app.Invoice.service.InvoiceService;
 import pialeda.app.Invoice.service.SupplierService;
@@ -505,7 +507,14 @@ public class VRController {
         }
 
         Invoice invoiceDetails = invoiceService.getInvoiceDetails(invoiceNum);
+        Supplier supplierDetails = supplierService.findByName(invoiceDetails.getSupplierName());
+        Client clientDetails = clientService.findByName(invoiceDetails.getClientName());
+        List<InvoiceProductInfo> invoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoiceDetails.getInvoiceNum());
+
+        model.addAttribute("supplierDetails", supplierDetails);
         model.addAttribute("invoiceDetails", invoiceDetails);
+        model.addAttribute("clientDetails", clientDetails);
+        model.addAttribute("invoicePurchaseProducts", invoicePurchaseProducts);
         
         return "vr-staff/vr-invoice";
     }

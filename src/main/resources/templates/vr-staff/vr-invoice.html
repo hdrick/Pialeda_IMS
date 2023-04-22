@@ -11,6 +11,7 @@
         border: 1px solid #706b7033;
         padding: 10px 10px 0 10px;
         border-radius: 5px;
+        height: 120px;
     }
     .invoice-footer
     {
@@ -21,6 +22,30 @@
         font-style: italic;
         font-size: 13px
     }
+    .invoice-from
+    {
+        display: flex;
+        justify-content: right;
+    }
+    .invoice-to
+    {
+        display: flex;
+        justify-content: right;
+        margin-top: 10px;
+        width: 245px;
+    }
+    .btn-print
+    {
+        display: flex;
+        justify-content: start;
+    }
+    #print-btn
+    {
+    height: 40px;
+    width: 60px;
+    }
+    .invoice-from ul
+    {width: 245px; margin-top: 35px;}
     @media print
     {
       .panel .panel * {
@@ -30,6 +55,19 @@
       {
         visibility: hidden;
       }
+      .invoice-from
+      {
+         display: flex;
+         justify-content: right;
+         margin-top: 35px;
+      }
+        .invoice-to
+        {
+            display: flex;
+            justify-content: right;
+            margin-top: 10px;
+            width: 245px;
+        }
     }
 
     </style>
@@ -40,12 +78,15 @@
     <div class="panel">
         <div class="panel-body">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12 btn-print">
+                    <button id="print-btn" type="button" class="btn btn-primary">Print</button>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                     <div class="invoice-from">
                         <ul class="list-unstyled text-right" >
-                            <li th:text="${invoiceDetails.getSupplierName()}"></li>
-                            <li th:text="${invoiceDetails.getGrandTotal()}"></li>
-                            <li th:text="${invoiceDetails.getClientContactPerson()}"></li>
+                            <strong><li th:text="${supplierDetails.getName()}"></li></strong>
+                            <li th:text="${supplierDetails.getAddress()}"></li>
+                            <li th:text="${supplierDetails.getCityAddress()}"></li>
                         </ul>
                     </div>
                 </div>
@@ -55,20 +96,19 @@
                     <div class="invoice-details">
                         <div class="well">
                             <ul class="list-unstyled">
-                                <li><strong>Invoice</strong> #936988</li>
-                                <li><strong>Invoice Date:</strong> Monday, October 10th, 2015</li>
-                                <li><strong>Due Date:</strong> Thursday, December 1th, 2015</li>
-                                <li style="color: red"><strong>Status:</strong> <span class="label label-danger">UNPAID</span></li>
+                                <li><strong>Invoice </strong><span th:text="${invoiceDetails.getInvoiceNum()}"></span></li>
+                                <li><strong>Invoice Date: </strong><span th:text="${invoiceDetails.getDateCreated()}"></span></li>
+                                <li><strong>Invoice total: </strong><span th:text="${invoiceDetails.getGrandTotal()}"></span></li>
+                                <li style="color: red"><strong>Status:</strong> <span class="label label-danger"  th:text="${invoiceDetails.getStatus()}"></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="invoice-to">
                         <ul class="list-unstyled">
                             <li><strong>Invoiced To</strong></li>
-                            <li>Jakob Smith</li>
-                            <li>Roupark 37</li>
-                            <li>New York, NY, 2014</li>
-                            <li>USA</li>
+                            <li th:text="${supplierDetails.getName()}"></li>
+                            <li th:text="${supplierDetails.getAddress()}"></li>
+                            <li th:text="${supplierDetails.getCityAddress()}"></li>
                         </ul>
                     </div>
                     <div class="invoice-items">
@@ -82,38 +122,29 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td>1024MB Cloud 2.0 Server - elisium.dynamic.com (12/04/2014 - 01/03/2015)</td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">$25.00 USD</td>
+                                <tr th:each="invoicePurchaseProduct: ${invoicePurchaseProducts}">
+                                    <td class="text-center" th:text="${invoicePurchaseProduct.articles}"></td>
+                                    <td class="text-center" th:text="${invoicePurchaseProduct.qty}"></td>
+                                    <td class="text-center" th:text="${invoicePurchaseProduct.amount}"></td>
                                 </tr>
-                                <tr>
-                                    <td>Logo design</td>
-                                    <td class="text-center">1</td>
-                                    <td class="text-center">$200.00 USD</td>
-                                </tr>
-                                <tr>
-                                    <td>Backup - 1024MB Cloud 2.0 Server - elisium.dynamic.com</td>
-                                    <td class="text-center">12</td>
-                                    <td class="text-center">$12.00 USD</td>
-                                </tr>
+
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th colspan="2" class="text-right">Sub Total:</th>
-                                    <th class="text-center">$237.00 USD</th>
+                                    <th colspan="2" class="text-right">Total Sales (VAT Inclusive):</th>
+                                    <th class="text-center" th:text="${invoiceDetails.getTotalSalesVatInc()}"></th>
                                 </tr>
                                 <tr>
-                                    <th colspan="2" class="text-right">20% VAT:</th>
-                                    <th class="text-center">$47.40 USD</th>
+                                    <th colspan="2" class="text-right">Amount: Net of VAT</th>
+                                    <th class="text-center" th:text="${invoiceDetails.getAmountNetOfVat()}"></th>
                                 </tr>
                                 <tr>
-                                    <th colspan="2" class="text-right">Credit:</th>
-                                    <th class="text-center">$00.00 USD</th>
+                                    <th colspan="2" class="text-right">Add: VAT</th>
+                                    <th class="text-center" th:text="${invoiceDetails.getAddVat()}"></th>
                                 </tr>
                                 <tr>
-                                    <th colspan="2" class="text-right">Total:</th>
-                                    <th class="text-center">$284.4.40 USD</th>
+                                    <th colspan="2" class="text-right">Total Amount Due:</th>
+                                    <th class="text-center" th:text="${invoiceDetails.getGrandTotal()}"></th>
                                 </tr>
                                 </tfoot>
                             </table>
@@ -122,7 +153,6 @@
                     <div class="invoice-footer">
                         <h7 id="date-time"></h7>
                     </div>
-                    <button id="print-btn">Print</button>
                 </div>
             </div>
         </div>
