@@ -10,14 +10,6 @@
     // Get the table element
     var table = document.getElementById('my-table');
     // Get the values of all dynamic parameters from the URL
-    var urlParams = new URLSearchParams(window.location.search);
-    var params = {};
-
-    // Loop through all parameter names
-    urlParams.forEach(function(value, name) {
-      // Add the parameter value to the "params" object
-      params[name] = value+"_";
-    });
 
     // Convert the table to a worksheet object
     var worksheet = XLSX.utils.table_to_sheet(table);
@@ -34,7 +26,7 @@
 
     var time = today.toLocaleTimeString('en-US', {hour12: false});
 
-    var cleanName = day + '/' + month + '/' + year+'/'+time+'.xlsx';
+    var cleanName = day + '-' + month + '-' + year+'-'+time+'.xlsx';
 
 
     // Save the file

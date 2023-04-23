@@ -302,14 +302,9 @@ public class InvoiceService {
        }
     }
 
-//    public Page<Invoice> findAllWithSort(String field, String direction, int pageNumber)
-//    {
-//        Sort sort = direction.equalsIgnoreCase(Sort.Direction.ASC.name())?
-//                Sort.by(field).ascending(): Sort.by(field).descending();
-//
-//        Pageable pageable = PageRequest.of(pageNumber -1, 7, sort);
-//
-//        return invoiceRepository.findAll(pageable);
-//    }
+    public Invoice getInvoiceDetails(String invoiceNum)
+    {
+        return invoiceRepository.findByInvoiceNum(invoiceNum);
+    }
 
 }

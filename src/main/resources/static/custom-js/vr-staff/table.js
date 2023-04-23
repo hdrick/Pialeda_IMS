@@ -72,11 +72,15 @@ function paginateTable(table, itemsPerPage) {
         $(this).addClass('active');
     });
 
-    $('td').on('click', function() {
-      setTimeout(function() {
-            var newTab = window.open('', 'myNewTab', 'width=800,height=600');
-            newTab.location.href = '/vr/user/invoice/getinvoice';
-         }, 500);
+    $('tbody').on('click','tr', function() {
+    event.preventDefault();
+    if ($(this).hasClass('active')) {
+        var invoiceNum = $(this).find('td:first-child').text();
+        alert(invoiceNum);
+        var newTab = window.open('', 'invoiceDetails', 'width=800,height=600');
+        newTab.location.href = '/vr/user/invoice/invoiceDetails/' + invoiceNum;
+      }
+
 
     });
 });

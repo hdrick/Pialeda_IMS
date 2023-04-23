@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import pialeda.app.Invoice.config.DateUtils;
 import pialeda.app.Invoice.model.Client;
 import pialeda.app.Invoice.model.Invoice;
+import pialeda.app.Invoice.model.InvoiceProductInfo;
+import pialeda.app.Invoice.model.Supplier;
 import pialeda.app.Invoice.service.ClientService;
 import pialeda.app.Invoice.service.InvoiceService;
 import pialeda.app.Invoice.service.SupplierService;
@@ -491,10 +493,29 @@ public class VRController {
         return "vr-staff/vr";
     }
 
-    @GetMapping("/vr/user/invoice/getinvoice")
-    public String viewInvoice(){
+    @GetMapping("/vr/user/invoice/invoiceDetails/{invoiceNum}")
+    public String viewInvoice(Model model, @PathVariable("invoiceNum") String invoiceNum)
+    {
         String role = GlobalUser.getUserRole();
-        String newRole = GlobalUser.setUserRole(null);
+
+        if(role == null)
+        {
+            String jsCode = "<script>window.close();</script>";
+            model.addAttribute("jsCode", jsCode);
+            model.addAttribute("autoClose", true);
+            return "vr-staff/vr-invoice";
+        }
+
+        Invoice invoiceDetails = invoiceService.getInvoiceDetails(invoiceNum);
+        Supplier supplierDetails = supplierService.findByName(invoiceDetails.getSupplierName());
+        Client clientDetails = clientService.findByName(invoiceDetails.getClientName());
+        List<InvoiceProductInfo> invoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoiceDetails.getInvoiceNum());
+
+        model.addAttribute("supplierDetails", supplierDetails);
+        model.addAttribute("invoiceDetails", invoiceDetails);
+        model.addAttribute("clientDetails", clientDetails);
+        model.addAttribute("invoicePurchaseProducts", invoicePurchaseProducts);
+        
         return "vr-staff/vr-invoice";
     }
 }
