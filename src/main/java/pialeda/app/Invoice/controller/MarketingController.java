@@ -144,16 +144,35 @@ public class MarketingController {
     }
 
     @GetMapping("/official-receipt-list")
-    public String officialReceiptList(){
-        // Page<Invoice> invoiceList= invoiceService.getInvoicesPaginated(pageno, 8);
+    public String officialReceiptList(Model model){
+        String role = GlobalUser.getUserRole();
+        String destination=null;
+        if(role == null){
+            return destination = "redirect:/login";
+        } else if (role.equals("vr-staff")) {
+            return destination = "redirect:/vr/user/invoices";
+        } else if (role.equals(("marketing"))) {
+            return destination = findPaginatedOR(0, model);
+        } else if (role.equals("admin")) {
+            return destination = "redirect:/admin-dashboard";
+        }
+        return destination;
 
-        // model.addAttribute("invoiceList", invoiceList);
-        // model.addAttribute("currentPage",pageno);
-        // model.addAttribute("totalPages",invoiceList.getTotalPages());
-        // model.addAttribute("totalItem", invoiceList.getTotalElements());
+    }
+
+    @GetMapping("/pages/{pageno}")
+    public String findPaginatedOR(@PathVariable int pageno, Model model){
+        Page<OfficialReceipt> officialReceiptList= officialRecptService.getOfficialReceiptPaginated(pageno, 8);
+        System.out.println("officialReceiptList: "+officialReceiptList);
+        
+        model.addAttribute("officialReceiptList", officialReceiptList);
+        model.addAttribute("currentPage",pageno);
+        model.addAttribute("totalPages",officialReceiptList.getTotalPages());
+        model.addAttribute("totalItem", officialReceiptList.getTotalElements());
 
         return "marketing/listofficialreceipt";
     }
+
 
     @GetMapping("/invoice-view")
     public String invoiceView(Model model){

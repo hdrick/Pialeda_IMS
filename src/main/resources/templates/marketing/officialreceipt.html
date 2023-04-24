@@ -40,13 +40,14 @@
 <!--      </div>-->
 <!--    </div>-->
 <!--  </div>-->
+<form method="POST" th:action="@{/createOfficialReceipt}" th:object="${officialReceiptInfo}">
 <div class="btn-actions">
   <div class="selection">
-    <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()">
+    <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()" required>
         <option value="" selected>Select Supplier</option>
         <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}" style="font-weight: bolder;"></option>
     </select>
-    <select id="my-client" style="font-weight: bolder;" onchange="getClientInfo()">
+    <select id="my-client" style="font-weight: bolder;" onchange="getClientInfo()" required>
       <option value="" selected>Select Client</option>
       <option  th:each="client : ${clientList}" th:value="${client.name}" th:text="${client.name}" style="font-weight: bolder;"></option>
   </select>
@@ -59,7 +60,7 @@
   </div>
 </div>
   <div class="main-con2">
-    <form method="POST" th:action="@{/createOfficialReceipt}" th:object="${officialReceiptInfo}">
+    
     <div class="officialReceipt-con" id="print-content">
         <div class="row-1">
           <table border=1>
@@ -212,12 +213,12 @@
     </div>
     <div class="officialReceipt-btn">
       <button class="btn btn-success">Save OR</button>
-      <a class="btn btn-dark" style="color: white;">List of Official Receipt</a>
+      <a class="btn btn-dark" th:href="@{/official-receipt-list}" style="color: white;">List of Official Receipt</a>
       <a class="btn btn-secondary" style="color: white;" th:href="@{marketing-invoice}">back</a>
     </div>
-    </form>
+    
   </div>
-
+</form>
 </div>
 <!-- Logout Modal -->
 <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
