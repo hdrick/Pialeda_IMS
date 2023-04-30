@@ -85,7 +85,7 @@
                                 <div style="font-weight: bolder;">
                                     <div id="s-invo-con">
                                         <label style="width: 150px;">SALES INVOICE:</label>
-                                        <span  id="invoice-number" style="color: red;" th:text="${generateInvNum}"></span>
+                                        <span  id="invoice-number" style="color: red;" th:text="${generateInvNum}" contenteditable="true"></span>
                                         <!-- <label id="invoice-number" style="color: red;" th:text="${generateInvNum}"></label> -->
                                         <input type="hidden" th:field="*{invoiceNum}" id="invoice-number-input" >
                                     </div>

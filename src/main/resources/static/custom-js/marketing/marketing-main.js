@@ -293,6 +293,12 @@ cashierNameInput.value = cashierName.textContent;
   const invoiceInput = document.getElementById('invoice-number-input');
   invoiceInput.value = invoiceSpan.innerText;
 
+//to update input hidden to have same value on span invoice number
+    invoiceSpan.addEventListener("input", function() {
+      invoiceInput.value = invoiceSpan.innerText;
+    });
+
+
   const invoiceObserver = new MutationObserver(function(mutationsList) {
     for(let mutation of mutationsList) {
       if (mutation.type === 'childList') {
