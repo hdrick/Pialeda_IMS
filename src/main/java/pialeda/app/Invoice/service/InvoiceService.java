@@ -308,4 +308,7 @@ public class InvoiceService {
         return invoiceRepository.findByInvoiceNum(invoiceNum);
     }
 
+    public Invoice findByInvNum(String invoiceNum){
+        return invoiceRepository.findByInvoiceNum(invoiceNum);
+    }
 }

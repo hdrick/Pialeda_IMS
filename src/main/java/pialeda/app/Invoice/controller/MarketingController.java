@@ -3,12 +3,14 @@ package pialeda.app.Invoice.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pialeda.app.Invoice.dto.*;
 import pialeda.app.Invoice.model.*;
+import pialeda.app.Invoice.repository.CurrentInvoiceRepo;
 import pialeda.app.Invoice.service.ClientService;
 import pialeda.app.Invoice.service.CollectionService;
 import pialeda.app.Invoice.service.OfficialRecptService;
@@ -19,7 +21,10 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class MarketingController {
@@ -33,6 +38,8 @@ public class MarketingController {
     private OfficialRecptService officialRecptService;
     @Autowired
     private CollectionService collectionService;
+    @Autowired
+    private CurrentInvoiceRepo currentInvoiceRepo;
 
     @GetMapping("marketing-view/invoices")
     public String viewInvoices(Model model){
@@ -48,34 +55,81 @@ public class MarketingController {
                                 @RequestParam("article") List<String> articlesList,
                                 @RequestParam("unitPrice") List<String> unitPriceList,
                                 @RequestParam("amount") List<String> amountList,
-                                RedirectAttributes redirectAttributes
+                                RedirectAttributes redirectAttributes,HttpSession session
                                  ){
         double sumOfGrandTotal = invoiceService.getSuppTotalLimit(invoiceInfo.getSupplierName());
         double supplierLimit = supplierService.findLimitByName(invoiceInfo.getSupplierName());
         double remainingLimit = supplierLimit - sumOfGrandTotal;
+        Invoice ifInvExist = invoiceService.findByInvNum(invoiceInfo.getInvoiceNum());
 
-        if(invoiceInfo.getGrandTotal() <= remainingLimit){
-            invoiceService.createInvoice(invoiceInfo, date, qtyList, unitList,articlesList,unitPriceList,amountList);
-            boolean hideDivSuccess = true;
-            redirectAttributes.addFlashAttribute("hideDivSuccess", hideDivSuccess);
-            return "redirect:/marketing-invoice";
+        if(ifInvExist == null){
+            if(invoiceInfo.getGrandTotal() <= remainingLimit){
+                invoiceService.createInvoice(invoiceInfo, date, qtyList, unitList,articlesList,unitPriceList,amountList);
+                boolean hideDivSuccess = true;
+                redirectAttributes.addFlashAttribute("hideDivSuccess", hideDivSuccess);
+                updateInvoiceAmount(invoiceInfo.getInvoiceNum());
+                return "redirect:/marketing-invoice";
+            }else{
+                boolean hideDivError = true;
+                redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
+                return "redirect:/marketing-invoice";
+            }
         }else{
-            boolean hideDivError = true;
-            redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
+            boolean hideDivDuplicateInv = true;
+            redirectAttributes.addFlashAttribute("hideDivDuplicateInv", hideDivDuplicateInv);
             return "redirect:/marketing-invoice";
         }
     }
 
+    @PutMapping()
+    public void updateInvoiceAmount(String invoiceNum) {
+        Optional<CurrentInvoice> cinv = currentInvoiceRepo.findById(1);
+        
+        if(cinv.isPresent()){
+            CurrentInvoice currentInvoice = cinv.get();
+            currentInvoice.setInvoiceNum(invoiceNum);
+            currentInvoiceRepo.save(currentInvoice);
+        }else{
+            CurrentInvoice currentInvoice = new CurrentInvoice(invoiceNum);
+            currentInvoice.setInvoiceNum(invoiceNum);
+            currentInvoiceRepo.save(currentInvoice);
+        }
+    }
+    
     @PostMapping("/createClient")
-    public String createClient(@ModelAttribute("clientInfo") ClientInfo clientInfo, Model model) {
-        clientService.createClient(clientInfo);
-        return "redirect:/marketing-invoice";
+    public String createClient(@ModelAttribute("clientInfo") ClientInfo clientInfo, 
+                                Model model,
+                                RedirectAttributes redirectAttributes) {
+        Client ifExist = clientService.findByName(clientInfo.getName());
+
+        if(ifExist == null){
+            boolean hideDivSuccessClient = true;
+            redirectAttributes.addFlashAttribute("hideDivSuccessClient", hideDivSuccessClient);
+            clientService.createClient(clientInfo);
+            return "redirect:/marketing-invoice";
+        }else{
+            boolean hideDivErrorDuplicateClient = true;
+            redirectAttributes.addFlashAttribute("hideDivErrorDuplicateClient", hideDivErrorDuplicateClient);
+            return "redirect:/marketing-invoice";
+        }
     }
 
     @PostMapping("/createSupplier")
-    public String createSupplier(@ModelAttribute("supplierInfo") SupplierInfo supplierInfo, Model model) {
-        supplierService.createSupplier(supplierInfo);
-        return "redirect:/marketing-invoice";
+    public String createSupplier(@ModelAttribute("supplierInfo") SupplierInfo supplierInfo, Model model,
+                                  RedirectAttributes redirectAttributes) {
+
+        Supplier ifExist = supplierService.findByName(supplierInfo.getName());
+
+        if(ifExist == null){
+            boolean hideDivSuccessSupp = true;
+            redirectAttributes.addFlashAttribute("hideDivSuccessSupp", hideDivSuccessSupp);
+            supplierService.createSupplier(supplierInfo);
+            return "redirect:/marketing-invoice";
+        }else{
+            boolean hideDivErrorDuplicateSupp = true;
+            redirectAttributes.addFlashAttribute("hideDivErrorDuplicateSupp", hideDivErrorDuplicateSupp);
+            return "redirect:/marketing-invoice";
+        }
     }
 
     @PostMapping("/createOfficialReceipt")
@@ -327,12 +381,24 @@ public class MarketingController {
             String orGeneratedNum = resultStr + randomNum;
             int result = Integer.parseInt(orGeneratedNum);
 
-            model.addAttribute("generateORNumber", result);
-            model.addAttribute("fullName",fullName);
-            model.addAttribute("clientList", clientService.getAllClient());
-            model.addAttribute("supplierList", supplierService.getAllSupplier());
-            model.addAttribute("officialReceiptInfo", new OfficialReceiptInfo());
-            return destination = "marketing/officialreceipt";
+            Optional<CurrentInvoice> cinv = currentInvoiceRepo.findById(1);
+        
+            if(cinv.isPresent()){
+                CurrentInvoice currentInvoice = cinv.get();
+                
+                Invoice inv = invoiceService.findByInvNum(currentInvoice.getInvoiceNum());
+                model.addAttribute("generateORNumber", result);
+                model.addAttribute("fullName",fullName);
+                model.addAttribute("clientList", clientService.getAllClient());
+                model.addAttribute("supplierList", supplierService.getAllSupplier());
+                model.addAttribute("officialReceiptInfo", new OfficialReceiptInfo());
+
+                model.addAttribute("currentInvoice", inv);
+                return destination = "marketing/officialreceipt";
+            }else{
+
+            }
+
         } else if (role.equals("admin")) {
             return destination = "redirect:/admin-dashboard";
         }

@@ -49,10 +49,11 @@
                     <option value="" selected>Select Supplier</option>
                     <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}" style="font-weight: bolder;"></option>
                 </select>
-                <!--Supplier button  -->
-                <a id="btn-addSupplier" class="btn btn-success" data-toggle="modal" data-target="#supplierModal">Add Supplier</a>
                 <!--Client button  -->
                 <a id="btn-addClient" class="btn btn-success" data-toggle="modal" data-target="#clientModal">Add Client</a>
+                <!--Supplier button  -->
+                <a id="btn-addSupplier" class="btn btn-success" data-toggle="modal" data-target="#supplierModal">Add Supplier</a>
+
                 <!--button for create Official receipt  -->
                 <div>
                     <a id="btn-OR" class="btn btn-warning" th:href="@{/marketing-officialreceipt}">Create OR</a>
@@ -159,7 +160,7 @@
                                 </tr>
                                 </thead>
                                 <tbody id="table-body" class="scrollable-table">
-
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -206,14 +207,14 @@
             <div class="main-bx2">
                 <!--            <a id="btn-Gen" class="btn btn-success" onclick="generateInvNum()">Generate</a>-->
                 <input id="btn-Create" type="submit" class="btn btn-success" value="Save Invoice">
-                <a id="btn-invoices" class="btn btn-success" th:href="@{/invoice-view}">List of Invoice</a>
+                <a id="btn-invoices" class="btn btn-success" onclick="return confirm('Warning: continuing will delete the encoded data. Do you want to proceed?')" th:href="@{/invoice-view}">List of Invoice</a>
             </div>
         </div>
     </form>
 </div>
 
 <!-- Client Modal -->
-<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true" style="margin-top: 4%;">
+<div class="modal fade" id="clientModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true" style="margin-top: 4%;" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -267,7 +268,7 @@
 </div>
 
 <!-- Supplier Modal -->
-<div class="modal fade" id="supplierModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true" style="margin-top: 4%;">
+<div class="modal fade" id="supplierModal" tabindex="-1" role="dialog" aria-labelledby="clientModalLabel" aria-hidden="true" style="margin-top: 4%;" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -400,6 +401,110 @@
     </div>
 </div>
 
+<!-- Modal: Success message for adding client-->
+
+<div class="modal fade" id="invoiceCreatedModal" tabindex="-1" role="dialog" aria-labelledby="invoiceCreatedModalLabel" aria-hidden="true" th:if="${hideDivSuccessClient}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceCreatedModalLabel" style="color:green">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>New Client  has been successfully created.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Success message for adding Supplier-->
+
+<div class="modal fade" id="invoiceCreatedModal" tabindex="-1" role="dialog" aria-labelledby="invoiceCreatedModalLabel" aria-hidden="true" th:if="${hideDivSuccessSupp}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceCreatedModalLabel" style="color:green">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>New Supplier  has been successfully created.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Error message for adding client duplicate -->
+
+<div class="modal fade" id="clientDuplicateModal" tabindex="-1" role="dialog" aria-labelledby="clientDuplicateModalLabel" aria-hidden="true" th:if="${hideDivErrorDuplicateClient}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clientDuplicateModalLabel" style="color:red">Duplicate Client Detected</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>This client name is already taken. Please choose a different name</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Error message for adding Supplier duplicate -->
+
+<div class="modal fade" id="suppDuplicateModal" tabindex="-1" role="dialog" aria-labelledby="suppDuplicateModalLabel" aria-hidden="true" th:if="${hideDivErrorDuplicateSupp}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="suppDuplicateModalLabel" style="color:red">Duplicate Supplier Detected</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>This Supplier name is already taken. Please choose a different name</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Error message for Creating invoice duplicate inv number -->
+
+<div class="modal fade" id="invNumDuplicateModal" tabindex="-1" role="dialog" aria-labelledby="invNumDuplicateModalLabel" aria-hidden="true" th:if="${hideDivDuplicateInv}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invNumDuplicateModalLabel" style="color:red">Duplicate Invoice Number Detected</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Invoice number arleady exists. Please choose a different name</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Bootstrap JavaScript -->
 <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
@@ -409,12 +514,22 @@
     $(document).ready(function () {
 
         $('#invoiceLimitModal').modal('show');
+        $('#invNumDuplicateModal').modal('show');
+        $('#suppDuplicateModal').modal('show');
+        $('#clientDuplicateModal').modal('show');
+
 
         $('#invoiceCreatedModal').modal('show');
         setTimeout(function() {
             $('#invoiceCreatedModal').modal('hide');
         }, 3000);
     });
+
+  // Get today's date as a string in the format that the input element expects
+  const today = new Date().toISOString().substr(0, 10);
+  
+  // Set the value of the input element to today's date
+  document.getElementById("client-date-input").value = today;
 </script>
 </body>
 </html>

@@ -148,18 +148,32 @@ function checkForDuplicateRows() {
 }
 
 const form = document.querySelector('#myForm');
-
+const tableBody_ = document.getElementById('table-body');
 form.addEventListener('submit', event => {
-  if (checkForDuplicateRows()) {
+
+  if(checkRowsIfEmpty()){
     event.preventDefault(); // prevent form submission
-    return false;
-  } else {
-    return true;
+  }else{
+    if (checkForDuplicateRows()) {
+      event.preventDefault(); // prevent form submission
+      return false;
+    } else {
+      return true;
+    }
   }
 });
 
 
-
+function checkRowsIfEmpty(){
+    // Check if the table has any rows
+    if (tableBody_.rows.length > 0) {
+      return false;
+    } else {
+      // Do something else if the table has no rows
+      alert("The invoice cannot be created without any items. Please add at least one item to complete the creation of the invoice.");
+      return true;
+    }
+}
 //////////////////// table
 const tableBody = document.getElementById('table-body');
 const addRowBtn = document.getElementById('add-row-btn');
