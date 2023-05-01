@@ -149,6 +149,7 @@ public class MarketingController {
                                         RedirectAttributes redirectAttributes
         ) {
       officialRecptService.createOR(orNumber, totalSales, addVat, lwTax, amtDue, ewt, total, cash, chckNo, orAmount, cashierName, requestParams, officialReceiptInfo);
+
       boolean hideDivSuccessOR = true;
       redirectAttributes.addFlashAttribute("hideDivSuccessOR", hideDivSuccessOR);
       return "redirect:/marketing-officialreceipt";
@@ -218,7 +219,7 @@ public class MarketingController {
     public String findPaginatedOR(@PathVariable int pageno, Model model){
         Page<OfficialReceipt> officialReceiptList= officialRecptService.getOfficialReceiptPaginated(pageno, 8);
         System.out.println("officialReceiptList: "+officialReceiptList);
-        
+
         model.addAttribute("officialReceiptList", officialReceiptList);
         model.addAttribute("currentPage",pageno);
         model.addAttribute("totalPages",officialReceiptList.getTotalPages());

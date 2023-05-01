@@ -74,7 +74,11 @@ public class OfficialRecptService {
         if(!(ewt.equals(null) || ewt.isEmpty())){
             or.setEwt(formatStringToDouble(ewt));
         }
-        or.setTotal(formatStringToDouble(total));
+        if(total.equals(null) || total.isEmpty()){
+            or.setTotal(formatStringToDouble(amtDue));
+        }else{
+            or.setTotal(formatStringToDouble(total));
+        }
         or.setCash(cash);
         or.setCheckNo(chckNo);
         or.setAmount(formatStringToDouble(orAmount));
