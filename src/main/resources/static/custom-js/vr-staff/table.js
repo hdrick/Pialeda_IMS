@@ -80,7 +80,6 @@ function paginateTable(table, itemsPerPage) {
         newTab.location.href = '/vr/user/invoice/invoiceDetails/' + invoiceNum;
       }
 
-
     });
 
 });

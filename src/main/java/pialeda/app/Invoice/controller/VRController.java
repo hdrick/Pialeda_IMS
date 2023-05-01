@@ -538,7 +538,7 @@ public class VRController {
         model.addAttribute("invoiceDetails", invoiceDetails);
         model.addAttribute("clientDetails", clientDetails);
         model.addAttribute("invoicePurchaseProducts", invoicePurchaseProducts);
-        
+
         return "vr-staff/vr-invoice";
     }
 }
