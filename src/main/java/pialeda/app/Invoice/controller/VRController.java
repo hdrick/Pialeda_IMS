@@ -16,6 +16,8 @@ import pialeda.app.Invoice.service.SupplierService;
 import pialeda.app.Invoice.dto.GlobalUser;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -156,6 +158,11 @@ public class VRController {
         BigDecimal supplierReachAmount = invoiceService.getTotalAmountBySupplierName(supplier);
         double supplierLimit = supplierService.findLimitByName(supplier);
 
+        NumberFormat format = new DecimalFormat("#,##0.00");
+        String formattedTotalAmount = format.format(totalAmount);
+        String formattedSupplierReachAmount = format.format(supplierReachAmount);
+        String formattedSupplierLimit = format.format(supplierLimit);
+
         List<Client> clients = clientService.getAllClient();
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
@@ -190,9 +197,9 @@ public class VRController {
         model.addAttribute("clients", clients);
         model.addAttribute("suppliers", suppliers);
 
-        model.addAttribute("totalInvoicesAmount", totalAmount);
-        model.addAttribute("supplierReachAmount", supplierReachAmount);
-        model.addAttribute("supplierLimit", supplierLimit);
+        model.addAttribute("totalInvoicesAmount", formattedTotalAmount);
+        model.addAttribute("supplierReachAmount", formattedSupplierReachAmount);
+        model.addAttribute("supplierLimit", formattedSupplierLimit);
 
         model.addAttribute("selectedClient", client);
         model.addAttribute("selectedSupplier", supplier);
@@ -253,7 +260,13 @@ public class VRController {
     {
         Page<Invoice> page = invoiceService.filterPageBySupplier(supplier, currentPage);
         BigDecimal totalAmount = invoiceService.getTotalAmountBySupplierName(supplier);
+        BigDecimal supplierReachAmount = invoiceService.getTotalAmountBySupplierName(supplier);
         double supplierLimit = supplierService.findLimitByName(supplier);
+
+        NumberFormat format = new DecimalFormat("#,##0.00");
+        String formattedTotalAmount = format.format(totalAmount);
+        String formattedSupplierReachAmount = format.format(supplierReachAmount);
+        String formattedSupplierLimit = format.format(supplierLimit);
 
         List<Client> clients = clientService.getAllClient();
         List<String> suppliers = supplierService.getAllSupplierName();
@@ -289,9 +302,9 @@ public class VRController {
         model.addAttribute("clients", clients);
         model.addAttribute("suppliers", suppliers);
 
-        model.addAttribute("totalInvoicesAmount", totalAmount);
-        model.addAttribute("supplierReachAmount", totalAmount);
-        model.addAttribute("supplierLimit", supplierLimit);
+        model.addAttribute("totalInvoicesAmount", formattedTotalAmount);
+        model.addAttribute("supplierReachAmount", formattedSupplierReachAmount);
+        model.addAttribute("supplierLimit", formattedSupplierLimit);
 
         model.addAttribute("selectedClient", null);
         model.addAttribute("selectedSupplier", supplier);
@@ -378,6 +391,11 @@ public class VRController {
         BigDecimal supplierReachAmount = invoiceService.getTotalAmountBySupplierName(supplier);
         double supplierLimit = supplierService.findLimitByName(supplier);
 
+        NumberFormat format = new DecimalFormat("#,##0.00");
+        String formattedTotalAmount = format.format(totalAmount);
+        String formattedSupplierReachAmount = format.format(supplierReachAmount);
+        String formattedSupplierLimit = format.format(supplierLimit);
+
         List<Client> clients = clientService.getAllClient();
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
@@ -415,9 +433,9 @@ public class VRController {
         model.addAttribute("clients", clients);
         model.addAttribute("suppliers", suppliers);
 
-        model.addAttribute("totalInvoicesAmount", totalAmount);
-        model.addAttribute("supplierReachAmount", supplierReachAmount);
-        model.addAttribute("supplierLimit", supplierLimit);
+        model.addAttribute("totalInvoicesAmount", formattedTotalAmount);
+        model.addAttribute("supplierReachAmount", formattedSupplierReachAmount);
+        model.addAttribute("supplierLimit", formattedSupplierLimit);
 
         model.addAttribute("selectedClient", null);
         model.addAttribute("selectedSupplier", supplier);
@@ -439,6 +457,11 @@ public class VRController {
         BigDecimal supplierReachAmount = invoiceService.getTotalAmountBySupplierName(supplier);
         double supplierLimit = supplierService.findLimitByName(supplier);
 
+        NumberFormat format = new DecimalFormat("#,##0.00");
+        String formattedTotalAmount = format.format(totalAmount);
+        String formattedSupplierReachAmount = format.format(supplierReachAmount);
+        String formattedSupplierLimit = format.format(supplierLimit);
+
         List<Client> clients = clientService.getAllClient();
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
@@ -476,9 +499,9 @@ public class VRController {
         model.addAttribute("clients", clients);
         model.addAttribute("suppliers", suppliers);
 
-        model.addAttribute("totalInvoicesAmount", totalAmount);
-        model.addAttribute("supplierReachAmount", supplierReachAmount);
-        model.addAttribute("supplierLimit", supplierLimit);
+        model.addAttribute("totalInvoicesAmount", formattedTotalAmount);
+        model.addAttribute("supplierReachAmount", formattedSupplierReachAmount);
+        model.addAttribute("supplierLimit", formattedSupplierLimit);
 
         model.addAttribute("selectedClient", client);
         model.addAttribute("selectedSupplier", supplier);

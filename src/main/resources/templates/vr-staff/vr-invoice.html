@@ -69,6 +69,184 @@
             width: 245px;
         }
     }
+    .officialReceipt-con
+    {
+    border: solid 1px #c3b9b9;
+    padding: 0.5%;
+    background-color: white;
+    height: 4.8in;
+    display: flex;
+    margin: 45px 0px 20px 0px;
+    gap: 5px;
+}
+.row-1{
+    width:40%;
+}
+.officialReceipt-btn{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    gap:20px;
+}
+
+table{
+  font-size: 73%;
+  border-collapse: collapse;
+  font-weight: bolder;
+}
+td{
+
+}
+
+#amt{
+
+}
+
+.amt-r1{
+  width: 51%;
+
+}
+
+.amt-r3{
+  width: 5px;
+}
+
+
+.row-2{
+   width:100%;
+
+   display: flex;
+   flex-direction: column;
+}
+
+.r2-header{
+    margin-bottom: 30px;
+}
+.r2-body{
+    flex-grow: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    text-align: center;
+    gap: 5px;
+}
+
+.r2-body .con{
+width: 100%;
+
+  display: flex;
+  align-items: center;
+}
+.r2-body .con label{
+    font-size: 13px;
+    font-style: italic;
+    font-weight: 400;
+    align-items: center;
+}
+.r2-body .con input{
+    align-items: center;
+    flex-grow: 1;
+    text-align: center;
+    outline: none;
+    box-shadow: none;
+    padding: 0 0 0 5px;
+    border: 0;
+    border-bottom: 1px solid black;
+    font-size: 12px;
+    font-weight: bolder;
+}
+
+#inp-1{
+
+}
+
+#hdate{
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.hstyle label
+{
+    margin:0;
+    font-size: 14px;
+}
+.r2-footer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.r2-footer input{
+    margin-right: 30px;
+    justify-content: center;
+    text-align: center;
+    outline: none;
+    box-shadow: none;
+    padding: 0 0 0 5px;
+    border: 0;
+    border-bottom: 1px solid black;
+    font-size: 12px;
+    font-weight: bolder;
+    font-style: italic;
+}
+
+#supp-details{
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+}
+#supp-name{
+     margin: 0;
+     font-size: 25px;
+     font-weight: bolder;
+}
+#supp-addrs{
+     margin: 0;
+     font-size: 8px;
+     width: 80%;
+     text-align: center;
+}
+
+#supp-tin{
+     font-size: 8px;
+}
+
+table td input{
+    font-size: 10px;
+    text-align: center;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+    padding:0;
+    border: 0;
+}
+
+.h-input{
+    text-align: center;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+    padding:0;
+    border: 0;
+}
+
+/* For Actions button */
+.btn-actions{
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  gap: 400px;
+}
+
+.selection{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
 
     </style>
 </head>
@@ -106,9 +284,9 @@
                     <div class="invoice-to">
                         <ul class="list-unstyled">
                             <li><strong>Invoiced To</strong></li>
-                            <li th:text="${supplierDetails.getName()}"></li>
-                            <li th:text="${supplierDetails.getAddress()}"></li>
-                            <li th:text="${supplierDetails.getCityAddress()}"></li>
+                            <li th:text="${clientDetails.getName()}"></li>
+                            <li th:text="${clientDetails.getAddress()}"></li>
+                            <li th:text="${clientDetails.getCityAddress()}"></li>
                         </ul>
                     </div>
                     <div class="invoice-items">
@@ -150,10 +328,150 @@
                             </table>
                         </div>
                     </div>
-                    <div class="invoice-footer">
-                        <h7 id="date-time"></h7>
-                    </div>
+
                 </div>
+            </div>
+            <div class="officialReceipt-con" id="print-content">
+                <div class="row-1">
+                    <table border="1">
+                        <tbody><tr>
+                            <td colspan="3" style="text-align: center;">IN SETTLEMENT OF THE FOLLOWING:</td>
+                        </tr>
+                        <tr>
+                            <td colspan="1" style="text-align: center;">INVOICE NO.</td>
+                            <td id="amt" colspan="2" style="text-align: center;">AMOUNT</td>
+                        </tr>
+                        <!-- Start invoice number input -->
+                        <tr>
+                            <td class="amt-r1"><input name="inv1" type="text" required=""></td>
+                            <td class="amt-r1"><input name="inv1-amt" id="inv1-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                            <td class="amt-r3"><input readonly=""></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" name="inv2"></td>
+                            <td class="amt-r1"><input name="inv2-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                            <td class="amt-r3"><input readonly=""></td>
+                        </tr>
+                        <tr>
+                            <td><input type="text" name="inv3"></td>
+                            <td class="amt-r1"><input name="inv3-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                            <td class="amt-r3"><input readonly=""></td>
+                        </tr>
+                        <tr>
+                            <td><input name="inv4" type="text"></td>
+                            <td class="amt-r1"><input name="inv4-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                            <td class="amt-r3"><input readonly=""></td>
+                        </tr>
+                        <tr>
+                            <td><input name="inv5" type="text"></td>
+                            <td><input name="inv5-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                            <td class="amt-r3"><input readonly=""></td>
+                        </tr>
+                        <tr>
+                            <td><input name="inv6" type="text"></td>
+                            <td><input name="inv6-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                            <td class="amt-r3"><input readonly=""></td>
+                        </tr>
+                        <tr>
+                            <td><input name="inv7" type="text"></td>
+                            <td><input name="inv7-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                            <td class="amt-r3"><input readonly=""></td>
+                        </tr>
+                        <tr>
+                            <td><input name="inv8" type="text"></td>
+                            <td><input name="inv8-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                            <td class="amt-r3"><input readonly=""></td>
+                        </tr>
+                        <!-- End invoice number input -->
+                        <tr>
+                            <td></td>
+                            <td><input name="totalSales" id="total-sales" type="hidden" style="color:red; font-weight: bolder;" readonly=""></td>
+                            <td class="amt-r3"><input></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input name="addVat" id="add-vat" type="text" readonly=""></td>
+                            <td class="amt-r3"><input></td>
+                        </tr>
+                        <tr>
+                            <td style="font-size: 10px;"></td>
+                            <td><input name="lwTax" id="lw-tax" type="text" readonly=""></td>
+                            <td class="amt-r3"><input></td>
+                        </tr>
+                        <tr>
+                            <td>Amount Due</td>
+                            <td style="display: flex; border:0; justify-content: center;">₱
+                                <!-- <label id="lbl-amtDue" style="color:red; font-weight: bolder; text-align: center;">1200</label> -->
+                                <input name="amtDue" id="amt-due" type="text" style="color:red; font-weight: bolder;" readonly=""></td>
+                            <td class="amt-r3"><input></td>
+                        </tr>
+                        <tr>
+                            <td>1% EWT</td>
+                            <td><input type="text" name="ewt" id="ewt" readonly="" required=""></td>
+                            <td class="amt-r3"><input></td>
+                        </tr>
+                        <tr>
+                            <td>Total:</td>
+                            <td style="display: flex; border:0; justify-content: center;">₱<input type="text" name="total" id="total" readonly="" style="color:red; font-weight: bolder;"></td>
+                            <td class="amt-r3"><input></td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 5px;"></td>
+                            <td></td>
+                            <td class="amt-r3"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="text-align: center;">PAYMENT IN FORM OF</td>
+                        </tr>
+                        <tr>
+                            <td>CASH</td>
+                            <td colspan="2"><input name="cash" required=""></td>
+
+                        </tr>
+                        <tr>
+                            <td>CHECK/NO.</td>
+                            <td colspan="2"><input name="chckNo"></td>
+                        </tr>
+                        <tr>
+                            <td>AMOUNT</td>
+                            <td colspan="2" style="display: flex; border:0;">₱<input name="crAmount" style="color:red; font-weight: bolder;" required=""></td>
+                        </tr>
+                        </tbody></table>
+                </div>
+
+
+                <div class="row-2">
+                    <div class="r2-header">
+                        <div class="d-flex align-items-center hstyle" style="flex-direction: column; justify-content: center;">
+<!--                            <h2 id="logo-suppName" class="mt-2 mx-4" contenteditable="true" style="font-size: 10px; width: 10%; font-weight: bolder; font-style: italic;">SUPPLIER NAME</h2>-->
+                            <div id="supp-details">
+                                <h4 th:text="${supplierDetails.getName()}"></h4>
+                                <label th:text="${supplierDetails.getAddress()}"></label>
+                                <label th:text="${supplierDetails.getCityAddress()}"></label>
+                                <label th:text="${supplierDetails.getTin()}"></label>
+                            </div>
+                            <div style="font-weight: bolder;position: absolute;right: 65px;">
+                                <div id="s-invo-con">
+                                    <label id="or-number" style="color:red;">520197</label>
+                                    <input type="hidden" name="orNumber" id="invoice-number-input" value="520197">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="r2-body">
+                        <div id="hdate" class="con"><h5>COLLECTTION RECEIPT</h5> <div><label>Date</label><input type="text" id="orDate" name="officialReceiptDate" required="" value=""></div></div>
+                        <div class="con"><label>Received from</label><input id="c-name" name="recvFrom" required="" value=""></div>
+                        <div class="con"><label>and Address at</label><input id="c-address" name="clientAddress" required="" value=""></div>
+                        <div class="con"><label>with TIN</label><input id="tin" name="clientTin" value=""><label>engaged in the</label></div>
+                        <div class="con"><label>Bus. Style of from</label><input id="busStyle" name="clientBus" value=""><label>,the sum of</label></div>
+                        <div class="con"><input id="sumOf" name="clientSumOf" required="" value=""><label>Pesos</label></div>
+                        <div class="con"><label>(₱<input type="text" id="clientPayment" name="clientPayment" step="0.01" style="color: red;" onchange="formatNumber(this)" required="" value="">) in full/partial payment for</label> <input id="paymentFor" name="partialPaymentFor" required="" value=""></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="invoice-footer">
+                <h7 id="date-time"></h7>
             </div>
         </div>
     </div>
