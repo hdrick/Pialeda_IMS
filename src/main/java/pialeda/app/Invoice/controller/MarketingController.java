@@ -143,6 +143,35 @@ public class MarketingController {
         return supplierInfo;
     }
 
+    @GetMapping("/official-receipt-list")
+    public String officialReceiptList(Model model){
+        String role = GlobalUser.getUserRole();
+        String destination=null;
+        if(role == null){
+            return destination = "redirect:/login";
+        } else if (role.equals("vr-staff")) {
+            return destination = "redirect:/vr/user/invoices";
+        } else if (role.equals(("marketing"))) {
+            return destination = findPaginatedOR(0, model);
+        } else if (role.equals("admin")) {
+            return destination = "redirect:/admin-dashboard";
+        }
+        return destination;
+
+    }
+
+    @GetMapping("/pages/{pageno}")
+    public String findPaginatedOR(@PathVariable int pageno, Model model){
+        Page<OfficialReceipt> officialReceiptList= officialRecptService.getOfficialReceiptPaginated(pageno, 8);
+        System.out.println("officialReceiptList: "+officialReceiptList);
+        
+        model.addAttribute("officialReceiptList", officialReceiptList);
+        model.addAttribute("currentPage",pageno);
+        model.addAttribute("totalPages",officialReceiptList.getTotalPages());
+        model.addAttribute("totalItem", officialReceiptList.getTotalElements());
+
+        return "marketing/listofficialreceipt";
+    }
 
 
     @GetMapping("/invoice-view")
@@ -159,7 +188,6 @@ public class MarketingController {
             return destination = "redirect:/admin-dashboard";
         }
         return destination;
-
     }
 
     @GetMapping("/page/{pageno}")
@@ -184,11 +212,25 @@ public class MarketingController {
         result.put("invoiceNum", inv.getInvoiceNum());
         result.put("poNum", inv.getPoNum());
         result.put("dateCreated", inv.getDateCreated());
+
         result.put("supplierName", inv.getSupplierName());
+        result.put("supplierAddress", inv.getSupplierAddress());
+        result.put("supplierTin", inv.getSupplierTin());
+
+
+
         result.put("clientName", inv.getClientName());
+        result.put("clientBusStyle", inv.getClientBusStyle());
+        result.put("clientTerms", inv.getClientTerms());
+        result.put("clientAddress", inv.getClientAddress());
+        result.put("clientTin", inv.getClientTin());
+
         result.put("clientContactPerson", inv.getClientContactPerson());
         result.put("productList", prodList);
 
+        result.put("addVat", inv.getAddVat());
+        result.put("amountNetOfVat", inv.getAmountNetOfVat());
+        result.put("totalSalesVatInc", inv.getTotalSalesVatInc());
         return result;
     }
 
@@ -340,4 +382,7 @@ public class MarketingController {
         }
         return destination;
     }
+
+
+
 }

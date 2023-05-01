@@ -10,6 +10,7 @@ import pialeda.app.Invoice.config.DateUtils;
 import pialeda.app.Invoice.model.Client;
 import pialeda.app.Invoice.model.Invoice;
 import pialeda.app.Invoice.model.InvoiceProductInfo;
+import pialeda.app.Invoice.model.OfficialReceipt;
 import pialeda.app.Invoice.model.Supplier;
 import pialeda.app.Invoice.repository.ClientRepository;
 import pialeda.app.Invoice.repository.InvoiceProdInfoRepository;

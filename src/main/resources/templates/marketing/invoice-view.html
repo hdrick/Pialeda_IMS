@@ -13,7 +13,7 @@
     <!--custom css for vr-->
     <!--    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/style.css}">-->
     <style>
-      .div1 .div2 .div3 input,#total-amt{
+      .div1 .div2 .div3 input,#total-amt,#addVat,#amtNetVat,#totalSalesVatInc{
           border: none;
           outline: none;
     }
@@ -131,6 +131,21 @@
                                 <input id="date-created" name="date-created">
                             </strong>
                         </p>
+                        <p>
+                            <strong>Client Contact Person:
+                                <input id="client-cp" name="client-cp">
+                            </strong>
+                        </p>
+                        <p>
+                            <strong>Client Bus. Style:
+                                <input id="client-bStyle" name="client-bStyle">
+                            </strong>
+                        </p>
+                        <p>
+                            <strong>Client Terms:
+                                <input id="client-terms" name="client-terms">
+                            </strong>
+                        </p>
                     </div>
                     <div class="col-6 div3">
                         <p>
@@ -139,13 +154,28 @@
                             </strong>
                         </p>
                         <p>
+                            <strong>Supplier Address:
+                                <input id="supp-address" name="supp-address">
+                            </strong>
+                        </p>
+                        <p>
+                            <strong>Supplier TIN:
+                                <input id="supp-tin" name="supp-tin">
+                            </strong>
+                        </p>
+                        <p>
                             <strong>Client Name:
                                 <input id="client-name" name="client-name">
                             </strong>
                         </p>
                         <p>
-                            <strong>Client Contact Person:
-                                <input id="client-cp" name="client-cp">
+                            <strong>Client Address:
+                                <input id="client-address" name="client-address">
+                            </strong>
+                        </p>
+                        <p>
+                            <strong>Client TIN:
+                                <input id="client-tin" name="client-tin">
                             </strong>
                         </p>
                     </div>
@@ -175,9 +205,15 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <label style="color: red; font-weight: bolder;">Total: <input id="total-amt" name="total-amt" readonly style="font-weight: bolder"></label>
+                <div>
+                    <label style="color: red; font-weight: bolder;">Grand Total: <input id="total-amt" name="total-amt" readonly style="font-weight: bolder"></label>
+                    <label style="color: red; font-weight: bolder;">Add VAT: <input id="addVat" name="addVat" readonly style="font-weight: bolder"></label>
+                    <label style="color: red; font-weight: bolder;">Amount Net Of VAT: <input id="amtNetVat" name="amtNetVat" readonly style="font-weight: bolder"></label>
+                    <label style="color: red; font-weight: bolder;">Total Sales VAT INC: <input id="totalSalesVatInc" name="totalSalesVatInc" readonly style="font-weight: bolder"></label>
+                </div>
+                
                 <a type="button" class="btn btn-secondary" data-dismiss="modal">Close</a>
-                <button type="submit" id="submitButton" class="btn btn-primary">Save changes</button>
+                <button type="submit" id="submitButton" class="btn btn-primary">Save</button>
             </div>
         </div>
         </form>

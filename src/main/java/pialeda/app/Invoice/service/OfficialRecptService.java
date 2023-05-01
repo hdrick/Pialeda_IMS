@@ -3,6 +3,8 @@ package pialeda.app.Invoice.service;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import pialeda.app.Invoice.dto.CollectionReceiptInfo;
@@ -13,6 +15,9 @@ import pialeda.app.Invoice.repository.OfficialRecptInvoicesRepo;
 import pialeda.app.Invoice.repository.OfficialRecptRepository;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
+
+
 @Service
 public class OfficialRecptService {
     @Autowired
@@ -100,6 +105,11 @@ public class OfficialRecptService {
     public void createCR(int orNumber, String amtDue, String ewt, String total, String cash, String chckNo,
             String crAmount, String cashierName, Map<String, String> requestParams,
             CollectionReceiptInfo collectionReceiptInfo) {
+    }
+
+    public Page<OfficialReceipt> getOfficialReceiptPaginated(int currentPage, int size){
+        Pageable p = PageRequest.of(currentPage, size);
+        return officialRecptRepository.findAll(p);
     }
 
 }
