@@ -71,8 +71,8 @@
             </tr>
             <!-- Start invoice number input -->
             <tr>
-              <td class="amt-r1"><input name="inv1" type="text" required></td>
-              <td class="amt-r1"><input name="inv1-amt" id="inv1-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+              <td class="amt-r1"><input name="inv1" th:value="${currentInvoice}" type="text" required></td>
+              <td class="amt-r1"><input name="inv1-amt" id="inv1-amt" th:value="${curAmount}" class="myNumber" onchange="formatNumber(this)" type="text"></td>
               <td class="amt-r3"><input readonly></td>
             </tr>
             <tr>
@@ -130,7 +130,7 @@
               <td>Amount Due</td>
               <td style="display: flex; border:0; justify-content: center;">₱
                 <!-- <label id="lbl-amtDue" style="color:red; font-weight: bolder; text-align: center;">1200</label> -->
-                <input  name="amtDue" id="amt-due"  type="text" style="color:red; font-weight: bolder;" readonly></td>
+                <input  name="amtDue" id="amt-due"  th:value="${curAmount}" type="text" style="color:red; font-weight: bolder;" readonly></td>
               <td class="amt-r3"><input></td>
             </tr>
             <tr>
@@ -296,6 +296,12 @@
           $('#orCreatedModal').modal('hide');
       }, 3000);
   });
+
+  // Get today's date as a string in the format that the input element expects
+  const today = new Date().toISOString().substr(0, 10);
+  
+  // Set the value of the input element to today's date
+  document.getElementById("orDate").value = today;
 </script>
 </body>
 </html>

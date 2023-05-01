@@ -382,21 +382,33 @@ public class MarketingController {
             int result = Integer.parseInt(orGeneratedNum);
 
             Optional<CurrentInvoice> cinv = currentInvoiceRepo.findById(1);
-        
+            System.out.println("CURRENT INVOICE: "+cinv);
             if(cinv.isPresent()){
                 CurrentInvoice currentInvoice = cinv.get();
                 
                 Invoice inv = invoiceService.findByInvNum(currentInvoice.getInvoiceNum());
+                String curInv = inv.getInvoiceNum();
+                double curAmount = inv.getGrandTotal();
+
                 model.addAttribute("generateORNumber", result);
                 model.addAttribute("fullName",fullName);
                 model.addAttribute("clientList", clientService.getAllClient());
                 model.addAttribute("supplierList", supplierService.getAllSupplier());
                 model.addAttribute("officialReceiptInfo", new OfficialReceiptInfo());
 
-                model.addAttribute("currentInvoice", inv);
+                model.addAttribute("currentInvoice", curInv);
+                model.addAttribute("curAmount", curAmount);
                 return destination = "marketing/officialreceipt";
             }else{
+                String inv = null;
+                model.addAttribute("generateORNumber", result);
+                model.addAttribute("fullName",fullName);
+                model.addAttribute("clientList", clientService.getAllClient());
+                model.addAttribute("supplierList", supplierService.getAllSupplier());
+                model.addAttribute("officialReceiptInfo", new OfficialReceiptInfo());
 
+                // model.addAttribute("currentInvoice", inv);
+                return destination = "marketing/officialreceipt";
             }
 
         } else if (role.equals("admin")) {
@@ -436,13 +448,37 @@ public class MarketingController {
             String resultStr = String.format("%d%d%s", currentMonth, currentDay, generateORNumberStr);
             String orGeneratedNum = resultStr + randomNum;
             int result = Integer.parseInt(orGeneratedNum);
+            Optional<CurrentInvoice> cinv = currentInvoiceRepo.findById(1);
 
-            model.addAttribute("generateORNumber", result);
-            model.addAttribute("fullName",fullName);
-            model.addAttribute("clientList", clientService.getAllClient());
-            model.addAttribute("supplierList", supplierService.getAllSupplier());
-            model.addAttribute("collectionReceiptInfo", new CollectionReceiptInfo());
-            return destination = "marketing/collectionreceipt";
+
+
+            
+
+            if(cinv.isPresent()){
+                CurrentInvoice currentInvoice = cinv.get();
+                
+                Invoice inv = invoiceService.findByInvNum(currentInvoice.getInvoiceNum());
+                String curInv = inv.getInvoiceNum();
+                double curAmount = inv.getGrandTotal();
+
+                model.addAttribute("generateORNumber", result);
+                model.addAttribute("fullName",fullName);
+                model.addAttribute("clientList", clientService.getAllClient());
+                model.addAttribute("supplierList", supplierService.getAllSupplier());
+                model.addAttribute("collectionReceiptInfo", new CollectionReceiptInfo());
+
+                model.addAttribute("currentInvoice", curInv);
+                model.addAttribute("curAmount", curAmount);
+                return destination = "marketing/collectionreceipt";
+            }else{
+                model.addAttribute("generateORNumber", result);
+                model.addAttribute("fullName",fullName);
+                model.addAttribute("clientList", clientService.getAllClient());
+                model.addAttribute("supplierList", supplierService.getAllSupplier());
+                model.addAttribute("officialReceiptInfo", new OfficialReceiptInfo());
+
+                return destination = "marketing/collectionreceipt";
+            }
         } else if (role.equals("admin")) {
             return destination = "redirect:/admin-dashboard";
         }
