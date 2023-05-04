@@ -186,6 +186,12 @@
     <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
       <div class="content-body">
         <div class="row">
+          <div class="Tab-selector col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <select class="form-select" id="filterByTab">
+              <option value="SI" selected>INVOICE</option>
+              <option value="OR">OFFICIAL RECEIPT</option>
+            </select>
+          </div>
           <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 left-panel">
             <select class="form-select" id="filterByClient">
               <option value="default" selected>Filter by Client</option>
@@ -249,15 +255,11 @@
           <table th:if="${isSupplierPresent}" class="table table-sm table-bordered" id="my-table-total">
             <tr>
               <th>Invoices Total Amount</th>
-              <td th:text="${totalInvoicesAmount+'0'}"></td>
-              <!--              <th style="background-color: red">VAT</th>-->
-              <!--              <td><i>1200</i></td>-->
-              <!--              <th>Total Amount</th>-->
-              <!--              <td>1200</td>-->
-              <th>Supplier Reach</th>
-              <td th:text="${supplierReachAmount+'0'}"></td>
+              <td th:text="${totalInvoicesAmount}"></td>
+              <th style="background-color: green">Supplier Reach</th>
+              <td th:text="${supplierReachAmount}"></td>
               <th style="background-color: orange">Supplier Limit</th>
-              <b><td th:text="${supplierLimit+'0'}" style="font-weight: bold;"></td></b>
+              <b><td th:text="${supplierLimit}" style="font-weight: bold; color: red"></td></b>
             </tr>
           </table>
           <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
