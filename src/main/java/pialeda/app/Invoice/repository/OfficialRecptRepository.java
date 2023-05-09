@@ -6,4 +6,5 @@ import pialeda.app.Invoice.model.OfficialReceipt;
 
 @Repository
 public interface OfficialRecptRepository extends JpaRepository<OfficialReceipt, Integer> {
+    OfficialReceipt findById(int orId);
 }

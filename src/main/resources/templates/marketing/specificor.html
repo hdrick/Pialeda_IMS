@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/or-view-style.css}">
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="invoice-title">
+                    <h2>Official receipt</h2>
+                    <h3 class="float-right">OR#: <strong th:text="${specificId.getOfficialReceiptNum}" style="color: red;"></strong></h3>
+                </div>
+                <hr>
+                <div id="info" class="row">
+                    <div class="col-md-6 client-info">
+                        <address>
+                            <h4>OR Client Info</h4><br>
+                            <strong>Name: </strong><input th:value="${specificId.getRecvFrom}" autocomplete="no-autocomplete" size="40" required><br> 
+                            <strong>Address: </strong><input type="text" th:value="${specificId.getClientAddress}" size="50" autocomplete="no-autocomplete" required><br>
+                            <strong>TIN: </strong><input th:value="${specificId.getClientTin}" autocomplete="no-autocomplete" required><br>
+                            <strong>Bus.Style: </strong><input th:value="${specificId.getClientBus}" autocomplete="no-autocomplete" required><br>
+                            <strong>Payment: </strong><input th:value="${specificId.getClientSumOf}" size="50" autocomplete="no-autocomplete" required><br>
+                            <strong>Payment: </strong><input th:value="${specificId.getClientPayment}" autocomplete="no-autocomplete" style="color: red;" required><br>
+                            <strong>Partial Payment: </strong><input th:value="${specificId.getPartialPaymentFor}" autocomplete="no-autocomplete" required><br>
+                        </address>
+                    </div>
+                    <div id="supplier-info" class="col-md-6 text-md-right">
+                        <address>
+                            <h4>OR Supplier Info</h4><br>
+                            <strong>Name: </strong><input th:value="${specificId.getSupplierName}" autocomplete="no-autocomplete" size="50" required><br> 
+                            <strong>Address: </strong><input th:value="${specificId.getSupplierAddress}" autocomplete="no-autocomplete" size="50" required><br> 
+                            <strong>TIN: </strong><input th:value="${specificId.getSupplierTin}" autocomplete="no-autocomplete" size="50" required><br>
+                        </address>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <address>
+                            <strong>Cashier Names:</strong><br>
+                            <span th:text="${specificId.getCashierName}"></span> 
+                        </address>
+                    </div>
+                    <div class="col-md-6 text-md-right">
+                        <address>
+                            <strong>Official Receipt Date:</strong><br>
+                           <input type="date" th:value="${specificId.getOfficialReceiptDate}" required><br><br>
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><strong>OR summary</strong></h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th><strong>Invoice Number</strong></th>
+                                        <th class="text-center"><strong>Amount</strong></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- foreach ($order->lineItems as $line) or some such thing here -->
+                                    <tr th:each="orInvoiceInfo: ${orInvoiceInfo}">
+                                        <td th:text="${orInvoiceInfo.invoiceNo}"></td>
+                                        <td th:text="${orInvoiceInfo.invoiceAmount}"></td>
+                                    </tr>
+                                    
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+</body>
+</html>

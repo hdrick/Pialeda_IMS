@@ -46,7 +46,7 @@
               <th>Bus. Style</th>
               <th>Total</th>
               <th>P.Payment For</th>
-              <!-- <th>Action</th> -->
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -61,10 +61,10 @@
               <td th:text="${orrcpt.total}" style="font-weight: bolder; color:red;"></td>
               <td th:text="${orrcpt.partialPaymentFor}"></td>
               <!-- <td th:text="${or.grandTotal}" style="font-weight: bolder; color:red;"></td> -->
-              <!-- <td>
-                Button trigger modal
-                <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" th:data-id="${inv.id}" onclick="fillModalFields(this.getAttribute('data-id'))"> Edit </a>
-              </td> -->
+              <td>
+                <!-- Button trigger modal -->
+                <a class="btn btn-primary"  th:href="@{'official-receipt-view/' + ${orrcpt.id}}"> View </a>
+              </td>
             </tr>
           </tbody>
         </table>

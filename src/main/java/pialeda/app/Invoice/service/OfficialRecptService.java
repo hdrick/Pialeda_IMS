@@ -1,6 +1,7 @@
 package pialeda.app.Invoice.service;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -116,4 +117,11 @@ public class OfficialRecptService {
         return officialRecptRepository.findAll(p);
     }
 
+    public OfficialReceipt getSpecificOfficialReceipt(int id){
+        return officialRecptRepository.findById(id);
+    }
+
+    public List<OfficialReceiptInvoices> getInvoiceByOrNum(int orNum ){
+        return officialRecptInvoicesRepo.findByOfficialReceiptNum(orNum);
+    }
 }

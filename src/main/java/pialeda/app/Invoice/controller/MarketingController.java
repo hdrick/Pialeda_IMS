@@ -486,6 +486,14 @@ public class MarketingController {
         return destination;
     }
 
+    @GetMapping("/official-receipt-view/{id}")
+    public String specificOfficialReceipt(@PathVariable int id,Model model){
+        OfficialReceipt specificId = officialRecptService.getSpecificOfficialReceipt(id);
+        List<OfficialReceiptInvoices> invoices = officialRecptService.getInvoiceByOrNum(specificId.getOfficialReceiptNum());
+        model.addAttribute("specificId", specificId);
 
+        model.addAttribute("orInvoiceInfo", invoices);
+        return "marketing/specificor";
+    }
 
 }
