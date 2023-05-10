@@ -530,8 +530,7 @@ public class VRController {
         Supplier supplierDetails = supplierService.findByName(invoiceDetails.getSupplierName());
         Client clientDetails = clientService.findByName(invoiceDetails.getClientName());
         List<InvoiceProductInfo> invoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoiceDetails.getInvoiceNum());
-        List<CollectionReceiptInvoices> invoices = invoiceService.getCollectionReceipt(invoiceDetails);
-        System.out.println(invoices);
+
         model.addAttribute("supplierDetails", supplierDetails);
         model.addAttribute("invoiceDetails", invoiceDetails);
         model.addAttribute("clientDetails", clientDetails);
