@@ -1,10 +1,6 @@
 package pialeda.app.Invoice.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name="collection_receipt_list_invoice")
@@ -12,10 +8,12 @@ public class CollectionReceiptInvoices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private int collectionReceiptNum;
-    private String invoiceNo;
+    @OneToOne
+    @JoinColumn(name = "invoiceNum", referencedColumnName = "supplier_invoice_number")
+    private Invoice invoice;
     private double invoiceAmount;
+
     public int getId() {
         return id;
     }
@@ -28,11 +26,12 @@ public class CollectionReceiptInvoices {
     public void setCollectionReceiptNum(int collectionReceiptNum) {
         this.collectionReceiptNum = collectionReceiptNum;
     }
-    public String getInvoiceNo() {
-        return invoiceNo;
+    public Invoice getInvoice() {
+        return invoice;
     }
-    public void setInvoiceNo(String invoiceNo) {
-        this.invoiceNo = invoiceNo;
+
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
     }
     public double getInvoiceAmount() {
         return invoiceAmount;

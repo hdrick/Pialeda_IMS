@@ -281,6 +281,7 @@ table td input{
                             </ul>
                         </div>
                     </div>
+                    <div th:each="invoice : ${invoices}">
                     <div class="invoice-to">
                         <ul class="list-unstyled">
                             <li><strong>Invoiced To</strong></li>
@@ -328,7 +329,7 @@ table td input{
                             </table>
                         </div>
                     </div>
-
+                </div>
                 </div>
             </div>
             <div class="officialReceipt-con" id="print-content">

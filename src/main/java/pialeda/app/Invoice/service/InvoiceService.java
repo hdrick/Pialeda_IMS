@@ -7,16 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pialeda.app.Invoice.config.DateUtils;
-import pialeda.app.Invoice.model.Client;
-import pialeda.app.Invoice.model.Invoice;
-import pialeda.app.Invoice.model.InvoiceProductInfo;
-import pialeda.app.Invoice.model.OfficialReceipt;
-import pialeda.app.Invoice.model.Supplier;
-import pialeda.app.Invoice.repository.ClientRepository;
-import pialeda.app.Invoice.repository.InvoiceProdInfoRepository;
-import pialeda.app.Invoice.repository.InvoiceRepository;
+import pialeda.app.Invoice.model.*;
+import pialeda.app.Invoice.repository.*;
 import pialeda.app.Invoice.dto.InvoiceInfo;
-import pialeda.app.Invoice.repository.SupplierRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
@@ -33,7 +26,8 @@ public class InvoiceService {
     private InvoiceRepository invoiceRepository;
     @Autowired
     private InvoiceProdInfoRepository invoiceProdInfoRepository;
-
+    @Autowired
+    private CollectionRecptInvoicesRepo collectionRecptInvoicesRepo;
     @Autowired
     private SupplierRepository supplierRepository;
 
@@ -240,6 +234,12 @@ public class InvoiceService {
         return invoiceRepository.sumOfGrandTotalByClientNameAndSupplierNameBetweenDateCreated(clientName, supplierName, startDate, endDate);
     }
 
+    public List<CollectionReceiptInvoices> getCollectionReceipt(Invoice invoiceNum)
+    {
+        return collectionRecptInvoicesRepo.findByInvoice(invoiceNum);
+    }
+
+
 //    DRICKS...
     public Page<Invoice> getInvoicesPaginated(int currentPage, int size){
         Pageable p = PageRequest.of(currentPage, size);
@@ -311,4 +311,5 @@ public class InvoiceService {
     public Invoice findByInvNum(String invoiceNum){
         return invoiceRepository.findByInvoiceNum(invoiceNum);
     }
+
 }

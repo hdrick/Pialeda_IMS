@@ -6,10 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pialeda.app.Invoice.config.DateUtils;
-import pialeda.app.Invoice.model.Client;
-import pialeda.app.Invoice.model.Invoice;
-import pialeda.app.Invoice.model.InvoiceProductInfo;
-import pialeda.app.Invoice.model.Supplier;
+import pialeda.app.Invoice.model.*;
 import pialeda.app.Invoice.service.ClientService;
 import pialeda.app.Invoice.service.InvoiceService;
 import pialeda.app.Invoice.service.SupplierService;
@@ -533,7 +530,8 @@ public class VRController {
         Supplier supplierDetails = supplierService.findByName(invoiceDetails.getSupplierName());
         Client clientDetails = clientService.findByName(invoiceDetails.getClientName());
         List<InvoiceProductInfo> invoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoiceDetails.getInvoiceNum());
-
+        List<CollectionReceiptInvoices> invoices = invoiceService.getCollectionReceipt(invoiceDetails);
+        System.out.println(invoices);
         model.addAttribute("supplierDetails", supplierDetails);
         model.addAttribute("invoiceDetails", invoiceDetails);
         model.addAttribute("clientDetails", clientDetails);

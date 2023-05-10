@@ -10,14 +10,17 @@ import org.springframework.stereotype.Service;
 import pialeda.app.Invoice.dto.CollectionReceiptInfo;
 import pialeda.app.Invoice.model.CollectionReceipt;
 import pialeda.app.Invoice.model.CollectionReceiptInvoices;
+import pialeda.app.Invoice.model.Invoice;
 import pialeda.app.Invoice.repository.CollectionRecptInvoicesRepo;
 import pialeda.app.Invoice.repository.CollectionRecptRepository;
+import pialeda.app.Invoice.repository.InvoiceRepository;
 
 @Service
 public class CollectionService {
     @Autowired
     private CollectionRecptRepository collectionRecptRepository;
-
+    @Autowired
+    private InvoiceRepository invoiceRepository;
     @Autowired
     private CollectionRecptInvoicesRepo collectionRecptInvoicesRepo;
 
@@ -41,8 +44,9 @@ public class CollectionService {
             String amount = requestParams.get("inv" + i + "-amt");
             if (invoice != null && !invoice.isEmpty()) {
                 CollectionReceiptInvoices crInv = new CollectionReceiptInvoices();
+                Invoice invoiceObject = invoiceRepository.findByInvoiceNum(invoice);
 
-                crInv.setInvoiceNo(invoice);
+                crInv.setInvoice(invoiceObject);
                 crInv.setInvoiceAmount(formatStringToDouble(amount));
                 crInv.setCollectionReceiptNum(orNum);
                 items.add(crInv);
