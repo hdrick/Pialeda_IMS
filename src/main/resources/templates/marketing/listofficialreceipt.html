@@ -8,30 +8,10 @@
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
     <!-- Font awesome local -->
     <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
-    <!--custom css for header-->
-    <!--    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/header.css}">-->
-    <!--custom css for vr-->
-    <!--    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/style.css}">-->
-    <!-- <style>
-      .div1 .div2 .div3 input,#total-amt,#addVat,#amtNetVat,#totalSalesVatInc{
-          border: none;
-          outline: none;
-    }
-    </style> -->
 </head>
 <body class="body">
 <div class="container">
     <h2 style="margin-top: 2%;">List of Official Receipt</h2>
-    <!-- <label for="clientNameInput" style="font-weight: bolder;">Client Name:</label>
-    <input type="text" id="clientNameInput" placeholder="Enter client name">
-
-    <label for="supplierNameInput" style="font-weight: bolder;">Supplier Name:</label>
-    <input type="text" id="supplierNameInput" placeholder="Enter supplier name">
-
-
-    <label for="invoiceNumInput" style="font-weight: bolder;">Invoice Number:</label>
-    <input type="text" id="invoiceNumInput" placeholder="Enter invoice number">
-    <button id="searchButton" class="btn btn-primary">Search</button> -->
 
     <div class="table-responsive">
         <table id="invoicesTable" class="table table-bordered">
@@ -60,10 +40,9 @@
               <td th:text="${orrcpt.clientBus}"></td>
               <td th:text="${orrcpt.total}" style="font-weight: bolder; color:red;"></td>
               <td th:text="${orrcpt.partialPaymentFor}"></td>
-              <!-- <td th:text="${or.grandTotal}" style="font-weight: bolder; color:red;"></td> -->
               <td>
-                <!-- Button trigger modal -->
-                <a class="btn btn-primary"  th:href="@{'official-receipt-view/' + ${orrcpt.id}}"> View </a>
+                <!-- <a class="btn btn-primary"  th:href="@{'official-receipt-view/' + ${orrcpt.id}}"> View </a> -->
+                <a class="btn btn-primary" th:href="@{/official-receipt-view/{id}(id=${orrcpt.id})}">View</a>
               </td>
             </tr>
           </tbody>

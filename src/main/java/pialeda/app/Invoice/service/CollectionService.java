@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import pialeda.app.Invoice.dto.CollectionReceiptInfo;
@@ -44,9 +47,15 @@ public class CollectionService {
             String amount = requestParams.get("inv" + i + "-amt");
             if (invoice != null && !invoice.isEmpty()) {
                 CollectionReceiptInvoices crInv = new CollectionReceiptInvoices();
-                Invoice invoiceObject = invoiceRepository.findByInvoiceNum(invoice);
+                // Invoice invoiceObject = invoiceRepository.findByInvoiceNum(invoice);
 
-                crInv.setInvoice(invoiceObject);
+                Invoice inv = invoiceRepository.findByInvoiceNum(invoice);
+                
+                inv.setStatus("In Progress");
+                invoiceRepository.save(inv);
+
+                crInv.setInvoice(invoice);
+                // crInv.setInvoice(invoiceObject);
                 crInv.setInvoiceAmount(formatStringToDouble(amount));
                 crInv.setCollectionReceiptNum(orNum);
                 items.add(crInv);
@@ -65,7 +74,11 @@ public class CollectionService {
         }
         cr.setTotal(formatStringToDouble(total));
         cr.setCash(cash);
-        cr.setCheckNo(chckNo);
+        if(chckNo.equals(null) || chckNo.isEmpty()){
+            cr.setCheckNo("NA");
+        }else{
+            cr.setCheckNo(chckNo);
+        }
         cr.setAmount(formatStringToDouble(crAmount));
 
         cr.setRecvFrom(crDTO.getRecvFrom());
@@ -87,7 +100,51 @@ public class CollectionService {
         return number;
     }
 
+    public Page<CollectionReceipt> getCollectionReceiptPaginated(int currentPage, int size){
+        Pageable p = PageRequest.of(currentPage, size);
+        return collectionRecptRepository.findAll(p);
+    }
+
     public long getCrCount(){
         return collectionRecptRepository.count();
+    }
+
+    public CollectionReceipt getSpecificCollectionReceipt(int id){
+        return collectionRecptRepository.findById(id);
+    }
+    public List<CollectionReceiptInvoices> getInvoiceByCrNum(int orNum ){
+        return collectionRecptInvoicesRepo.findByCollectionReceiptNum(orNum);
+    }
+
+    public Boolean updateCr(int id, String clientName, String clientAddress,
+                            String clientTIN, String busStyle,
+                            String wPayment, Double nPayment,
+                            String partialP, String suppName,
+                            String suppAddrs, String suppTIN,
+                            String cash, String chckNo,
+                            Double amount, String orDate){
+        CollectionReceipt cr = collectionRecptRepository.findById(id);    
+        
+        if(cr != null){
+            cr.setRecvFrom(clientName);
+            cr.setClientAddress(clientAddress);
+            cr.setClientTin(clientTIN);
+            cr.setClientBus(busStyle);
+            cr.setClientSumOf(wPayment);
+            cr.setClientPayment(nPayment);
+            cr.setPartialPaymentFor(partialP);
+            cr.setSupplierName(suppName);
+            cr.setSupplierAddress(suppAddrs);
+            cr.setSupplierTin(suppTIN);
+            cr.setCash(cash);
+            cr.setCheckNo(chckNo);
+            cr.setAmount(amount);
+            cr.setCollectionReceiptDate(orDate);
+   
+            collectionRecptRepository.save(cr);
+            return true;
+         }else{
+            return false;
+         }                      
     }
 }

@@ -20,26 +20,7 @@
 
 
 <div class="main-con">
-  <!--Header starts-->
-<!--  <div class="header-con">-->
-<!--    <div class="left-con">-->
-<!--      <div id="bx1">-->
-<!--        <img id="h-logo" th:src="@{/icon/LOGO.png}" alt="Logo">-->
-<!--      </div>-->
-<!--      <div id="bx2">-->
-<!--        <label id="logo-name">PIALEDA</label>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="right-con">-->
-<!--      <div>-->
-<!--        <i class="fa-solid fa-user"></i>-->
-<!--        <a class="m-2" >VR-Staff</a>-->
-<!--        <a href="#" class="" data-toggle="modal" data-target="#logoutModal">-->
-<!--          <i class="fas fa-sign-out-alt"></i>-->
-<!--        </a>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
+
 <div class="btn-actions">
   <div class="selection">
     <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()">
@@ -134,7 +115,7 @@
               <td class="amt-r3"><input></td>
             </tr>
             <tr>
-              <td>1% EWT</td>
+              <td><span id="ewt-input"></span> EWT</td>
               <td><input type="text" name="ewt" id="ewt" readonly required></td>
               <td class="amt-r3"><input></td>
             </tr>
@@ -211,7 +192,7 @@
     </div>
     <div class="officialReceipt-btn">
       <button class="btn btn-success">Save OR</button>
-      <a class="btn btn-dark" style="color: white;">List of Collection Receipt</a>
+      <a class="btn btn-dark" th:href="@{/collection-receipt-list}" style="color: white;">List of Collection Receipt</a>
       <a class="btn btn-secondary" style="color: white;" th:href="@{marketing-invoice}">back</a>
     </div>
     </form>

@@ -34,6 +34,14 @@ public class InvoiceService {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private CollectionRecptRepository collectionRecptRepository;
+
+    @Autowired 
+    private OfficialRecptRepository officialRecptRepository;
+    @Autowired
+    private OfficialRecptInvoicesRepo officialRecptInvoicesRepo;
+
     public Optional<Invoice> getInvoiceById(int id)
     {
         if (invoiceRepository.findById(id) == null )
@@ -75,6 +83,7 @@ public class InvoiceService {
         invoice.setAmountNetOfVat(invoiceInfo.getAmountNetOfVat());
         invoice.setTotalSalesVatInc(invoiceInfo.getTotalSalesVatInc());
         invoice.setCashier(invoiceInfo.getCashier());     
+        invoice.setStatus("Unpaid"); 
         Invoice savedInvoice = invoiceRepository.save(invoice);
 
         if(savedInvoice != null){
@@ -234,13 +243,19 @@ public class InvoiceService {
         return invoiceRepository.sumOfGrandTotalByClientNameAndSupplierNameBetweenDateCreated(clientName, supplierName, startDate, endDate);
     }
 
-    public List<CollectionReceiptInvoices> getCollectionReceipt(Invoice invoiceNum)
-    {
-        return collectionRecptInvoicesRepo.findByInvoice(invoiceNum);
-    }
+    // public List<CollectionReceiptInvoices> getCollectionReceipt(Invoice invoiceNum)
+    // {
+    //     return collectionRecptInvoicesRepo.findByInvoice(invoiceNum);
+    // }
 
 
 //    DRICKS...
+// public List<CollectionReceiptInvoices> getCollectionReceipt(String invoiceNum)
+// {
+//     return collectionRecptInvoicesRepo.findByInvoice(invoiceNum);
+// }
+
+
     public Page<Invoice> getInvoicesPaginated(int currentPage, int size){
         Pageable p = PageRequest.of(currentPage, size);
         return invoiceRepository.findAll(p);
@@ -256,7 +271,7 @@ public class InvoiceService {
 
     public boolean updateInvoices(String invoiceNumber, LocalDate dateCreated,
                                  String supplierName, String clientName, String clientContactPerson,
-                                 String totalAmt, List<String> qtyList, List<String> unitList, List<String> articlesList,
+                                 String totalAmt, String addVat, String amtNetVat, String totalSalesVatInc, List<String> qtyList, List<String> unitList, List<String> articlesList,
                                  List<String> unitPriceList, List<String> amountList, List<String> prodIdList){
 
        try {
@@ -264,7 +279,7 @@ public class InvoiceService {
            Supplier supplier = supplierRepository.findByName(supplierName);
            Client client = clientRepository.findByName(clientName);
            List<InvoiceProductInfo> productInfo = invoiceProdInfoRepository.findByInvoiceNumber(invoiceNumber);
-
+           String totalAmtNew = totalAmt.replace(",", "");
            invDb.setDateCreated(dateCreated);
 
            invDb.setSupplierName(supplier.getName());
@@ -275,9 +290,137 @@ public class InvoiceService {
            invDb.setClientContactPerson(clientContactPerson);
            invDb.setClientTin(client.getTin());
            invDb.setClientAddress(client.getAddress());
+      
+           //Update Official ReceiptInvoice Info if inv has or
+           OfficialReceiptInvoices or = officialRecptInvoicesRepo.findByInvoiceNo(invoiceNumber);
+            if(or != null){
+                or.setInvoiceAmount(Double.parseDouble(totalAmtNew));
+                officialRecptInvoicesRepo.save(or);
+                OfficialReceipt  specfcOr = officialRecptRepository.findByOfficialReceiptNum(or.getOfficialReceiptNum());
+                double total = Double.parseDouble(totalAmtNew);
+                double totalResult = 0;
 
-           String totalAmtNew = totalAmt.replace(",", "");
+                if(specfcOr.getAddVat() != 0){
+                    // update vat
+                    // Add VAT: 0.12 * total amount
+                    // Net of Vat: total amount * 0.02
+                    // totalResult = (totalAmount + addVat) -lwTax;
+                    
+                    double newAddVat = 0.12 * total;
+                    double newNOV = total * 0.02;
+                    totalResult = (total+newAddVat)-newNOV;
+
+                    // System.out.println("Total Sales: "+total);
+                    // System.out.println("Add VAT: "+newAddVat);
+                    // System.out.println("Net of Vat: "+newNOV);
+                    // System.out.println("Ammount Due: "+totalResult);
+                    // System.out.println("EWT: ");
+                    // System.out.println("Total: "+totalResult);
+
+                    specfcOr.setTotalSales(total);
+                    specfcOr.setAddVat(newAddVat);
+                    specfcOr.setLessWithHoldTax(newNOV);
+                    specfcOr.setAmountDue(totalResult);
+
+                    if(specfcOr.getEwt() !=0){
+                        // let result = (totalAmountNoComma/1.12)*ewtPercentage;
+                        double ewt = specfcOr.getEwt();
+                        // inputEwt = (ewt / (amountDue / 1.12)) to get the percentage of ewt
+                        double ewtPercentage = ewt/(specfcOr.getAmountDue()/1.12);
+                        double roundedEwtPercentage = Math.round(ewtPercentage * 100.0) / 100.0;
+                        double newTotalAmount = totalResult;
+
+                        double newEwt = (newTotalAmount/1.12)*roundedEwtPercentage;
+                        double newTotal = newTotalAmount - newEwt;
+
+                        // Round newEwt and newTotal to 2 decimal places
+                        newEwt = Math.round(newEwt * 100.0) / 100.0;
+                        totalResult = Math.round(newTotal * 100.0) / 100.0;
+
+                        specfcOr.setEwt(newEwt);
+                        specfcOr.setTotal(totalResult);
+                        officialRecptRepository.save(specfcOr);
+                    }else{
+                        specfcOr.setTotal(totalResult);
+                        officialRecptRepository.save(specfcOr);
+                    }
+                }
+                if(specfcOr.getEwt() !=0){
+                    //update ewt
+                    // let result = (totalAmountNoComma/1.12)*ewtPercentage;
+                    double ewt = specfcOr.getEwt();
+                    // inputEwt = (ewt / (amountDue / 1.12)) to get the percentage of ewt
+                    double ewtPercentage = ewt/(specfcOr.getAmountDue()/1.12);
+                    double roundedEwtPercentage = Math.round(ewtPercentage * 100.0) / 100.0;
+                    totalResult = total;
+                    double newTotalAmount = totalResult;
+
+                    double newEwt = (newTotalAmount/1.12)*roundedEwtPercentage;
+                    double newTotal = newTotalAmount - newEwt;
+
+                    // Round newEwt and newTotal to 2 decimal places
+                    newEwt = Math.round(newEwt * 100.0) / 100.0;
+                    totalResult = Math.round(newTotal * 100.0) / 100.0;
+
+                    specfcOr.setTotalSales(total);
+                    specfcOr.setAmountDue(total);
+                    specfcOr.setEwt(newEwt);
+                    specfcOr.setTotal(totalResult);
+                    officialRecptRepository.save(specfcOr);
+                }   
+                if(specfcOr.getEwt() == 0 && specfcOr.getEwt() ==0){
+                    specfcOr.setTotalSales(total);
+                    specfcOr.setTotal(total);
+                    specfcOr.setAmountDue(total);
+                }
+            }
+
+
+
+
+            // Update CollectionReceiptInvoices info if inv has cr
+            List<CollectionReceiptInvoices> listCR= collectionRecptInvoicesRepo.getAllByInvoice(invoiceNumber);//check if inv has cr
+            if(!(listCR.isEmpty() || listCR.size() == 0)){
+                for(CollectionReceiptInvoices crInvoice: listCR){
+                    crInvoice.setInvoiceAmount(Double.parseDouble(totalAmtNew));
+                    collectionRecptInvoicesRepo.save(crInvoice);
+
+                    CollectionReceipt cr = collectionRecptRepository.findByCollectionReceiptNum(crInvoice.getCollectionReceiptNum());
+                    
+                    double ewt = cr.getEwt();
+                    if(!(ewt == 0)){
+                        // inputEwt = (ewt / (amountDue / 1.12)) to get the percentage of ewt
+                        double ewtPercentage = ewt/(cr.getAmountDue()/1.12);
+                        double roundedEwtPercentage = Math.round(ewtPercentage * 100.0) / 100.0;
+                        double newTotalAmount = Double.parseDouble(totalAmtNew);
+
+                        double newEwt = (newTotalAmount/1.12)*roundedEwtPercentage;
+                        double newTotal = newTotalAmount - newEwt;
+
+                        // Round newEwt and newTotal to 2 decimal places
+                        newEwt = Math.round(newEwt * 100.0) / 100.0;
+                        newTotal = Math.round(newTotal * 100.0) / 100.0;
+                        System.out.println("ewtpercent: "+roundedEwtPercentage);
+                        System.out.println("newEwt: "+newEwt);
+                        System.out.println("newTotal: "+newTotal);
+                        System.out.println("newTotalAmount: "+newTotalAmount);
+                        cr.setAmountDue(newTotalAmount);
+                        cr.setEwt(newEwt);
+                        cr.setTotal(newTotal);
+                        collectionRecptRepository.save(cr);
+                    }
+                }
+            }
            invDb.setGrandTotal(Double.parseDouble(totalAmtNew));
+
+           String addVatNew = addVat.replace(",", "");
+           invDb.setAddVat(Double.parseDouble(addVatNew));
+
+           String amtNetVatNew = amtNetVat.replace(",", "");
+           invDb.setAmountNetOfVat(Double.parseDouble(amtNetVatNew));
+
+           String totalSalesVatIncNew = totalSalesVatInc.replace(",", "");
+           invDb.setTotalSalesVatInc(Double.parseDouble(totalSalesVatIncNew));
 
            // Update the product info for each product
            for (int i = 0; i < prodIdList.size(); i++) {

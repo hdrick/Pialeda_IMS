@@ -18,31 +18,31 @@
         <div class="row">
             <div class="col-12">
                 <div class="invoice-title">
-                    <h2>Official receipt</h2>
-                    <h3 class="float-right">OR#: <strong th:text="${specificId.getOfficialReceiptNum}" style="color: red;"></strong></h3>
+                    <h2>Collection receipt</h2>
+                    <h3 class="float-right">OR#: <strong th:text="${specificId.getCollectionReceiptNum}" style="color: red;"></strong></h3>
                 </div>
                 <hr>
                 <div id="info" class="row">
                     <div class="col-md-6 client-info">
-                        <form method="POST" th:action="@{/updateSpecificOr/{id}(id=${specificId.id})}" >
+                    <form method="POST" th:action="@{/updateSpecificCr/{id}(id=${specificId.id})}" >
 
-                       
-                        <a th:href="@{/official-receipt-list}" class="btn btn-secondary">back</a>
+                    
+                        <a th:href="@{/collection-receipt-list}" class="btn btn-secondary">back</a>
                         <input type="submit" class="btn btn-info" value="Save OR">
                         <address>
-                            <h4>OR Client Info</h4><br>
+                            <h4>CR Client Info</h4><br>
                             <strong>Name: </strong><input name="clientName" th:value="${specificId.getRecvFrom}" autocomplete="no-autocomplete" size="40" required><br> 
-                            <strong>Address: </strong><input name="clientAddress"  type="text" th:value="${specificId.getClientAddress}" size="50" autocomplete="no-autocomplete" required><br>
-                            <strong>TIN: </strong><input name="clientTIN"  th:value="${specificId.getClientTin}" autocomplete="no-autocomplete" required><br>
-                            <strong>Bus.Style: </strong><input name="busStyle"  th:value="${specificId.getClientBus}" autocomplete="no-autocomplete" required><br>
-                            <strong>Payment: </strong><input name="wPayment"  th:value="${specificId.getClientSumOf}" size="50" autocomplete="no-autocomplete" required><br>
-                            <strong>Payment: </strong><input name="nPayment"  th:value="${specificId.getClientPayment}" autocomplete="no-autocomplete" style="color: red;" required><br>
-                            <strong>Partial Payment: </strong><input name="partialP"  th:value="${specificId.getPartialPaymentFor}" autocomplete="no-autocomplete" required><br>
+                            <strong>Address: </strong><input name="clientAddress" type="text" th:value="${specificId.getClientAddress}" size="50" autocomplete="no-autocomplete" required><br>
+                            <strong>TIN: </strong><input name="clientTIN" th:value="${specificId.getClientTin}" autocomplete="no-autocomplete" required><br>
+                            <strong>Bus.Style: </strong><input name="busStyle" th:value="${specificId.getClientBus}" autocomplete="no-autocomplete" required><br>
+                            <strong>Payment: </strong><input name="wPayment" th:value="${specificId.getClientSumOf}" size="50" autocomplete="no-autocomplete" required><br>
+                            <strong>Payment: </strong><input name="nPayment" th:value="${specificId.getClientPayment}" autocomplete="no-autocomplete" style="color: red;" required><br>
+                            <strong>Partial Payment: </strong><input name="partialP" th:value="${specificId.getPartialPaymentFor}" autocomplete="no-autocomplete" required><br>
                         </address>
                     </div>
                     <div id="supplier-info" class="col-md-6 text-md-right">
                         <address>
-                            <h4>OR Supplier Info</h4><br>
+                            <h4>CR Supplier Info</h4><br>
                             <strong>Name: </strong><input name="suppName" th:value="${specificId.getSupplierName}" autocomplete="no-autocomplete" size="50" required><br> 
                             <strong>Address: </strong><input name="suppAddrs" th:value="${specificId.getSupplierAddress}" autocomplete="no-autocomplete" size="50" required><br> 
                             <strong>TIN: </strong><input name="suppTIN" th:value="${specificId.getSupplierTin}" autocomplete="no-autocomplete" size="50" required><br>
@@ -55,17 +55,17 @@
                 <div class="row">
                     <div class="col-md-6">
                         <address>
-                            <strong>Cashier Names:</strong><br>
+                            <strong>Cashier Name:</strong><br>
                             <span th:text="${specificId.getCashierName}"></span> 
                         </address>
                     </div>
                     <div class="col-md-6 text-md-right">
                         <address>
-                            <strong>Official Receipt Date:</strong><br>
-                           <input type="date" name="orDate" th:value="${specificId.getOfficialReceiptDate}" required><br><br>
+                            <strong>Collection Receipt Date:</strong><br>
+                           <input type="date" name="orDate" th:value="${specificId.getCollectionReceiptDate}" required><br><br>
                         </address>
                     </div>
-                </form>
+                </form>   
                 </div>
             </div>
         </div>
@@ -74,7 +74,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><strong>OR summary</strong></h3>
+                        <h3 class="panel-title"><strong>CR summary</strong></h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -86,28 +86,16 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- foreach ($order->lineItems as $line) or some such thing here -->
-                                    <tr th:each="orInvoiceInfo: ${orInvoiceInfo}">
-                                        <td class="text-left" th:text="${orInvoiceInfo.invoiceNo}"></td>
-                                        <td class="text-center" th:text="${orInvoiceInfo.invoiceAmount}"></td>
+                         
+                                    <tr th:each="crInvoiceInfo: ${crInvoiceInfo}">
+                                        <td class="text-left" th:text="${crInvoiceInfo.invoice}"></td>
+                                        <td class="text-center" th:text="${crInvoiceInfo.invoiceAmount}"></td>
                                     </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <th class="text-right">Total Sales:</th>
-                                            <th class="text-center val" th:text="${specificId.getTotalSales}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-right">Add VAT:</th>
-                                            <th class="text-center val" th:text="${specificId.getAddVat}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-right">Net Of VAT: </th>
-                                            <th class="text-center val" th:text="${specificId.getLessWithHoldTax}"></th>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-right">Amount Due:</th>
-                                            <th class="text-center val" th:text="${specificId.getAmountDue}"></th>
+                                            <th class="text-center val" th:text="${specificId.amountDue}"></th>
                                         </tr>
                                         <tr>
                                             <th class="text-right">EWT:</th>
@@ -125,19 +113,19 @@
                 </div>
             </div>
         </div>
-        <!-- Modal -->
+<!-- Modal -->
 
-<div class="modal fade" id="orCreatedModal" tabindex="-1" role="dialog" aria-labelledby="orCreatedModalLabel" aria-hidden="true" th:if="${hideDivSuccess}">
+<div class="modal fade" id="crCreatedModal" tabindex="-1" role="dialog" aria-labelledby="crCreatedModalLabel" aria-hidden="true" th:if="${hideDivSuccess}">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="orCreatedModalLabel" style="color:green">Success</h5>
+                <h5 class="modal-title" id="crCreatedModalLabel" style="color:green">Success</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Official Receipt has been successfully updated.</p>
+                <p>Collection Receipt has been successfully updated.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
@@ -151,7 +139,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="invoiceLimitModalLabel" style="color:red;">Error updating Official Receipt</h5>
+                <h5 class="modal-title" id="invoiceLimitModalLabel" style="color:red;">Error updating Collection Receipt</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -170,11 +158,11 @@
         $('#invoiceLimitModal').modal('show');
 
 
-        $('#orCreatedModal').modal('show');
+        $('#crCreatedModal').modal('show');
         setTimeout(function() {
-            $('#orCreatedModal').modal('hide');
+            $('#crCreatedModal').modal('hide');
         }, 3000);
     });
-</script>
+</script>        
 </body>
 </html>

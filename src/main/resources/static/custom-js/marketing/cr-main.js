@@ -53,6 +53,7 @@ function formatNumber(input) {
     const totalInput = document.getElementById("total");
     // Get the input element
     var inputElement = document.getElementById("ewtInput");
+    var displayEwt = document.getElementById("ewt-input");
     // Get the value of the input
     var ewtPercentage = inputElement.value/100;
 
@@ -68,6 +69,7 @@ function formatNumber(input) {
     ewtInput.value = ewt.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     let newTotal = totalAmountNoComma - ewt; 
     totalInput.value = newTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    displayEwt.innerHTML = inputElement.value+"%";
   }
 
   function clearFields(){

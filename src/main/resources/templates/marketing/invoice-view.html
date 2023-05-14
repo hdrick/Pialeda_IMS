@@ -63,7 +63,7 @@
               <td th:text="${inv.grandTotal}" style="font-weight: bolder; color:red;"></td>
               <td>
                 <!-- Button trigger modal -->
-                <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" th:data-id="${inv.id}" onclick="fillModalFields(this.getAttribute('data-id'))"> Edit </a>
+                <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" th:data-id="${inv.id}" onclick="fillModalFields(this.getAttribute('data-id'))"> View </a>
               </td>
             </tr>
           </tbody>
@@ -128,7 +128,7 @@
                         </p>
                         <p>
                             <strong>Date Created:
-                                <input id="date-created" name="date-created">
+                                <input type="date" id="date-created" name="date-created">
                             </strong>
                         </p>
                         <p>
@@ -212,8 +212,15 @@
                     <label style="color: red; font-weight: bolder;">Total Sales VAT INC: <input id="totalSalesVatInc" name="totalSalesVatInc" readonly style="font-weight: bolder"></label>
                 </div>
                 
-                <a type="button" class="btn btn-secondary" data-dismiss="modal">Close</a>
+                
+                <!-- <a type="button" class="btn btn-warning" style="width: max-content;">Update total</a> -->
+                <!-- <a type="button" class="btn btn-warning" style="width: max-content; text-align: center;">Update total</a> -->
+                <a type="button" id="btnUpdteVat" class="btn btn-warning" style="white-space: nowrap;" onclick="updateVat()">Update VAT</a>
+
+
+                  
                 <button type="submit" id="submitButton" class="btn btn-primary">Save</button>
+                <a type="button" class="btn btn-secondary" data-dismiss="modal">Close</a>
             </div>
         </div>
         </form>

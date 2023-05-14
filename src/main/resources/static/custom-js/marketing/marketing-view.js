@@ -86,9 +86,29 @@ function fillModalFields(invId) {
                     totalAmt += parseFloat($(this).find('td:eq(4)').text());
                 });
                 $('#total-amt').val(totalAmt.toFixed(2));
+                $('#totalSalesVatInc').val(totalAmt.toFixed(2));
+                
             });
         }
     });
+}
+
+
+function updateVat(){
+  const total = $("#total-amt").val();
+  let totalSalesVatInc = 0;
+  let totalAmountNetOfVat = 0;
+  let addVat = 0;
+  let grandTotal = 0;
+
+  totalAmountNetOfVat = total / 1.12;
+  addVat = total - totalAmountNetOfVat;
+  grandTotal = totalSalesVatInc;
+
+  // $('#total-amt').val(totalAmt.toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2})); // Set the formatted value of the total amount input
+  $('#addVat').val(addVat.toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2})); // Set the formatted value of the total amount input
+  $('#amtNetVat').val(totalAmountNetOfVat.toLocaleString('en-US', {style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2})); // Set the formatted value of the total amount input
+  
 }
 
 function searchInvoices() {

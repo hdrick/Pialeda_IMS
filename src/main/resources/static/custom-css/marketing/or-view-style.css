@@ -20,3 +20,7 @@
     outline: none; 
     background-color: transparent;
 }
+
+table tfoot tr .val{
+    color: red;
+}

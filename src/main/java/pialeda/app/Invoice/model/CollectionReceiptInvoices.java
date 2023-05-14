@@ -9,9 +9,10 @@ public class CollectionReceiptInvoices {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int collectionReceiptNum;
-    @OneToOne
-    @JoinColumn(name = "invoiceNum", referencedColumnName = "supplier_invoice_number")
-    private Invoice invoice;
+    // @OneToOne
+    // @JoinColumn(name = "invoiceNum", referencedColumnName = "supplier_invoice_number")
+    // private Invoice invoice;
+    private String invoice;
     private double invoiceAmount;
 
     public int getId() {
@@ -26,11 +27,11 @@ public class CollectionReceiptInvoices {
     public void setCollectionReceiptNum(int collectionReceiptNum) {
         this.collectionReceiptNum = collectionReceiptNum;
     }
-    public Invoice getInvoice() {
+    public String getInvoice() {
         return invoice;
     }
 
-    public void setInvoice(Invoice invoice) {
+    public void setInvoice(String invoice) {
         this.invoice = invoice;
     }
     public double getInvoiceAmount() {

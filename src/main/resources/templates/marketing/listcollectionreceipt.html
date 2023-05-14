@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}" />
+    <title>Pialeda</title>
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <!-- Font awesome local -->
+    <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
+</head>
+<body class="body">
+<div class="container">
+    <h2 style="margin-top: 2%;">List of Collection Receipt</h2>
+
+
+    <div class="table-responsive">
+        <table id="invoicesTable" class="table table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>CR Number</th>
+              <!-- <th>Invoice Number</th> -->
+              <th>Supplier Name</th>
+              <th>Receive From</th>
+              <th>Client Address</th>
+              <th>Client TIN</th>
+              <th>Bus. Style</th>
+              <th>Total</th>
+              <th>P.Payment For</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="crrcpt: ${collectionReceiptList}">
+              <td id="inv-id" th:text="${crrcpt.id}" style="display: none;"></td>
+              <td th:text="${crrcpt.collectionReceiptNum}" style="font-weight: bolder;"></td>
+              <td th:text="${crrcpt.supplierName}" style="font-weight: bolder;"></td>
+              <td th:text="${crrcpt.recvFrom}"></td>
+              <td th:text="${crrcpt.clientAddress}"></td>
+              <td th:text="${crrcpt.clientTin}"></td>
+              <td th:text="${crrcpt.clientBus}"></td>
+              <td th:text="${crrcpt.total}" style="font-weight: bolder; color:red;"></td>
+              <td th:text="${crrcpt.partialPaymentFor}"></td>
+              <td>
+    
+                <a class="btn btn-primary" th:href="@{/collection-receipt-view/{id}(id=${crrcpt.id})}">View</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+</div>
+
+<div class="container">
+    <p>Total OR: [[${totalItem}]]</p>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li th:if="${currentPage !=0}" class="page-item">
+                <a class="page-link" th:href="@{'/pagescr/'+${currentPage-1}}">Previous</a>
+            </li>
+            <li th:if="${currentPage > 5}" class="page-item">
+                <a class="page-link" th:href="@{'/pagescr/0'}">1</a>
+            </li>
+            <li th:if="${currentPage > 6}" class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+            <li th:each="i:${#numbers.sequence(currentPage - 4, currentPage + 5)}" th:classappend="${currentPage==i-1? 'active': '' }" class="page-item" th:if="${i >= 1 and i <= totalPages}">
+                <a class="page-link" th:href="@{'/pagescr/'+${i-1}}">[[${i}]]</a>
+            </li>
+            <li th:if="${currentPage < totalPages - 7}" class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+            <li th:if="${currentPage < totalPages - 6}" class="page-item">
+                <a class="page-link" th:href="@{'/pagescr/'+${totalPages-1}}">[[${totalPages}]]</a>
+            </li>
+            <li th:if="${currentPage+1!=totalPages}" class="page-item">
+                <a class="page-link" th:href="@{'/pagescr/'+${currentPage+1}}">Next</a>
+            </li>
+            <a  th:href="@{/marketing-invoice}" class="btn ml-auto btn-dark" style="color: white;">Go Back</a>
+        </ul>
+    </nav>
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+</body>
+</html>

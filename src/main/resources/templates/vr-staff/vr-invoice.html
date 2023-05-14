@@ -247,6 +247,27 @@ table td input{
   gap: 10px;
 }
 
+.label {
+        padding: 5px 10px;
+        border-radius: 3px;
+        font-weight: bold;
+    }
+
+.label-success {
+    background-color: green;
+    color: white;
+}
+
+.label-black {
+    background-color: black;
+    color: white;
+}
+
+.label-orange {
+    background-color: orange;
+    color: white;
+}
+
     </style>
 </head>
 <body>
@@ -276,7 +297,14 @@ table td input{
                                 <li><strong>Invoice </strong><span th:text="${invoiceDetails.getInvoiceNum()}"></span></li>
                                 <li><strong>Invoice Date: </strong><span th:text="${invoiceDetails.getDateCreated()}"></span></li>
                                 <li><strong>Invoice total: </strong><span th:text="${invoiceDetails.getGrandTotal()}"></span></li>
-                                <li style="color: red"><strong>Status:</strong> <span class="label label-danger"  th:text="${invoiceDetails.getStatus()}"></span></li>
+                                <!-- <li style="color: red"><strong>Status:</strong> <span class="label label-danger"  th:text="${invoiceDetails.getStatus()}"></span></li> -->
+                                <li>
+                                    <strong>Status:</strong>
+                                    <span class="label" th:text="${invoiceDetails.getStatus()}"
+                                          th:classappend="${invoiceDetails.getStatus() == 'Paid' ? 'label-success' : (invoiceDetails.getStatus() == 'Unpaid' ? 'label-black' : 'label-orange')}">
+                                    </span>
+                                </li>
+                                
                             </ul>
                         </div>
                     </div>

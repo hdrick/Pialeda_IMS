@@ -6,5 +6,6 @@ import pialeda.app.Invoice.model.CollectionReceipt;
 
 @Repository
 public interface CollectionRecptRepository extends JpaRepository<CollectionReceipt, Integer>{
-    
+    CollectionReceipt findById(int crId);
+    CollectionReceipt findByCollectionReceiptNum(int crNum);
 }

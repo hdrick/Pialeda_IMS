@@ -57,9 +57,9 @@ public class MarketingController {
                                 @RequestParam("amount") List<String> amountList,
                                 RedirectAttributes redirectAttributes,HttpSession session
                                  ){
-        double sumOfGrandTotal = invoiceService.getSuppTotalLimit(invoiceInfo.getSupplierName());
+        double remainingLimitOfSupp = invoiceService.getSuppTotalLimit(invoiceInfo.getSupplierName());
         double supplierLimit = supplierService.findLimitByName(invoiceInfo.getSupplierName());
-        double remainingLimit = supplierLimit - sumOfGrandTotal;
+        double remainingLimit = supplierLimit - remainingLimitOfSupp;
         Invoice ifInvExist = invoiceService.findByInvNum(invoiceInfo.getInvoiceNum());
 
         if(ifInvExist == null){
@@ -214,6 +214,22 @@ public class MarketingController {
         return destination;
 
     }
+    @GetMapping("/collection-receipt-list")
+    public String collectionReceiptList(Model model){
+        String role = GlobalUser.getUserRole();
+        String destination=null;
+        if(role == null){
+            return destination = "redirect:/login";
+        } else if (role.equals("vr-staff")) {
+            return destination = "redirect:/vr/user/invoices";
+        } else if (role.equals(("marketing"))) {
+            return destination = findPaginatedCR(0, model);
+        } else if (role.equals("admin")) {
+            return destination = "redirect:/admin-dashboard";
+        }
+        return destination;
+
+    }
 
     @GetMapping("/pages/{pageno}")
     public String findPaginatedOR(@PathVariable int pageno, Model model){
@@ -227,7 +243,18 @@ public class MarketingController {
 
         return "marketing/listofficialreceipt";
     }
+    @GetMapping("/pagescr/{pageno}")
+    public String findPaginatedCR(@PathVariable int pageno, Model model){
+        Page<CollectionReceipt> collectionReceiptList= collectionService.getCollectionReceiptPaginated(pageno, 8);
+        System.out.println("collectionReceiptList: "+collectionReceiptList);
 
+        model.addAttribute("collectionReceiptList", collectionReceiptList);
+        model.addAttribute("currentPage",pageno);
+        model.addAttribute("totalPages",collectionReceiptList.getTotalPages());
+        model.addAttribute("totalItem", collectionReceiptList.getTotalElements());
+
+        return "marketing/listcollectionreceipt";
+    }
 
     @GetMapping("/invoice-view")
     public String invoiceView(Model model){
@@ -297,6 +324,9 @@ public class MarketingController {
             @RequestParam("client-name") String clientName,
             @RequestParam("client-cp") String clientContactPerson,
             @RequestParam("total-amt") String totalAmt,
+            @RequestParam("addVat") String addVat,
+            @RequestParam("amtNetVat") String amtNetVat,
+            @RequestParam("totalSalesVatInc") String totalSalesVatInc,
             @RequestParam("qty-input") List<String> qtyList,
             @RequestParam("unit-input") List<String> unitList,
             @RequestParam("articles-input") List<String> articlesList,
@@ -307,7 +337,8 @@ public class MarketingController {
             RedirectAttributes redirectAttributes
     ) {
 
-         boolean ifSuccess = invoiceService.updateInvoices(invoiceNumber, dateCreated, supplierName, clientName, clientContactPerson, totalAmt, qtyList, unitList, articlesList, unitPriceList, amountList, prodIdList);
+         boolean ifSuccess = invoiceService.updateInvoices(invoiceNumber, dateCreated, supplierName, clientName, 
+         clientContactPerson, totalAmt, addVat, amtNetVat, totalSalesVatInc, qtyList, unitList, articlesList, unitPriceList, amountList, prodIdList);
 
          if(ifSuccess == true){
              boolean hideDivSuccess = true;
@@ -451,10 +482,6 @@ public class MarketingController {
             int result = Integer.parseInt(orGeneratedNum);
             Optional<CurrentInvoice> cinv = currentInvoiceRepo.findById(1);
 
-
-
-            
-
             if(cinv.isPresent()){
                 CurrentInvoice currentInvoice = cinv.get();
                 
@@ -496,4 +523,71 @@ public class MarketingController {
         return "marketing/specificor";
     }
 
+    @GetMapping("/collection-receipt-view/{id}")
+    public String specificCollectionReceipt(@PathVariable int id,Model model){
+        CollectionReceipt specificId = collectionService.getSpecificCollectionReceipt(id);
+        List<CollectionReceiptInvoices> invoices = collectionService.getInvoiceByCrNum(specificId.getCollectionReceiptNum());
+        model.addAttribute("specificId", specificId);
+
+        model.addAttribute("crInvoiceInfo", invoices);
+        return "marketing/specificcr";
+    }
+
+    @PostMapping("/updateSpecificOr/{id}")
+    public String updateOrById(@PathVariable("id") int id, @RequestParam("clientName") String clientName,
+                             @RequestParam("clientAddress") String clientAddress,
+                             @RequestParam("clientTIN") String clientTIN,
+                             @RequestParam("busStyle") String busStyle,
+                             @RequestParam("wPayment") String wPayment,
+                             @RequestParam("nPayment") Double nPayment,
+                             @RequestParam("partialP") String partialP,
+                             @RequestParam("suppName") String suppName,
+                             @RequestParam("suppAddrs") String suppAddrs,
+                             @RequestParam("suppTIN") String suppTIN,
+                             @RequestParam("cash") String cash,
+                             @RequestParam("chckNo") String chckNo,
+                             @RequestParam("amount") Double amount,
+                             @RequestParam("orDate") String orDate,
+                             RedirectAttributes redirectAttributes){
+
+        Boolean result = officialRecptService.updateOr(id, clientName, clientAddress, clientTIN, busStyle, wPayment, nPayment, partialP, suppName, suppAddrs, suppTIN, cash, chckNo, amount, orDate);                       
+        if(result == true){
+            boolean hideDivSuccess = true;
+            redirectAttributes.addFlashAttribute("hideDivSuccess", hideDivSuccess);
+            return "redirect:/official-receipt-view/" + id;
+        }else{
+            boolean hideDivError = true;
+            redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
+            return "redirect:/official-receipt-view/" + id;
+        } 
+    }
+
+    @PostMapping("/updateSpecificCr/{id}")
+    public String updateCrById(@PathVariable("id") int id, @RequestParam("clientName") String clientName,
+                             @RequestParam("clientAddress") String clientAddress,
+                             @RequestParam("clientTIN") String clientTIN,
+                             @RequestParam("busStyle") String busStyle,
+                             @RequestParam("wPayment") String wPayment,
+                             @RequestParam("nPayment") Double nPayment,
+                             @RequestParam("partialP") String partialP,
+                             @RequestParam("suppName") String suppName,
+                             @RequestParam("suppAddrs") String suppAddrs,
+                             @RequestParam("suppTIN") String suppTIN,
+                             @RequestParam("cash") String cash,
+                             @RequestParam("chckNo") String chckNo,
+                             @RequestParam("amount") Double amount,
+                             @RequestParam("orDate") String orDate,
+                             RedirectAttributes redirectAttributes){
+
+        Boolean result = collectionService.updateCr(id, clientName, clientAddress, clientTIN, busStyle, wPayment, nPayment, partialP, suppName, suppAddrs, suppTIN, cash, chckNo, amount, orDate);                       
+        if(result == true){
+            boolean hideDivSuccess = true;
+            redirectAttributes.addFlashAttribute("hideDivSuccess", hideDivSuccess);
+            return "redirect:/official-receipt-view/" + id;
+        }else{
+            boolean hideDivError = true;
+            redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
+            return "redirect:/official-receipt-view/" + id;
+        } 
+    }
 }

@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 
 import pialeda.app.Invoice.dto.CollectionReceiptInfo;
 import pialeda.app.Invoice.dto.OfficialReceiptInfo;
+import pialeda.app.Invoice.model.Invoice;
 import pialeda.app.Invoice.model.OfficialReceipt;
 import pialeda.app.Invoice.model.OfficialReceiptInvoices;
+import pialeda.app.Invoice.repository.InvoiceRepository;
 import pialeda.app.Invoice.repository.OfficialRecptInvoicesRepo;
 import pialeda.app.Invoice.repository.OfficialRecptRepository;
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ public class OfficialRecptService {
 
     @Autowired
     private OfficialRecptInvoicesRepo officialRecptInvoicesRepo;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     public void createOR(int orNum,
                          String totalSales,
@@ -50,6 +55,11 @@ public class OfficialRecptService {
             String amount = requestParams.get("inv" + i + "-amt");
             if (invoice != null && !invoice.isEmpty()) {
                 OfficialReceiptInvoices orInv = new OfficialReceiptInvoices();
+                Invoice inv = invoiceRepository.findByInvoiceNum(invoice);
+                
+                inv.setStatus("Paid");
+                invoiceRepository.save(inv);
+
                 orInv.setInvoiceNo(invoice);
                 orInv.setInvoiceAmount(formatStringToDouble(amount));
                 orInv.setOfficialReceiptNum(orNum);
@@ -81,7 +91,12 @@ public class OfficialRecptService {
             or.setTotal(formatStringToDouble(total));
         }
         or.setCash(cash);
-        or.setCheckNo(chckNo);
+        if(chckNo.equals(null) || chckNo.isEmpty()){
+            or.setCheckNo("NA");
+        }else{
+            or.setCheckNo(chckNo);
+        }
+        
         or.setAmount(formatStringToDouble(orAmount));
 
         or.setRecvFrom(orDTO.getRecvFrom());
@@ -93,6 +108,10 @@ public class OfficialRecptService {
         or.setClientPayment(formatStringToDouble(orDTO.getClientPayment()));
         or.setPartialPaymentFor(orDTO.getPartialPaymentFor());
         or.setCashierName(cashierName);
+        
+        
+
+
         this.officialRecptRepository.save(or);
     }
 
@@ -123,5 +142,38 @@ public class OfficialRecptService {
 
     public List<OfficialReceiptInvoices> getInvoiceByOrNum(int orNum ){
         return officialRecptInvoicesRepo.findByOfficialReceiptNum(orNum);
+    }
+
+    public Boolean updateOr(int id, String clientName, String clientAddress,
+                         String clientTIN, String busStyle,
+                         String wPayment, Double nPayment,
+                         String partialP, String suppName,
+                         String suppAddrs, String suppTIN,
+                         String cash, String chckNo,
+                         Double amount, String orDate){
+    
+         OfficialReceipt or= officialRecptRepository.findById(id);
+        
+         if(or != null){
+            or.setRecvFrom(clientName);
+            or.setClientAddress(clientAddress);
+            or.setClientTin(clientTIN);
+            or.setClientBus(busStyle);
+            or.setClientSumOf(wPayment);
+            or.setClientPayment(nPayment);
+            or.setPartialPaymentFor(partialP);
+            or.setSupplierName(suppName);
+            or.setSupplierAddress(suppAddrs);
+            or.setSupplierTin(suppTIN);
+            or.setCash(cash);
+            or.setCheckNo(chckNo);
+            or.setAmount(amount);
+            or.setOfficialReceiptDate(orDate);
+   
+            officialRecptRepository.save(or);
+            return true;
+         }else{
+            return false;
+         } 
     }
 }
