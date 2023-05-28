@@ -147,4 +147,26 @@ public class CollectionService {
             return false;
          }                      
     }
+
+//    public long countInvoicesCr(long crId)
+//    {
+//        return collectionRecptInvoicesRepo.findByCollectionReceiptNumCountAll(crId);
+//    }
+
+    public CollectionReceiptInvoices getCollectionReceiptId(String invoiceNum)
+    {
+        return collectionRecptInvoicesRepo.findByInvoice(invoiceNum);
+    }
+
+    public List<CollectionReceiptInvoices> getAllInvoicesByCollectionReceiptId(int crNum) {
+        return collectionRecptInvoicesRepo.findAllByCollectionReceiptNum(crNum);
+    }
+    public List<CollectionReceiptInvoices> getAllInvoicesByCollectionReceipt(int crNum) {
+        return collectionRecptInvoicesRepo.findAllByCollectionReceiptNum(crNum);
+    }
+    public CollectionReceipt getCollectionReceiptDetails(int crNum)
+    {
+        return collectionRecptRepository.findByCollectionReceiptNum(crNum);
+    }
+
 }

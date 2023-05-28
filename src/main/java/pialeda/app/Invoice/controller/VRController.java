@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pialeda.app.Invoice.config.DateUtils;
 import pialeda.app.Invoice.model.*;
 import pialeda.app.Invoice.service.ClientService;
+import pialeda.app.Invoice.service.CollectionService;
 import pialeda.app.Invoice.service.InvoiceService;
 import pialeda.app.Invoice.service.SupplierService;
 import pialeda.app.Invoice.dto.GlobalUser;
@@ -29,7 +30,8 @@ public class VRController {
     private ClientService clientService;
     @Autowired
     private SupplierService supplierService;
-
+    @Autowired
+    private CollectionService collectionService;
 
     @GetMapping("vr/user/invoices/search")
     public String searchInvoice(Model model, @RequestParam(name="query", required = false) String query,
@@ -525,12 +527,42 @@ public class VRController {
             model.addAttribute("autoClose", true);
             return "vr-staff/vr-invoice";
         }
-
+        List<Invoice> invoices = new ArrayList<>();
         Invoice invoiceDetails = invoiceService.getInvoiceDetails(invoiceNum);
         Supplier supplierDetails = supplierService.findByName(invoiceDetails.getSupplierName());
         Client clientDetails = clientService.findByName(invoiceDetails.getClientName());
         List<InvoiceProductInfo> invoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoiceDetails.getInvoiceNum());
 
+        CollectionReceiptInvoices collectionReceipt = collectionService.getCollectionReceiptId(invoiceDetails.getInvoiceNum());
+
+        if (collectionReceipt == null)
+        {
+            model.addAttribute("noCollectionReceipt", true);
+        }
+
+//          Long countedInvoicesCr = collectionService.countInvoicesCr(collectionReceipt.getCollectionReceiptNum());
+            CollectionReceipt collectionReceiptDetails = collectionService.getCollectionReceiptDetails(collectionReceipt.getCollectionReceiptNum());
+            List<CollectionReceiptInvoices> collectionReceiptInvoices = collectionService.getAllInvoicesByCollectionReceiptId(collectionReceipt.getCollectionReceiptNum());
+            for (CollectionReceiptInvoices collectionReceiptInvoice : collectionReceiptInvoices)
+            {
+                Invoice invoice = invoiceService.getInvoiceDetails(collectionReceiptInvoice.getInvoice());
+
+                Invoice crInvoiceDetails = invoiceService.getInvoiceDetails(invoice.getInvoiceNum());
+                Supplier crInvoiceSupplierDetails = supplierService.findByName(invoice.getSupplierName());
+                Client crInvoiceClientDetails = clientService.findByName(invoice.getClientName());
+                List<InvoiceProductInfo> crInvoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoice.getInvoiceNum());
+
+                if (invoice != null)
+                {
+                    invoices.add(invoice);
+                }
+
+            }
+            List<CollectionReceiptInvoices> collectionReceipts1 = collectionService.getAllInvoicesByCollectionReceipt(collectionReceiptDetails.getCollectionReceiptNum());
+            model.addAttribute("collectionReceipts", collectionReceipts1);
+            model.addAttribute("collectionReceiptDetails", collectionReceiptDetails);
+
+        model.addAttribute("invoices", invoices);
         model.addAttribute("supplierDetails", supplierDetails);
         model.addAttribute("invoiceDetails", invoiceDetails);
         model.addAttribute("clientDetails", clientDetails);
