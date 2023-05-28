@@ -29,12 +29,11 @@ public class UserService {
 
     public void updateUser(User updateUser, String uPassword){
         User user = userRepo.findById(updateUser.getId());
-
         user.setFirstName(updateUser.getFirstName());
         user.setLastName(updateUser.getLastName());
         user.setEmail(updateUser.getEmail());
         user.setRole(updateUser.getRole());
-        if(!uPassword.equals(null)){
+        if(!(uPassword.equals(null) || uPassword.equals(""))){
             String encodedPassword = bCryptPasswordEncoder.encode(uPassword);
             user.setPassword(encodedPassword);
         }

@@ -1,5 +1,7 @@
 package pialeda.app.Invoice.controller;
 
+import java.io.Console;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,6 +57,7 @@ public class AdminController {
     @PostMapping("/updateUser")
     public String updateUser(@RequestParam(value = "uPassword", required = false) String uPassword, @ModelAttribute("user") User user) {
         userService.updateUser(user, uPassword);
+        System.out.println("uPassword: "+uPassword);
         return "redirect:/admin-users";
     }
 
