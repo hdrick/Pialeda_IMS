@@ -86,9 +86,9 @@
                                 <div style="font-weight: bolder;">
                                     <div id="s-invo-con">
                                         <label style="width: 150px;">SALES INVOICE:</label>
-                                        <span  id="invoice-number" style="color: red;" th:text="${generateInvNum}" contenteditable="true"></span>
+                                        <span  id="invoice-number" style="color: red; display: none;" th:text="${generateInvNum}" contenteditable="true"></span>
                                         <!-- <label id="invoice-number" style="color: red;" th:text="${generateInvNum}"></label> -->
-                                        <input type="hidden" th:field="*{invoiceNum}" id="invoice-number-input" >
+                                        <input type="text" th:field="*{invoiceNum}" style="text-align: center; color: red; font-weight: bolder;" id="invoice-number-input" >
                                     </div>
                                 </div>
                             </div>
@@ -257,9 +257,14 @@
                             <input th:field="*{terms}" type="text" class="form-control" id="terms" name="terms">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" style="background-color: #003D2B; border-color: #003D2B;">Save changes</button>
+                    <div id="btn-footer" class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" style="background-color: #003D2B; border-color: #003D2B;">Save</button> -->
+                        <div><a type="button" class="btn btn-warning" th:href="@{/client-list}">Client List</a></div>
+                        <div>
+                            <button type="submit" class="btn btn-primary" style="background-color: #003D2B; border-color: #003D2B;">Save</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -327,9 +332,12 @@
                             <input th:field="*{corDate}" type="text" class="form-control" id="suppCORDate" name="suppCORDate">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" style="background-color: #003D2B; border-color: #003D2B;">Save changes</button>
+                    <div id="btn-footer" class="modal-footer">
+                        <div><a type="button" class="btn btn-warning" th:href="@{/supplier-list}">Supplier List</a></div>
+                        <div>
+                            <button type="submit" class="btn btn-primary" style="background-color: #003D2B; border-color: #003D2B;">Save</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
                     </div>
 
                 </form>
@@ -497,7 +505,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Invoice number arleady exists. Please choose a different name</p>
+                <p>Invoice number arleady exists. Please choose a different Invoice number</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>

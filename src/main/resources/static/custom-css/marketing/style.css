@@ -73,6 +73,12 @@
      margin: 0;
      font-size: 12px;
 }
+
+#btn-footer{
+    display: flex;
+    justify-content: space-between;
+}
+
 /*start of client info and date,PO,CP */
  #st-con{
      display: flex;

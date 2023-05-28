@@ -14,5 +14,5 @@ public interface SupplierRepository extends JpaRepository<Supplier, Integer> {
     @Query("SELECT s.name FROM Supplier s")
     List<String> getAllSupplierNames(Sort name);
     Supplier findByName(String name);
-
+    Supplier findById(int suppId);
 }

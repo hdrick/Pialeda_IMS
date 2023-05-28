@@ -55,6 +55,10 @@ public class InvoiceService {
         return invoiceRepository.findAll();
     }
 
+    public List<Invoice> getAllInvoiceByStatusUnpaid(){
+        return invoiceRepository.findInvoicesByStatusUnpaid();
+    }
+
     public List<Invoice> getKeyword(String query)
     {
         return invoiceRepository.findByClientNameContainingIgnoreCase(query);

@@ -24,6 +24,9 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     @Query(value ="SELECT COALESCE(SUM(grand_total), 0) FROM invoice where supplier_name like:suppliername", nativeQuery = true)
     double findSumLimitByName(@Param("suppliername") String suppliername);
 
+    @Query(value = "SELECT * FROM invoice WHERE status LIKE 'Unpaid' OR status LIKE 'In Progress' ORDER BY invoice_date_created DESC", nativeQuery = true)
+    List<Invoice> findInvoicesByStatusUnpaid();
+    
     Invoice findByInvoiceNum(String invNum);
     Page<Invoice> findByClientNameContainingIgnoreCase(String name, Pageable pageable);
     Page<Invoice> findByClientNameAndDateCreatedContainingIgnoreCase(String name, String month, Pageable pageable);

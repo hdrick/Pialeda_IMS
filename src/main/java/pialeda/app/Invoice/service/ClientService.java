@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import pialeda.app.Invoice.dto.ClientInfo;
 import pialeda.app.Invoice.model.Client;
 import pialeda.app.Invoice.repository.ClientRepository;
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import java.util.List;
 
 @Service
@@ -51,5 +53,45 @@ public class ClientService {
     public List<Client> filterClient(String name)
     {
         return (List<Client>) clientRepository.findByName(name);
+    }
+
+    public Page<Client> getClientPaginated(int currentPage, int size){
+        Pageable p = PageRequest.of(currentPage, size);
+        return clientRepository.findAll(p);
+    }
+
+    public Client getSpecificClient(int id){
+        return clientRepository.findById(id);
+    }
+
+    public Boolean updateClientById(int id, String suppName,String address,String cityAddress,String tin,
+                                    String agent,String busStyle,String terms){
+        Client client = getSpecificClient(id);
+        
+        if(client !=null){
+            client.setName(suppName);
+            client.setAddress(address);
+            client.setCityAddress(cityAddress);
+            client.setTin(tin);
+            client.setAgent(agent);
+            client.setBusStyle(busStyle);
+            client.setTerms(terms);
+    
+            clientRepository.save(client);
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean deleteClient(int id){
+        try {
+            clientRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        // clientRepository.deleteById(id);
     }
 }

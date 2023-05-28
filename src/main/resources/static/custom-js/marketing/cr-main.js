@@ -88,6 +88,55 @@ function formatNumber(input) {
     totalInput.value = null;
   }
 
+  function getInvoiceInfo() {
+    var invNum = $('#my-invNum').val();
+    $.ajax({
+        type: "GET",
+        url: "/getInvoiceInfo",
+        data: {
+            invNum: invNum
+        },
+        success: function(data) {
+            $('#inv1').val(data.invoiceNum);
+  
+            $('#inv1-amt').val(data.grandTotal);
+  
+            // client
+            $('#c-name').val(data.clientName);
+  
+            $('#tin').val(formatTIN(data.clientTin));
+  
+            $('#c-address').val(data.clientAddress);
+  
+            $('#busStyle').val(data.clientBusStyle);
+  
+            //supplier
+            //for input and display
+            $('#supp-name').val(data.supplierName);
+            $('#logo-suppName').text(data.supplierName);
+            // $('#supp-name').text(data.name);
+  
+            $('#supp-addrs').val(data.supplierAddress);
+            // $('#supp-addrs').text(data.address+", "+data.cityAddress);
+  
+            $('#supp-tin').val("VAT Reg. TIN "+formatTIN(data.supplierTin));
+            $('#supp-tin-hidden').val(formatTIN(data.supplierTin));
+            // $('#supp-tin').text("VAT Reg. TIN "+data.tin);
+  
+  
+            //total and amount Due
+            $('#total-sales').val(data.grandTotal);
+            $('#amt-due').val(data.grandTotal);
+  
+            $('#add-vat').val(null);
+            $('#lw-tax').val(null);
+            $('#ewt').val(null);
+            $('#total').val(null);
+            
+        }
+    });
+  }
+
 
 //   SUPPLIER AND CLIENT INFO
 function getSupplierInfo(){

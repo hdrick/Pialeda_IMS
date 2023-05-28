@@ -43,14 +43,18 @@
 <form method="POST" th:action="@{/createOfficialReceipt}" th:object="${officialReceiptInfo}">
 <div class="btn-actions">
   <div class="selection">
-    <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()" required>
+    <!-- <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()" required>
         <option value="" selected>Select Supplier</option>
         <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}" style="font-weight: bolder;"></option>
     </select>
     <select id="my-client" style="font-weight: bolder;" onchange="getClientInfo()" required>
       <option value="" selected>Select Client</option>
       <option  th:each="client : ${clientList}" th:value="${client.name}" th:text="${client.name}" style="font-weight: bolder;"></option>
-  </select>
+    </select> -->
+    <select id="my-invNum" style="font-weight: bolder;" onchange="getInvoiceInfo()" required>
+      <option value="" selected>Select Invoice</option>
+      <option  th:each="invoice : ${invoiceList}" th:value="${invoice.invoiceNum}" th:text="${invoice.invoiceNum}" style="font-weight: bolder;"></option>
+    </select>
   </div>
   <div>
     <!-- <a class="btn btn-info" style="color: white;" onclick="computeEWT()">compute EWT</a> -->
@@ -74,7 +78,7 @@
             <!-- Start invoice number input -->
             <tr>
               <td class="amt-r1">
-                <input name="inv1" type="text"  th:value="${currentInvoice}" required></td>
+                <input name="inv1" id="inv1" type="text"  th:value="${currentInvoice}" required></td>
               <td class="amt-r1"><input name="inv1-amt" th:value="${curAmount}" id="inv1-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
               <td class="amt-r3"><input readonly></td>
             </tr>
@@ -165,7 +169,8 @@
             </tr>
             <tr>
               <td>AMOUNT</td>
-              <td colspan="2" style="display: flex; border:0;">₱<input name="orAmount" style="color:red; font-weight: bolder;" required></td>
+              <!-- <td colspan="2" style="display: flex; border:0;">₱<input name="orAmount" style="color:red; font-weight: bolder;" required></td> -->
+              <td colspan="2" style="display: flex; border:0;">₱<input name="orAmount" id="orAmount" type="number" step="0.01" required onblur="convertNumberToWords()"></td>
             </tr>
           </table>
         </div>
@@ -305,6 +310,110 @@
   
   // Set the value of the input element to today's date
   document.getElementById("orDate").value = today;
+
+
+// Get the orAmount and clientPayment input fields
+var orAmountInput = document.getElementById("orAmount");
+var clientPaymentInput = document.getElementById("clientPayment");
+
+// Add an input event listener to orAmount input field
+orAmountInput.addEventListener("input", function() {
+  var amount = parseFloat(orAmountInput.value);
+
+  // Update the value of clientPayment input field
+  clientPaymentInput.value = amount.toFixed(2);
+});
+
+
+    function convertNumberToWords() {
+      // Get the input value
+      var amountInput = document.getElementById("orAmount");
+      var amount = parseFloat(amountInput.value);
+
+      // Split the amount into whole and decimal parts
+      var wholePart = Math.floor(amount);
+      var decimalPart = Math.floor((amount % 1) * 100);
+
+      // Convert the whole and decimal parts to words
+      var wholePartWords = convertToWords(wholePart);
+      var decimalPartWords = convertToWords(decimalPart);
+
+      // Set the converted value to the sumOf input field
+      var sumOfInput = document.getElementById("sumOf");
+      
+      var output = wholePartWords;
+      if (decimalPart > 0) {
+        output += (wholePartWords !== '' ? ' and ' : '') + decimalPartWords + " cents";
+      }
+      
+      sumOfInput.value = output;
+    }
+
+    function convertToWords(number) {
+      // Define the arrays for units, tens, and scales
+      var units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+        'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+        'eighteen', 'nineteen'];
+
+      var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+      var scales = ['', 'thousand', 'million', 'billion'];
+
+      // Convert the number to words
+      var words = '';
+
+      if (number === 0) {
+        words = 'zero';
+      } else {
+        var count = 0;
+
+        do {
+          var hundreds = number % 1000;
+
+          if (hundreds !== 0) {
+            var hundredsWords = convertToWordsLessThanOneThousand(hundreds);
+            words = hundredsWords + ' ' + scales[count] + ' ' + words;
+          }
+
+          count++;
+          number = Math.floor(number / 1000);
+        } while (number > 0);
+      }
+
+      return words.trim();
+    }
+
+    function convertToWordsLessThanOneThousand(number) {
+      // Define the arrays for units and tens
+      var units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+        'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+        'eighteen', 'nineteen'];
+
+      var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+      // Convert the number to words less than one thousand
+      var words = '';
+
+      if (number % 100 < 20) {
+        words = units[number % 100];
+        number = Math.floor(number / 100);
+      } else {
+        words = units[number % 10];
+        number = Math.floor(number / 10);
+
+        if (number % 10 !== 0) {
+          words = tens[number % 10] + ' ' + words;
+        }
+
+        number = Math.floor(number / 10);
+      }
+
+      if (number === 0) {
+        return words;
+      }
+
+      return units[number] + ' hundred ' + words;
+    }
 </script>
 </body>
 </html>

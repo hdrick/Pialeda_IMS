@@ -17,6 +17,8 @@ import pialeda.app.Invoice.service.OfficialRecptService;
 import pialeda.app.Invoice.service.SupplierService;
 import pialeda.app.Invoice.service.InvoiceService;
 import pialeda.app.Invoice.dto.GlobalUser;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -148,7 +150,21 @@ public class MarketingController {
                                         @ModelAttribute("officialReceiptInfo") OfficialReceiptInfo officialReceiptInfo,
                                         RedirectAttributes redirectAttributes
         ) {
-      officialRecptService.createOR(orNumber, totalSales, addVat, lwTax, amtDue, ewt, total, cash, chckNo, orAmount, cashierName, requestParams, officialReceiptInfo);
+            System.out.print("orNumber: " + orNumber);
+            System.out.print("totalSales: " + totalSales);
+            System.out.print("addVat: " + addVat);
+            System.out.print("lwTax: " + lwTax);
+            System.out.print("amtDue: " + amtDue);
+            System.out.print("ewt: " + ewt);
+            System.out.print("total: " + total);
+            System.out.print("cash: " + cash);
+            System.out.print("chckNo: " + chckNo);
+            System.out.print("orAmount: " + orAmount);
+            System.out.print("cashierName: " + cashierName);
+            System.out.print("requestParams: " + requestParams);
+            System.out.print("officialReceiptInfo: " + officialReceiptInfo);
+            
+            officialRecptService.createOR(orNumber, totalSales, addVat, lwTax, amtDue, ewt, total, cash, chckNo, orAmount, cashierName, requestParams, officialReceiptInfo);
 
       boolean hideDivSuccessOR = true;
       redirectAttributes.addFlashAttribute("hideDivSuccessOR", hideDivSuccessOR);
@@ -176,7 +192,16 @@ public class MarketingController {
       return "redirect:/marketing-collectionreceipt";
     }
       
-
+    @GetMapping("/getInvoiceInfo")
+    @ResponseBody
+    public Invoice getInvoiceInfo(@RequestParam("invNum") String invNum) {
+        Invoice invInfo = invoiceService.findByInvNum(invNum);
+        // Client clientInfo = new Client(client.getName(), client.getAddress(), 
+        //                                client.getCityAddress(), client.getTin(), 
+        //                                client.getAgent(),client.getBusStyle(),
+        //                                client.getTerms());
+        return invInfo;
+    }
 
 
     @GetMapping("/getClientInfo")
@@ -212,8 +237,8 @@ public class MarketingController {
             return destination = "redirect:/admin-dashboard";
         }
         return destination;
-
     }
+
     @GetMapping("/collection-receipt-list")
     public String collectionReceiptList(Model model){
         String role = GlobalUser.getUserRole();
@@ -243,6 +268,7 @@ public class MarketingController {
 
         return "marketing/listofficialreceipt";
     }
+
     @GetMapping("/pagescr/{pageno}")
     public String findPaginatedCR(@PathVariable int pageno, Model model){
         Page<CollectionReceipt> collectionReceiptList= collectionService.getCollectionReceiptPaginated(pageno, 8);
@@ -425,11 +451,12 @@ public class MarketingController {
                 model.addAttribute("generateORNumber", result);
                 model.addAttribute("fullName",fullName);
                 model.addAttribute("clientList", clientService.getAllClient());
+                model.addAttribute("invoiceList", invoiceService.getAllInvoiceByStatusUnpaid());
                 model.addAttribute("supplierList", supplierService.getAllSupplier());
                 model.addAttribute("officialReceiptInfo", new OfficialReceiptInfo());
 
-                model.addAttribute("currentInvoice", curInv);
-                model.addAttribute("curAmount", curAmount);
+                // model.addAttribute("currentInvoice", curInv);
+                // model.addAttribute("curAmount", curAmount);
                 return destination = "marketing/officialreceipt";
             }else{
                 String inv = null;
@@ -492,11 +519,12 @@ public class MarketingController {
                 model.addAttribute("generateORNumber", result);
                 model.addAttribute("fullName",fullName);
                 model.addAttribute("clientList", clientService.getAllClient());
+                model.addAttribute("invoiceList", invoiceService.getAllInvoiceByStatusUnpaid());
                 model.addAttribute("supplierList", supplierService.getAllSupplier());
                 model.addAttribute("collectionReceiptInfo", new CollectionReceiptInfo());
 
-                model.addAttribute("currentInvoice", curInv);
-                model.addAttribute("curAmount", curAmount);
+                // model.addAttribute("currentInvoice", curInv);
+                // model.addAttribute("curAmount", curAmount);
                 return destination = "marketing/collectionreceipt";
             }else{
                 model.addAttribute("generateORNumber", result);
@@ -588,6 +616,172 @@ public class MarketingController {
             boolean hideDivError = true;
             redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
             return "redirect:/official-receipt-view/" + id;
+        } 
+    }
+
+    @GetMapping("/supplier-list")
+    public String viewSupplierList(Model model){
+        String role = GlobalUser.getUserRole();
+        String destination=null;
+        if(role == null){
+            return destination = "redirect:/login";
+        } else if (role.equals("vr-staff")) {
+            return destination = "redirect:/vr/user/invoices";
+        } else if (role.equals(("marketing"))) {
+            return destination = findPaginatedSupplier(0, model);
+        } else if (role.equals("admin")) {
+            return destination = "redirect:/admin-dashboard";
+        }
+        return destination;
+    }
+
+    @GetMapping("/pagesupp/{pageno}")
+    public String findPaginatedSupplier(@PathVariable int pageno, Model model){
+        Page<Supplier> supplierList= supplierService.getSupplierPaginated(pageno,8);
+
+        model.addAttribute("supplierList", supplierList);
+        model.addAttribute("currentPage",pageno);
+        model.addAttribute("totalPages",supplierList.getTotalPages());
+        model.addAttribute("totalItem", supplierList.getTotalElements());
+
+        return "marketing/supplierList";
+    }
+
+    @GetMapping("/supplier-view/{id}")
+    public String specificSupplier(@PathVariable int id,Model model){
+        Supplier specificId = supplierService.getSpecificSupplier(id);
+        BigDecimal supplierReachAmount = invoiceService.getTotalAmountBySupplierName(specificId.getName());
+
+        double limit = specificId.getLimit();
+        double supplierReachAmountConv = supplierReachAmount.doubleValue();
+        double currentLimit = limit - supplierReachAmountConv;
+
+        model.addAttribute("specificId", specificId);
+        model.addAttribute("supplierReachAmount", supplierReachAmount);
+        model.addAttribute("currentLimit", currentLimit);
+        return "marketing/specificSupplier";
+    }
+
+    @PostMapping("/updateSpecificSupplier/{id}")
+    public String updateSupplierById(@PathVariable("id") int id,
+                                     @RequestParam("name") String suppName,
+                                     @RequestParam("address") String address,
+                                     @RequestParam("cityAddress") String cityAddress,
+                                     @RequestParam("tin") String tin,
+                                     @RequestParam("secNum") String secNum,
+                                     @RequestParam("secYear") String secYear,
+                                     @RequestParam("atp") String atp,
+                                     @RequestParam("corNum") String corNum,
+                                     @RequestParam("corDate") String corDate,
+                                     @RequestParam("limit") double limit,
+                                     RedirectAttributes redirectAttributes){
+
+        Boolean result = supplierService.updateSupplierById(id,suppName,address,cityAddress,tin,secNum,secYear,atp,
+                                                            corNum,corDate,limit);                       
+        if(result == true){
+            boolean hideDivSuccess = true;
+            redirectAttributes.addFlashAttribute("hideDivSuccess", hideDivSuccess);
+            return "redirect:/supplier-view/" + id;
+        }else{
+            boolean hideDivError = true;
+            redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
+            return "redirect:/supplier-view/" + id;
+        } 
+    }
+
+
+    @GetMapping("/client-list")
+    public String viewClientList(Model model){
+        String role = GlobalUser.getUserRole();
+        String destination=null;
+
+        if(role == null){
+            return destination = "redirect:/login";
+        } else if (role.equals("vr-staff")) {
+            return destination = "redirect:/vr/user/invoices";
+        } else if (role.equals(("marketing"))) {
+            return destination = findPaginatedClient(0, model);
+        } else if (role.equals("admin")) {
+            return destination = "redirect:/admin-dashboard";
+        }
+        return destination;
+    }
+
+    @GetMapping("/pageclient/{pageno}")
+    public String findPaginatedClient(@PathVariable int pageno, Model model){
+        Page<Client> clientList= clientService.getClientPaginated(pageno,8);
+
+        model.addAttribute("clientList", clientList);
+        model.addAttribute("currentPage",pageno);
+        model.addAttribute("totalPages",clientList.getTotalPages());
+        model.addAttribute("totalItem", clientList.getTotalElements());
+
+        return "marketing/clientList";
+    }
+
+    @GetMapping("/client-view/{id}")
+    public String specificClient(@PathVariable int id,Model model){
+        Client specificId = clientService.getSpecificClient(id);
+
+        model.addAttribute("specificId", specificId);
+        return "marketing/specificClient";
+    }
+
+    @PostMapping("/updateSpecificClient/{id}")
+    public String updateClientById(@PathVariable("id") int id,
+                                     @RequestParam("name") String suppName,
+                                     @RequestParam("address") String address,
+                                     @RequestParam("cityAddress") String cityAddress,
+                                     @RequestParam("tin") String tin,
+                                     @RequestParam("agent") String agent,
+                                     @RequestParam("busStyle") String busStyle,
+                                     @RequestParam("terms") String terms,
+                                     RedirectAttributes redirectAttributes){
+
+        Boolean result = clientService.updateClientById(id,suppName,address,cityAddress,tin,agent,busStyle,terms);                       
+        if(result == true){
+            boolean hideDivSuccess = true;
+            redirectAttributes.addFlashAttribute("hideDivSuccess", hideDivSuccess);
+            return "redirect:/client-view/" + id;
+        }else{
+            boolean hideDivError = true;
+            redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
+            return "redirect:/client-view/" + id;
+        } 
+    }
+
+    @GetMapping("/deleteClient/{id}")
+    public String deleteClient(@PathVariable("id") int id, 
+                                RedirectAttributes redirectAttributes){
+                                    System.out.println("CONTROLLER");
+        // clientService.deleteClient(id);
+        // return "redirect:/client-list";
+        if(clientService.deleteClient(id)){
+            boolean hideDivSuccessDel = true;
+            redirectAttributes.addFlashAttribute("hideDivSuccessDel", hideDivSuccessDel);
+            System.out.println("CONTROLLER:TRUE");
+            return "redirect:/client-list";
+        }else{
+            boolean hideDivErrorDel = true;
+            redirectAttributes.addFlashAttribute("hideDivErrorDel", hideDivErrorDel);
+            System.out.println("CONTROLLER:FALSE");
+            return "redirect:/client-list";
+        } 
+    }
+
+    @GetMapping("/deleteSupp/{id}")
+    public String deleteSupplier(@PathVariable("id") int id, 
+                                RedirectAttributes redirectAttributes){
+        if(supplierService.deleteSupp(id)){
+            boolean hideDivSuccessDel = true;
+            redirectAttributes.addFlashAttribute("hideDivSuccessDel", hideDivSuccessDel);
+            System.out.println("CONTROLLER:TRUE");
+            return "redirect:/supplier-list";
+        }else{
+            boolean hideDivErrorDel = true;
+            redirectAttributes.addFlashAttribute("hideDivErrorDel", hideDivErrorDel);
+            System.out.println("CONTROLLER:FALSE");
+            return "redirect:/supplier-list";
         } 
     }
 }

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}" />
+    <title>Pialeda</title>
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <!-- Font awesome local -->
+    <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
+</head>
+<body class="body">
+<div class="container">
+    <h2 style="margin-top: 2%;">List of Supplier</h2>
+
+     <div class="table-responsive">
+        <table id="invoicesTable" class="table table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Supplier Name</th>
+              <th>Address</th>
+              <th>City</th>
+              <th>TIN</th>
+              <th>Supplier Limit</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:each="suppList: ${supplierList}">
+              <td id="inv-id" th:text="${suppList.id}" style="display: none;"></td>
+              <td th:text="${suppList.name}" style="font-weight: bolder;"></td>
+              <td th:text="${suppList.address}" style="font-weight: bolder;"></td>
+              <td th:text="${suppList.cityAddress}"></td>
+              <td th:text="${suppList.tin}"></td>
+              <td th:text="${suppList.limit}"></td>
+              <td>
+                <div class="btn-group" role="group" aria-label="Actions">
+                  <a class="btn btn-primary mr-2" th:href="@{/supplier-view/{id}(id=${suppList.id})}">View</a>
+
+                  <a class="btn btn-danger" th:href="@{/deleteSupp/{id}(id=${suppList.id})}" onclick="return confirm('Are you sure you want to delete this supplier?')">Delete</a>
+                </div>
+              </td>
+              
+            </tr>
+          </tbody>
+        </table>
+      </div>
+</div>
+
+<div class="container">
+    <p>Total Supplier: [[${totalItem}]]</p>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li th:if="${currentPage !=0}" class="page-item">
+                <a class="page-link" th:href="@{'/pagesupp/'+${currentPage-1}}">Previous</a>
+            </li>
+            <li th:if="${currentPage > 5}" class="page-item">
+                <a class="page-link" th:href="@{'/pagesupp/0'}">1</a>
+            </li>
+            <li th:if="${currentPage > 6}" class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+            <li th:each="i:${#numbers.sequence(currentPage - 4, currentPage + 5)}" th:classappend="${currentPage==i-1? 'active': '' }" class="page-item" th:if="${i >= 1 and i <= totalPages}">
+                <a class="page-link" th:href="@{'/pagesupp/'+${i-1}}">[[${i}]]</a>
+            </li>
+            <li th:if="${currentPage < totalPages - 7}" class="page-item disabled">
+                <a class="page-link">...</a>
+            </li>
+            <li th:if="${currentPage < totalPages - 6}" class="page-item">
+                <a class="page-link" th:href="@{'/pagesupp/'+${totalPages-1}}">[[${totalPages}]]</a>
+            </li>
+            <li th:if="${currentPage+1!=totalPages}" class="page-item">
+                <a class="page-link" th:href="@{'/pagesupp/'+${currentPage+1}}">Next</a>
+            </li>
+            <a  th:href="@{/marketing-invoice}" class="btn ml-auto btn-dark" style="color: white;">Go Back</a>
+        </ul>
+    </nav>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="invoiceLimitModal" tabindex="-1" role="dialog" aria-labelledby="invoiceLimitModalLabel" aria-hidden="true" th:if="${hideDivSuccessDel}">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="invoiceLimitModalLabel" style="color:green;">Success</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <p>Supplier successfully deleted.</p>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="invoiceLimitModalLabel" aria-hidden="true" th:if="${hideDivErrorDel}">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="invoiceLimitModalLabel" style="color:red;">Deletion Error</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <p>Failed to delete supplier.</p>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Bootstrap JavaScript -->
+<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+<script>
+  $(document).ready(function () {
+      $('#deleteModal').modal('show');
+
+      $('#invoiceLimitModal').modal('show');
+      setTimeout(function() {
+          $('#invoiceLimitModal').modal('hide');
+      }, 3000);
+  });
+</script>
+</body>
+</html>

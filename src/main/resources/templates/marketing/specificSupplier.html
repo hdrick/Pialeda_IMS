@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pialeda</title>
+    <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/or-view-style.css}">
+    <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+    <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
+    <style>
+        .header {
+          background-color: #003D2B; /* Example background color */
+          padding: 20px;
+        }
+      </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="text-center text-white">SUPPLIER INFORMATION</h1>
+    </div>
+    <div class="container mt-5">
+        <form method="POST" th:action="@{/updateSpecificSupplier/{id}(id=${specificId.id})}">
+          <!-- Form inputs go here -->
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="name" class="form-label">Name:</label>
+                <input type="hidden"  th:value="${specificId.id}" class="form-control" id="supp-id" name="supp-id" required>
+                <input type="text"  th:value="${specificId.name}" class="form-control" id="name" name="name" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="address" class="form-label">Address:</label>
+                <input type="text" th:value="${specificId.address}" class="form-control" id="address" name="address" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="cityAddress" class="form-label">City Address:</label>
+                <input type="text" th:value="${specificId.cityAddress}" class="form-control" id="cityAddress" name="cityAddress" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="tin" class="form-label">TIN:</label>
+                <input type="text" th:value="${specificId.tin}" class="form-control" id="tin" name="tin" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="secNum" class="form-label">SEC Number:</label>
+                <input type="text" th:value="${specificId.secNum}" class="form-control" id="secNum" name="secNum" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="secYear" class="form-label">SEC Year:</label>
+                <input type="text" th:value="${specificId.secYear}" class="form-control" id="secYear" name="secYear" required>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="atp" class="form-label">ATP:</label>
+                <input type="text" th:value="${specificId.atp}" class="form-control" id="atp" name="atp" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="corNum" class="form-label">COR Number:</label>
+                <input type="text" th:value="${specificId.corNum}" class="form-control" id="corNum" name="corNum" required>
+              </div>
+            </div>
+          </div>
+        <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="corDate" class="form-label">COR Date:</label>
+                <input type="text" th:value="${specificId.corDate}" class="form-control" id="corDate" name="corDate" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="limit" class="form-label">Limit:</label>
+                <input type="text" th:value="${specificId.limit}" class="form-control" id="limit" name="limit" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="limit" class="form-label">Supplier Reach Amount:</label>
+                  <input type="text" th:value="${supplierReachAmount}" class="form-control" id="limit" name="limit" required readonly>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="mb-3">
+                  <label for="limit" class="form-label">Remaining Limit:</label>
+                  <input type="text" th:value="${currentLimit}" class="form-control" id="limit" name="limit" required readonly>
+                </div>
+            </div>
+        </div>
+    <!-- Button row -->
+    <div class="row">
+        <div class="col-md-6">
+          <button type="submit" class="btn" style="background-color:#003D2B; color:aliceblue">Update</button>
+        </div>
+        <div class="col-md-6 d-flex justify-content-end">
+          <a th:href="@{/supplier-list}" class="btn btn-secondary">Back</a>
+        </div>
+      </div>
+        </form>
+      </div>
+<!-- Modal -->
+<div class="modal fade" id="orCreatedModal" tabindex="-1" role="dialog" aria-labelledby="orCreatedModalLabel" aria-hidden="true" th:if="${hideDivSuccess}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orCreatedModalLabel" style="color:green">Success</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Supplier has been successfully updated.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="invoiceLimitModal" tabindex="-1" role="dialog" aria-labelledby="invoiceLimitModalLabel" aria-hidden="true" th:if="${hideDivError}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="invoiceLimitModalLabel" style="color:red;">Error updating Supplier</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Update failed, check if the fields are correct.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#invoiceLimitModal').modal('show');
+
+
+        $('#orCreatedModal').modal('show');
+        setTimeout(function() {
+            $('#orCreatedModal').modal('hide');
+        }, 3000);
+    });
+
+
+    function formatNumber(value) {
+        return parseFloat(value).toLocaleString();
+    }
+</script>
+</body>
+</html>

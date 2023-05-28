@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 import pialeda.app.Invoice.dto.SupplierInfo;
 import pialeda.app.Invoice.model.Supplier;
 import pialeda.app.Invoice.repository.SupplierRepository;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class SupplierService {
@@ -88,4 +90,48 @@ public class SupplierService {
         return supp.getLimit();
     }
 
+    public Page<Supplier> getSupplierPaginated(int currentPage, int size){
+        Pageable p = PageRequest.of(currentPage, size);
+        return supplierRepository.findAll(p);
+    }
+
+    public Supplier getSpecificSupplier(int id){
+        return supplierRepository.findById(id);
+    }
+
+    public Boolean updateSupplierById(int id, String suppName, String address, String cityAddress, String tin,    
+                                      String secNum, String secYear, String atp, String corNum, String corDate,
+                                      double limit){
+        Supplier supp = getSpecificSupplier(id);
+        
+        if(supp !=null){
+            supp.setName(suppName);
+            supp.setAddress(address);
+            supp.setCityAddress(cityAddress);
+            supp.setTin(tin);
+            supp.setSecNum(secNum);
+            supp.setSecYear(secYear);
+            supp.setAtp(atp);
+            supp.setCorNum(corNum);
+            supp.setCorDate(corDate);
+            supp.setLimit(limit);
+    
+            supplierRepository.save(supp);
+    
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public boolean deleteSupp(int id){
+        try {
+            supplierRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        // clientRepository.deleteById(id);
+    }
 }

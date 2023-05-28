@@ -8,5 +8,6 @@ import pialeda.app.Invoice.model.Client;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Integer>{
     Client findByName(String name);
-
+    Client findById(int clientId);
+    Client deleteById(int id);
 }
