@@ -101,11 +101,14 @@ public class AdminController {
             Process process = Runtime.getRuntime().exec(command);
             int exitCode = process.waitFor();
             if (exitCode == 0) {
+                System.out.println("Backup success");
                 return "admin/backupandrestore";
             } else {
+                System.out.println("Backup failed");
                 return "admin/backupandrestore";
             }
         } catch (IOException | InterruptedException e) {
+            System.out.println("E: "+e);
             return "admin/backupandrestore";
         }
     }
@@ -114,7 +117,7 @@ public class AdminController {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
         String timestamp = now.format(formatter);
-        String backupPath = "D:/backup/backup_" + timestamp + ".sql";
+        String backupPath = "C:/backup/backup_" + timestamp + ".sql";
         return backupPath;
     }
 

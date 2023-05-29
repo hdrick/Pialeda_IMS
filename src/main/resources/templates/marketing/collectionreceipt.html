@@ -23,14 +23,14 @@
 
 <div class="btn-actions">
   <div class="selection">
-    <!-- <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()">
-        <option value="" selected>Select Supplier</option>
-        <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}" style="font-weight: bolder;"></option>
-    </select>
-    <select id="my-client" style="font-weight: bolder;" onchange="getClientInfo()">
-      <option value="" selected>Select Client</option>
-      <option  th:each="client : ${clientList}" th:value="${client.name}" th:text="${client.name}" style="font-weight: bolder;"></option>
-    </select> -->
+<!--    <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()">-->
+<!--        <option value="" selected>Select Supplier</option>-->
+<!--        <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}" style="font-weight: bolder;"></option>-->
+<!--    </select>-->
+<!--    <select id="my-client" style="font-weight: bolder;" onchange="getClientInfo()">-->
+<!--      <option value="" selected>Select Client</option>-->
+<!--      <option  th:each="client : ${clientList}" th:value="${client.name}" th:text="${client.name}" style="font-weight: bolder;"></option>-->
+<!--    </select>-->
     <select id="my-invNum" style="font-weight: bolder;" onchange="getInvoiceInfo()" required>
       <option value="" selected>Select Invoice</option>
       <option  th:each="invoice : ${invoiceList}" th:value="${invoice.invoiceNum}" th:text="${invoice.invoiceNum}" style="font-weight: bolder;"></option>

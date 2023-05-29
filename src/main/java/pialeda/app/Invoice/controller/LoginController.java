@@ -46,6 +46,7 @@ public class LoginController {
         } else if (role.equals("admin")) {
             return destination = "redirect:/admin-dashboard";
         }
+        
         return destination;
     }
 
