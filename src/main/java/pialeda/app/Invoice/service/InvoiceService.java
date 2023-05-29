@@ -54,6 +54,11 @@ public class InvoiceService {
     public List<Invoice> getAllInvoice(){
         return invoiceRepository.findAll();
     }
+    public List<Invoice> getCRInvoice(String supplierName, String clientName)
+    {
+        String unpaidStatus = "Unpaid";
+        return invoiceRepository.findBySupplierNameAndClientNameAndStatus(supplierName, clientName, unpaidStatus);
+    }
 
     public List<Invoice> getAllInvoiceByStatusUnpaid(){
         return invoiceRepository.findInvoicesByStatusUnpaid();

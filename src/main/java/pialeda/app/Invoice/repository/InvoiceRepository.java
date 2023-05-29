@@ -20,7 +20,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     Invoice findById(int id);
     List<Invoice> findByClientNameContainingIgnoreCase(String query);
     List<Invoice> findByClientName(String client);
-
+    List<Invoice> findBySupplierNameAndClientNameAndStatus(String supplierName, String clientName, String status);
     @Query(value ="SELECT COALESCE(SUM(grand_total), 0) FROM invoice where supplier_name like:suppliername", nativeQuery = true)
     double findSumLimitByName(@Param("suppliername") String suppliername);
 

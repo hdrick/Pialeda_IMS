@@ -21,11 +21,11 @@ public class InvoiceManagementApplication {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 	public static void main(String[] args) {
 		        // Open the default browser and navigate to the login page
-		try {
-			Desktop.getDesktop().browse(new URI("http://pialeda.com:8088/login"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Desktop.getDesktop().browse(new URI("http://pialeda.com:8088/login"));
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		SpringApplication.run(InvoiceManagementApplication.class, args);
 	}
 	@PostConstruct

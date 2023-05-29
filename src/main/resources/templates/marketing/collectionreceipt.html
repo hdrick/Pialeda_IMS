@@ -23,18 +23,15 @@
 
 <div class="btn-actions">
   <div class="selection">
-<!--    <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()">-->
-<!--        <option value="" selected>Select Supplier</option>-->
-<!--        <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}" style="font-weight: bolder;"></option>-->
-<!--    </select>-->
-<!--    <select id="my-client" style="font-weight: bolder;" onchange="getClientInfo()">-->
-<!--      <option value="" selected>Select Client</option>-->
-<!--      <option  th:each="client : ${clientList}" th:value="${client.name}" th:text="${client.name}" style="font-weight: bolder;"></option>-->
-<!--    </select>-->
-    <select id="my-invNum" style="font-weight: bolder;" onchange="getInvoiceInfo()" required>
-      <option value="" selected>Select Invoice</option>
-      <option  th:each="invoice : ${invoiceList}" th:value="${invoice.invoiceNum}" th:text="${invoice.invoiceNum}" style="font-weight: bolder;"></option>
+    <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()">
+        <option value="" selected>Select Supplier</option>
+        <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}" style="font-weight: bolder;"></option>
     </select>
+    <select id="my-client" style="font-weight: bolder;" onchange="getClientInfo()">
+      <option value="" selected>Select Client</option>
+      <option  th:each="client : ${clientList}" th:value="${client.name}" th:text="${client.name}" style="font-weight: bolder;"></option>
+    </select>
+
   </div>
   <div>
     <!-- <a class="btn btn-info" style="color: white;" onclick="computeEWT()">compute EWT</a> -->
@@ -56,7 +53,12 @@
             </tr>
             <!-- Start invoice number input -->
             <tr>
-              <td class="amt-r1"><input name="inv1" id="inv1" th:value="${currentInvoice}" type="text" required></td>
+              <td class="amt-r1">
+                <select id="my-invNum" style="width: 100%;" onchange="getInvoiceInfo()" required>
+                  <option value="" selected>Select Invoice</option>
+<!--                  <option  th:each="invoice : ${invoiceList}" th:value="${invoice.invoiceNum}" th:text="${invoice.invoiceNum}" style="font-weight: bolder;"></option>-->
+                </select>
+              </td>
               <td class="amt-r1"><input name="inv1-amt" id="inv1-amt" th:value="${curAmount}" class="myNumber" onchange="formatNumber(this)" type="text"></td>
               <td class="amt-r3"><input readonly></td>
             </tr>
@@ -182,12 +184,12 @@
           </div>
           <div class="r2-body">
             <div id="hdate" class="con"><h5>COLLECTTION RECEIPT</h5> <div><label>Date</label><input type="date" id="orDate" th:field="*{officialReceiptDate}" name="orDate" required></div></div>
-            <div class="con"><label >Received from</label><input th:field="*{recvFrom}" id="c-name" name="c-name"  required></div>
-            <div class="con"><label>and Address at</label><input th:field="*{clientAddress}" id="c-address" name="c-address" required></div>
-            <div class="con"><label>with TIN</label><input th:field="*{clientTin}" id="tin" name="tin"><label>engaged in the</label></div>
-            <div class="con"><label>Bus. Style of from</label><input th:field="*{clientBus}" id="busStyle" name="busStyle"><label>,the sum of</label></div>
-            <div class="con"><input  th:field="*{clientSumOf}" id="sumOf" name="sumOf" required><label>Pesos</label></div>
-            <div class="con"><label>(₱<input th:field="*{clientPayment}" type="text" id="clientPayment" name="clientPayment" step="0.01" style="color: red;" onchange="formatNumber(this)" required>) in full/partial payment for</label> <input th:field="*{partialPaymentFor}" id="paymentFor" name="paymentFor" required></div>
+            <div class="con"><label >Received from</label><input th:field="*{recvFrom}" id="c-name" name="c-name"  disabled></div>
+            <div class="con"><label>and Address at</label><input th:field="*{clientAddress}" id="c-address" name="c-address" disabled></div>
+            <div class="con"><label>with TIN</label><input th:field="*{clientTin}" id="tin" name="tin" disabled><label>engaged in the</label></div>
+            <div class="con"><label>Bus. Style of from</label><input th:field="*{clientBus}" id="busStyle" name="busStyle" disabled><label>,the sum of</label></div>
+            <div class="con"><input  th:field="*{clientSumOf}" id="sumOf" name="sumOf" disabled><label>Pesos</label></div>
+            <div class="con"><label>(₱<input th:field="*{clientPayment}" type="text" id="clientPayment" name="clientPayment" step="0.01" style="color: red;" onchange="formatNumber(this)" disabled>) in full/partial payment for</label> <input th:field="*{partialPaymentFor}" id="paymentFor" name="paymentFor" required></div>
           </div>
           <div class="r2-footer">
               <input type="text" name="cashierName" id="cashier-name-input" th:value="${fullName}">
@@ -308,6 +310,13 @@ crAmountInput.addEventListener("input", function() {
       // Get the input value
       var amountInput = document.getElementById("crAmount");
       var amount = parseFloat(amountInput.value);
+      // Set the converted value to the sumOf input field
+      var sumOfInput = document.getElementById("sumOf");
+
+      // Check for null input
+      if (amountInput === null || isNaN(amount)) {
+        return sumOfInput.value = "please input in numbers only";
+      }
 
       // Split the amount into whole and decimal parts
       var wholePart = Math.floor(amount);
@@ -317,8 +326,7 @@ crAmountInput.addEventListener("input", function() {
       var wholePartWords = convertToWords(wholePart);
       var decimalPartWords = convertToWords(decimalPart);
 
-      // Set the converted value to the sumOf input field
-      var sumOfInput = document.getElementById("sumOf");
+
 
       var output = wholePartWords;
       if (decimalPart > 0) {

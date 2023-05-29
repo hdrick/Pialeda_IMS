@@ -223,6 +223,13 @@ public class MarketingController {
         return supplierInfo;
     }
 
+    @GetMapping("/getCRInvoiceDetails")
+    @ResponseBody
+    public List<Invoice> getInvoiceInfo(@RequestParam("supplier") String supplierName, @RequestParam("client") String clientName) {
+        List<Invoice> crInvoice = invoiceService.getCRInvoice(supplierName, clientName);
+        return crInvoice;
+    }
+
     @GetMapping("/official-receipt-list")
     public String officialReceiptList(Model model){
         String role = GlobalUser.getUserRole();

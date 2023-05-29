@@ -97,42 +97,14 @@ function formatNumber(input) {
             invNum: invNum
         },
         success: function(data) {
-            $('#inv1').val(data.invoiceNum);
-  
             $('#inv1-amt').val(data.grandTotal);
-  
-            // client
-            $('#c-name').val(data.clientName);
-  
-            $('#tin').val(formatTIN(data.clientTin));
-  
-            $('#c-address').val(data.clientAddress);
-  
-            $('#busStyle').val(data.clientBusStyle);
-  
-            //supplier
-            //for input and display
-            $('#supp-name').val(data.supplierName);
-            $('#logo-suppName').text(data.supplierName);
-            // $('#supp-name').text(data.name);
-  
-            $('#supp-addrs').val(data.supplierAddress);
-            // $('#supp-addrs').text(data.address+", "+data.cityAddress);
-  
-            $('#supp-tin').val("VAT Reg. TIN "+formatTIN(data.supplierTin));
-            $('#supp-tin-hidden').val(formatTIN(data.supplierTin));
-            // $('#supp-tin').text("VAT Reg. TIN "+data.tin);
-  
-  
-            //total and amount Due
-            $('#total-sales').val(data.grandTotal);
             $('#amt-due').val(data.grandTotal);
-  
+
             $('#add-vat').val(null);
             $('#lw-tax').val(null);
             $('#ewt').val(null);
             $('#total').val(null);
-            
+
         }
     });
   }
@@ -141,52 +113,122 @@ function formatNumber(input) {
 //   SUPPLIER AND CLIENT INFO
 function getSupplierInfo(){
     var supplierName = $('#my-supplier').val();
-    $.ajax({
-        type: "GET",
-        url: "/getSupplierInfo",
-        data: {
-            name: supplierName
-        },
-        success: function(data) {
-            // $('#logo-suppName').text(data.name);
+    if(supplierName != "")
+    {
+        $.ajax({
+                type: "GET",
+                url: "/getSupplierInfo",
+                data: {
+                    name: supplierName
+                },
+                success: function(data) {
+                    // $('#logo-suppName').text(data.name);
 
-            //for input and display
-            $('#supp-name').val(data.name);
-            $('#logo-suppName').text(data.name);
+                    //for input and display
+                    $('#supp-name').val(data.name);
+                    $('#logo-suppName').text(data.name);
+                    // $('#supp-name').text(data.name);
+
+                    $('#supp-addrs').val(data.address+", "+data.cityAddress);
+                    // $('#supp-addrs').text(data.address+", "+data.cityAddress);
+
+                    $('#supp-tin').val("VAT Reg. TIN "+formatTIN(data.tin));
+                    $('#supp-tin-hidden').val(formatTIN(data.tin));
+                    // $('#supp-tin').text("VAT Reg. TIN "+data.tin);
+                    displayInvoice();
+                }
+            });
+    }
+    else
+        {
+            var select = $('#my-invNum');
+            clearFields();
+            $('#inv1-amt').val(null);
+            $('#supp-name').val(null);
+            $('#logo-suppName').text(null);
             // $('#supp-name').text(data.name);
-
-            $('#supp-addrs').val(data.address+", "+data.cityAddress);
+            $('#supp-addrs').val(null);
             // $('#supp-addrs').text(data.address+", "+data.cityAddress);
-
-            $('#supp-tin').val("VAT Reg. TIN "+formatTIN(data.tin));
-            $('#supp-tin-hidden').val(formatTIN(data.tin));
-            // $('#supp-tin').text("VAT Reg. TIN "+data.tin);
+            $('#supp-tin').val(null);
+            $('#supp-tin-hidden').val(null);
+            select.children(':not(:first)').remove();
         }
-    });
+
+
 }
 
 function getClientInfo() {
     var clientName = $('#my-client').val();
-    $.ajax({
-        type: "GET",
-        url: "/getClientInfo",
-        data: {
-            name: clientName
-        },
-        success: function(data) {
-            $('#c-name').val(data.name);
+    if(clientName != "")
+    {
+        $.ajax({
+                type: "GET",
+                url: "/getClientInfo",
+                data: {
+                    name: clientName
+                },
+                success: function(data) {
+                    $('#c-name').val(data.name);
 
-            $('#tin').val(formatTIN(data.tin));
+                    $('#tin').val(formatTIN(data.tin));
 
-            $('#c-address').val(data.address+", "+data.cityAddress);
+                    $('#c-address').val(data.address+", "+data.cityAddress);
 
-            $('#busStyle').val(data.busStyle);
+                    $('#busStyle').val(data.busStyle);
+                    displayInvoice();
 
+                }
+            });
+    }
+    else
+    {
+        var select = $('#my-invNum');
+        clearFields();
+        $('#inv1-amt').val(null);
+        $('#c-name').val(null);
+        $('#tin').val(null);
+        $('#c-address').val(null);
+        $('#busStyle').val(null);
+        select.children(':not(:first)').remove();
+    }
+}
+function displayInvoice()
+{
+    var supplierName = $('#my-supplier').val();
+    var clientName = $('#my-client').val();
+    var select = $('#my-invNum');
 
-        }
-    });
+    if(supplierName != "" && clientName != "")
+    {
+    select.children(':not(:first)').remove();
+        $.ajax({
+                type: "GET",
+                url: "/getCRInvoiceDetails",
+                data: {
+                    supplier: supplierName,
+                    client: clientName
+                },
+                success: function(data) {
+                    $('#inv1-amt').val(null);
+                    clearFields();
+                    populateSelector(data);
+                },
+                error: function() {
+                  console.log('Error retrieving data');
+                }
+            });
+    }
 }
 
+function populateSelector(data) {
+  var select = $('#my-invNum');
+
+  $.each(data, function(index, item) {
+    var option = $('<option>').val(item.invoiceNum).text(item.invoiceNum);
+    select.append(option);
+  });
+
+}
 function formatTIN(tin) {
     var formattedTIN = tin.toString().replace(/[^0-9]/g, ''); // remove any non-digit characters
     formattedTIN = formattedTIN.replace(/^(\d{3})(\d{3})(\d{3})$/, "$1-$2-$3-000");
