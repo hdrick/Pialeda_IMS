@@ -171,7 +171,7 @@ public class InvoiceService {
 
     public Page<Invoice> findPage(int pageNumber)
     {
-        Pageable pageable = PageRequest.of(pageNumber -1, 2);
+        Pageable pageable = PageRequest.of(pageNumber -1, 7);
         return invoiceRepository.findAll(pageable);
     }
 
