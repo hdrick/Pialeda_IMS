@@ -97,7 +97,7 @@ function formatNumber(input) {
             invNum: invNum
         },
         success: function(data) {
-            alert(data.invoiceNum);
+
             $('#inv1').val(data.invoiceNum);
             $('#inv1-amt').val(data.grandTotal);
             $('#amt-due').val(data.grandTotal);
