@@ -396,7 +396,7 @@ font-size: 35px!important;
                 </div>
 
             </div>
-            <div class="officialReceipt-con" id="print-content">
+            <div class="officialReceipt-con" id="print-content" th:if="${invoiceDetails.getStatus() != 'Unpaid'}">
                 <div class="row-1">
                     <table border="1">
                         <tbody><tr>
@@ -407,7 +407,7 @@ font-size: 35px!important;
                             <td id="amt" colspan="2" style="text-align: center;">AMOUNT</td>
                         </tr>
                         <!-- Start invoice number input -->
-                        <tr th:each="collectionReceipt: ${collectionReceipts}">
+                        <tr>
                             <td class="amt-r1 supplier-name" ><input name="inv1" type="text" th:value="${collectionReceipt.invoice}" readonly></td>
                             <td class="amt-r1"><input name="inv1-amt"  th:value="${collectionReceipt.invoiceAmount}" readonly class="myNumber" type="text"></td>
                             <td class="amt-r3"><input readonly=""></td>

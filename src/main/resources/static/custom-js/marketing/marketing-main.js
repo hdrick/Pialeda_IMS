@@ -210,7 +210,7 @@ addRowBtn.addEventListener('click', () => {
     });
     rowCounter++;
     computeInvoiceTotals();
-    generatePONumber();
+
   } else {
     alert('Maximum row limit reached!');
   }

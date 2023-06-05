@@ -527,42 +527,26 @@ public class VRController {
             model.addAttribute("autoClose", true);
             return "vr-staff/vr-invoice";
         }
-        List<Invoice> invoices = new ArrayList<>();
+
         Invoice invoiceDetails = invoiceService.getInvoiceDetails(invoiceNum);
+        System.out.print("==============================="+invoiceDetails.getInvoiceNum());
         Supplier supplierDetails = supplierService.findByName(invoiceDetails.getSupplierName());
         Client clientDetails = clientService.findByName(invoiceDetails.getClientName());
         List<InvoiceProductInfo> invoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoiceDetails.getInvoiceNum());
+        CollectionReceiptInvoices collectionReceipt;
+        CollectionReceipt collectionReceiptDetails;
 
-        CollectionReceiptInvoices collectionReceipt = collectionService.getCollectionReceiptId(invoiceDetails.getInvoiceNum());
 
-        if (collectionReceipt == null)
+        if (invoiceDetails.getStatus() != "Unpaid")
         {
-            model.addAttribute("noCollectionReceipt", true);
+
+            collectionReceipt = collectionService.getCollectionReceiptId(invoiceDetails.getInvoiceNum());
+            collectionReceiptDetails = collectionService.getCollectionReceiptDetails(collectionReceipt.getCollectionReceiptNum());
+            model.addAttribute("collectionReceiptDetails", collectionReceiptDetails);
+            model.addAttribute("collectionReceipt", collectionReceipt);
+
         }
 
-//          Long countedInvoicesCr = collectionService.countInvoicesCr(collectionReceipt.getCollectionReceiptNum());
-            CollectionReceipt collectionReceiptDetails = collectionService.getCollectionReceiptDetails(collectionReceipt.getCollectionReceiptNum());
-            List<CollectionReceiptInvoices> collectionReceiptInvoices = collectionService.getAllInvoicesByCollectionReceiptId(collectionReceipt.getCollectionReceiptNum());
-            for (CollectionReceiptInvoices collectionReceiptInvoice : collectionReceiptInvoices)
-            {
-                Invoice invoice = invoiceService.getInvoiceDetails(collectionReceiptInvoice.getInvoice());
-
-                Invoice crInvoiceDetails = invoiceService.getInvoiceDetails(invoice.getInvoiceNum());
-                Supplier crInvoiceSupplierDetails = supplierService.findByName(invoice.getSupplierName());
-                Client crInvoiceClientDetails = clientService.findByName(invoice.getClientName());
-                List<InvoiceProductInfo> crInvoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoice.getInvoiceNum());
-
-                if (invoice != null)
-                {
-                    invoices.add(invoice);
-                }
-
-            }
-            List<CollectionReceiptInvoices> collectionReceipts1 = collectionService.getAllInvoicesByCollectionReceipt(collectionReceiptDetails.getCollectionReceiptNum());
-            model.addAttribute("collectionReceipts", collectionReceipts1);
-            model.addAttribute("collectionReceiptDetails", collectionReceiptDetails);
-
-        model.addAttribute("invoices", invoices);
         model.addAttribute("supplierDetails", supplierDetails);
         model.addAttribute("invoiceDetails", invoiceDetails);
         model.addAttribute("clientDetails", clientDetails);
@@ -570,4 +554,59 @@ public class VRController {
 
         return "vr-staff/vr-invoice";
     }
+//    @GetMapping("/vr/user/invoice/invoiceDetails/{invoiceNum}")
+//    public String viewInvoice(Model model, @PathVariable("invoiceNum") String invoiceNum)
+//    {
+//        String role = GlobalUser.getUserRole();
+//
+//        if(role == null)
+//        {
+//            String jsCode = "<script>window.close();</script>";
+//            model.addAttribute("jsCode", jsCode);
+//            model.addAttribute("autoClose", true);
+//            return "vr-staff/vr-invoice";
+//        }
+//        List<Invoice> invoices = new ArrayList<>();
+//        Invoice invoiceDetails = invoiceService.getInvoiceDetails(invoiceNum);
+//        Supplier supplierDetails = supplierService.findByName(invoiceDetails.getSupplierName());
+//        Client clientDetails = clientService.findByName(invoiceDetails.getClientName());
+//        List<InvoiceProductInfo> invoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoiceDetails.getInvoiceNum());
+//
+//        CollectionReceiptInvoices collectionReceipt = collectionService.getCollectionReceiptId(invoiceDetails.getInvoiceNum());
+//
+//        if (collectionReceipt == null)
+//        {
+//            model.addAttribute("noCollectionReceipt", true);
+//        }
+//
+////          Long countedInvoicesCr = collectionService.countInvoicesCr(collectionReceipt.getCollectionReceiptNum());
+//            CollectionReceipt collectionReceiptDetails = collectionService.getCollectionReceiptDetails(collectionReceipt.getCollectionReceiptNum());
+//            List<CollectionReceiptInvoices> collectionReceiptInvoices = collectionService.getAllInvoicesByCollectionReceiptId(collectionReceipt.getCollectionReceiptNum());
+//            for (CollectionReceiptInvoices collectionReceiptInvoice : collectionReceiptInvoices)
+//            {
+//                Invoice invoice = invoiceService.getInvoiceDetails(collectionReceiptInvoice.getInvoice());
+//
+//                Invoice crInvoiceDetails = invoiceService.getInvoiceDetails(invoice.getInvoiceNum());
+//                Supplier crInvoiceSupplierDetails = supplierService.findByName(invoice.getSupplierName());
+//                Client crInvoiceClientDetails = clientService.findByName(invoice.getClientName());
+//                List<InvoiceProductInfo> crInvoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoice.getInvoiceNum());
+//
+//                if (invoice != null)
+//                {
+//                    invoices.add(invoice);
+//                }
+//
+//            }
+//            List<CollectionReceiptInvoices> collectionReceipts1 = collectionService.getAllInvoicesByCollectionReceipt(collectionReceiptDetails.getCollectionReceiptNum());
+//            model.addAttribute("collectionReceipts", collectionReceipts1);
+//            model.addAttribute("collectionReceiptDetails", collectionReceiptDetails);
+//
+//        model.addAttribute("invoices", invoices);
+//        model.addAttribute("supplierDetails", supplierDetails);
+//        model.addAttribute("invoiceDetails", invoiceDetails);
+//        model.addAttribute("clientDetails", clientDetails);
+//        model.addAttribute("invoicePurchaseProducts", invoicePurchaseProducts);
+//
+//        return "vr-staff/vr-invoice";
+//    }
 }
