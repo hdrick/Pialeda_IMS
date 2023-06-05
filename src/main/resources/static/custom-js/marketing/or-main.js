@@ -68,7 +68,7 @@ function formatNumber(input) {
     
     ewtInput.value = ewt.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     let newTotal = totalAmountNoComma - ewt; 
-    totalInput.value = newTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    // totalInput.value = newTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     displayEwt.innerHTML = inputElement.value+"%";
   }
 
@@ -88,8 +88,8 @@ function formatNumber(input) {
 
     addVatInput.value = addVat.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});;
     lwTaxInput.value = lwTax.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});;
-    totalInput.value = totalResult.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});;
-    amtDueInput.value = totalResult.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});;
+    // totalInput.value = totalResult.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});;
+    // amtDueInput.value = totalResult.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});;
   }
 
   function clearFields(){
@@ -132,6 +132,7 @@ function getSupplierInfo(){
             $('#supp-tin').val("VAT Reg. TIN "+formatTIN(data.tin));
             $('#supp-tin-hidden').val(formatTIN(data.tin));
             // $('#supp-tin').text("VAT Reg. TIN "+data.tin);
+            displayInvoice();
         }
     });
 }
@@ -152,10 +153,38 @@ function getClientInfo() {
             $('#c-address').val(data.address+", "+data.cityAddress);
 
             $('#busStyle').val(data.busStyle);
-
+            displayInvoice();
 
         }
     });
+}
+
+function displayInvoice()
+{
+    var supplierName = $('#my-supplier').val();
+    var clientName = $('#my-client').val();
+    var select = $('#my-invNum');
+
+    if(supplierName != "" && clientName != "")
+    {
+    select.children(':not(:first)').remove();
+        $.ajax({
+                type: "GET",
+                url: "/getORInvoiceDetails",
+                data: {
+                    supplier: supplierName,
+                    client: clientName
+                },
+                success: function(data) {
+                    $('#inv1-amt').val(null);
+                    clearFields();
+                    populateSelector(data);
+                },
+                error: function() {
+                  console.log('Error retrieving data');
+                }
+            });
+    }
 }
 
 function getInvoiceInfo() {
@@ -167,47 +196,31 @@ function getInvoiceInfo() {
           invNum: invNum
       },
       success: function(data) {
-          $('#inv1').val(data.invoiceNum);
+        $('#inv1').val(data.invoiceNum);
+        $('#inv1-amt').val(data.grandTotal);
+        $('#amt-due').val(data.grandTotal);
+        $('#total').val(data.grandTotal);
+        $('#total-sales').val(data.grandTotal);
+        
 
-          $('#inv1-amt').val(data.grandTotal);
+        $('#add-vat').val(null);
+        $('#lw-tax').val(null);
+        $('#ewt').val(null);
 
-          // client
-          $('#c-name').val(data.clientName);
-
-          $('#tin').val(formatTIN(data.clientTin));
-
-          $('#c-address').val(data.clientAddress);
-
-          $('#busStyle').val(data.clientBusStyle);
-
-          //supplier
-          //for input and display
-          $('#supp-name').val(data.supplierName);
-          $('#logo-suppName').text(data.supplierName);
-          // $('#supp-name').text(data.name);
-
-          $('#supp-addrs').val(data.supplierAddress);
-          // $('#supp-addrs').text(data.address+", "+data.cityAddress);
-
-          $('#supp-tin').val("VAT Reg. TIN "+formatTIN(data.supplierTin));
-          $('#supp-tin-hidden').val(formatTIN(data.supplierTin));
-          // $('#supp-tin').text("VAT Reg. TIN "+data.tin);
-
-
-          //total and amount Due
-          $('#total-sales').val(data.grandTotal);
-          $('#amt-due').val(data.grandTotal);
-
-          $('#add-vat').val(null);
-          $('#lw-tax').val(null);
-          $('#ewt').val(null);
-          $('#total').val(null);
           
       }
   });
 }
 
+function populateSelector(data) {
+  var select = $('#my-invNum');
 
+  $.each(data, function(index, item) {
+    var option = $('<option>').val(item.invoiceNum).text(item.invoiceNum);
+    select.append(option);
+  });
+
+}
 
 function formatTIN(tin) {
     var formattedTIN = tin.toString().replace(/[^0-9]/g, ''); // remove any non-digit characters

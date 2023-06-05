@@ -60,6 +60,11 @@ public class InvoiceService {
         return invoiceRepository.findBySupplierNameAndClientNameAndStatus(supplierName, clientName, unpaidStatus);
     }
 
+    public List<Invoice> getORInvoice(String supplierName, String clientName)
+    {
+        return invoiceRepository.findBySupplierNameAndClientNameAndStatusInProgressAndUnPaid(clientName, supplierName);
+    }
+
     public List<Invoice> getAllInvoiceByStatusUnpaid(){
         return invoiceRepository.findInvoicesByStatusUnpaid();
     }

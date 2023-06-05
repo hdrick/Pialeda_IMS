@@ -9,8 +9,6 @@
   <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
   <!-- Font awesome local -->
   <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
-<!--  custom css for header-->
-<!--  <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/or-header.css}">-->
   <!--custom css for vr-->
   <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/or-style.css}">
 <!--  <link rel="stylesheet" th:href="@{/custom-css/marketing/or-print.css}" media="print">-->
@@ -20,41 +18,22 @@
 
 
 <div class="main-con">
-  <!--Header starts-->
-<!--  <div class="header-con">-->
-<!--    <div class="left-con">-->
-<!--      <div id="bx1">-->
-<!--        <img id="h-logo" th:src="@{/icon/LOGO.png}" alt="Logo">-->
-<!--      </div>-->
-<!--      <div id="bx2">-->
-<!--        <label id="logo-name">PIALEDA</label>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="right-con">-->
-<!--      <div>-->
-<!--        <i class="fa-solid fa-user"></i>-->
-<!--        <a class="m-2" >VR-Staff</a>-->
-<!--        <a href="#" class="" data-toggle="modal" data-target="#logoutModal">-->
-<!--          <i class="fas fa-sign-out-alt"></i>-->
-<!--        </a>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
+
 <form method="POST" th:action="@{/createOfficialReceipt}" th:object="${officialReceiptInfo}">
 <div class="btn-actions">
   <div class="selection">
-    <!-- <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()" required>
+    <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()" required>
         <option value="" selected>Select Supplier</option>
         <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}" style="font-weight: bolder;"></option>
     </select>
     <select id="my-client" style="font-weight: bolder;" onchange="getClientInfo()" required>
       <option value="" selected>Select Client</option>
       <option  th:each="client : ${clientList}" th:value="${client.name}" th:text="${client.name}" style="font-weight: bolder;"></option>
-    </select> -->
-    <select id="my-invNum" style="font-weight: bolder;" onchange="getInvoiceInfo()" required>
+    </select>
+    <!-- <select id="my-invNum" style="font-weight: bolder;" onchange="getInvoiceInfo()" required>
       <option value="" selected>Select Invoice</option>
       <option  th:each="invoice : ${invoiceList}" th:value="${invoice.invoiceNum}" th:text="${invoice.invoiceNum}" style="font-weight: bolder;"></option>
-    </select>
+    </select> -->
   </div>
   <div>
     <!-- <a class="btn btn-info" style="color: white;" onclick="computeEWT()">compute EWT</a> -->
@@ -78,8 +57,13 @@
             <!-- Start invoice number input -->
             <tr>
               <td class="amt-r1">
-                <input name="inv1" id="inv1" type="text"  th:value="${currentInvoice}" required></td>
+                <select id="my-invNum" style="width: 100%;" onchange="getInvoiceInfo()" required>
+                  <option value="" selected>Select Invoice</option>
+<!--                  <option  th:each="invoice : ${invoiceList}" th:value="${invoice.invoiceNum}" th:text="${invoice.invoiceNum}" style="font-weight: bolder;"></option>-->
+                </select>
+              </td>
               <td class="amt-r1"><input name="inv1-amt" th:value="${curAmount}" id="inv1-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+              <td class="amt-r1"><input name="inv1" id="inv1" type="hidden" required></td>
               <td class="amt-r3"><input readonly></td>
             </tr>
             <tr>
