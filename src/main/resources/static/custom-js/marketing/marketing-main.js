@@ -3,30 +3,30 @@ const invoiceNumInput = document.getElementById('invoice-number-input');
 
 const btnGen = document.getElementById('btn-Gen');
 
-function generateInvNum() {
-    const f1 = "INV-";
-    const currentYear = new Date().getFullYear();
-    const currentYearLast2Digit = currentYear.toString().slice(-2);
-
-    const now = new Date();
-    const monthIndex = now.getMonth();
-
-    const currentMonth = monthIndex + 1;
-    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
-    const randomNumber2 = Math.floor(Math.random() * 90) + 10;
-
-    const date = now.getDate();
-    let currentDay = 0;
-    if (date <= 9) {
-        currentDay = "0" + date;
-    } else {
-        currentDay = date;
-    }
-    const result = f1 + currentYearLast2Digit + currentDay + currentMonth + "-" + randomNumber + randomNumber2;
-    invoiceNum.textContent = result;
-    invoiceNumInput.value = result;
-    generatePONumber();
-}
+//function generateInvNum() {
+//    const f1 = "INV-";
+//    const currentYear = new Date().getFullYear();
+//    const currentYearLast2Digit = currentYear.toString().slice(-2);
+//
+//    const now = new Date();
+//    const monthIndex = now.getMonth();
+//
+//    const currentMonth = monthIndex + 1;
+//    const randomNumber = Math.floor(Math.random() * 90000) + 10000;
+//    const randomNumber2 = Math.floor(Math.random() * 90) + 10;
+//
+//    const date = now.getDate();
+//    let currentDay = 0;
+//    if (date <= 9) {
+//        currentDay = "0" + date;
+//    } else {
+//        currentDay = date;
+//    }
+//    const result = f1 + currentYearLast2Digit + currentDay + currentMonth + "-" + randomNumber + randomNumber2;
+//    invoiceNum.textContent = result;
+//    invoiceNumInput.value = result;
+//    generatePONumber();
+//}
 
 function getClientInfo() {
     const date = new Date();
@@ -103,7 +103,7 @@ function generatePONumber() {
     const poNum = document.getElementById('client-poNumber');
     const poNumInput = document.getElementById('client-poNumber-input');
     const timestamp = new Date().getTime(); // Get the current timestamp in milliseconds
-    const randomNum = Math.floor(Math.random() * 10000); // Generate a random number between 0 and 9999
+    const randomNum = Math.floor(Math.random() * 1000); // Generate a random number between 0 and 9999
     const poNumber = `PO-${timestamp}-${randomNum}`; // Combine the timestamp and random number to create the PO number
 
     // Check if the PO number already exists
@@ -210,6 +210,7 @@ addRowBtn.addEventListener('click', () => {
     });
     rowCounter++;
     computeInvoiceTotals();
+    generatePONumber();
   } else {
     alert('Maximum row limit reached!');
   }
@@ -303,9 +304,9 @@ cashierNameInput.value = cashierName.textContent;
 // generateInvNum();
 
   // Invoice number pair
-  const invoiceSpan = document.getElementById('invoice-number');
-  const invoiceInput = document.getElementById('invoice-number-input');
-  invoiceInput.value = invoiceSpan.innerText;
+//  const invoiceSpan = document.getElementById('invoice-number');
+//  const invoiceInput = document.getElementById('invoice-number-input');
+//  invoiceInput.value = invoiceSpan.innerText;
 
 //to update input hidden to have same value on span invoice number
     invoiceSpan.addEventListener("input", function() {
@@ -337,7 +338,4 @@ cashierNameInput.value = cashierName.textContent;
   });
 
   poObserver.observe(poLabel, {childList: true});
-
-
-  
 

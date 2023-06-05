@@ -52,7 +52,7 @@
 </div>
 
 <div class="container">
-    <p>Total OR: [[${totalItem}]]</p>
+    <p>Total CR: [[${totalItem}]]</p>
     <nav aria-label="Page navigation example">
         <ul class="pagination">
             <li th:if="${currentPage !=0}" class="page-item">
@@ -76,7 +76,7 @@
             <li th:if="${currentPage+1!=totalPages}" class="page-item">
                 <a class="page-link" th:href="@{'/pagescr/'+${currentPage+1}}">Next</a>
             </li>
-            <a  th:href="@{/marketing-invoice}" class="btn ml-auto btn-dark" style="color: white;">Go Back</a>
+            <a  th:href="@{/marketing-collectionreceipt}" class="btn ml-auto btn-dark" style="color: white;">Go Back</a>
         </ul>
     </nav>
 </div>

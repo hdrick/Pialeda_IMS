@@ -56,8 +56,8 @@
 
                 <!--button for create Official receipt  -->
                 <div>
-                    <a id="btn-OR" class="btn btn-warning" th:href="@{/marketing-officialreceipt}">Create OR</a>
-                    <a id="btn-CR" class="btn btn-dark" th:href="@{/marketing-collectionreceipt}">Create CR</a>
+                    <a id="btn-OR" class="btn btn-warning">Create OR</a>
+                    <a id="btn-CR" class="btn btn-dark" style="color: white">Create CR</a>
                 </div>
 
                 <div>
@@ -88,7 +88,8 @@
                                         <label style="width: 150px;">SALES INVOICE:</label>
                                         <span  id="invoice-number" style="color: red; display: none;" th:text="${generateInvNum}" contenteditable="true"></span>
                                         <!-- <label id="invoice-number" style="color: red;" th:text="${generateInvNum}"></label> -->
-                                        <input type="text" th:field="*{invoiceNum}" style="text-align: center; color: red; font-weight: bolder;" id="invoice-number-input" >
+<!--                                        <input type="text" th:field="*{invoiceNum}" placeholder="Invoice # here" style="text-align: center; color: red; font-weight: bolder;" id="invoice-number-input" >-->
+                                        <input type="text" th:field="*{invoiceNum}" placeholder="Invoice # here" style="text-align: center; color: red; font-weight: bolder;" id="invoice-number-input" >
                                     </div>
                                 </div>
                             </div>
@@ -207,7 +208,7 @@
             <div class="main-bx2">
                 <!--            <a id="btn-Gen" class="btn btn-success" onclick="generateInvNum()">Generate</a>-->
                 <input id="btn-Create" type="submit" class="btn btn-success" value="Save Invoice">
-                <a id="btn-invoices" class="btn btn-success" onclick="return confirm('Warning: continuing will delete the encoded data. Do you want to proceed?')" th:href="@{/invoice-view}">List of Invoice</a>
+                <a id="btn-invoices" class="btn btn-success">List of Invoice</a>
             </div>
         </div>
     </form>
@@ -219,9 +220,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="clientModalLabel">Client</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body">
                 <form th:action="@{/createClient}" th:object="${clientInfo}" method="POST">
@@ -263,7 +261,7 @@
                         <div><a type="button" class="btn btn-warning" th:href="@{/client-list}">Client List</a></div>
                         <div>
                             <button type="submit" class="btn btn-primary" style="background-color: #003D2B; border-color: #003D2B;">Save</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary btn-close">Close</button>
                         </div>
                     </div>
                 </form>
@@ -278,9 +276,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="supplierModalLabel">Supplier</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
             </div>
             <div class="modal-body">
                 <form th:action="@{/createSupplier}" th:object="${supplierInfo}" method="POST">
@@ -336,7 +331,7 @@
                         <div><a type="button" class="btn btn-warning" th:href="@{/supplier-list}">Supplier List</a></div>
                         <div>
                             <button type="submit" class="btn btn-primary" style="background-color: #003D2B; border-color: #003D2B;">Save</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary btn-close" id="close-supplier">Close</button>
                         </div>
                     </div>
 
@@ -513,14 +508,23 @@
         </div>
     </div>
 </div>
+<div id="confirmationModal" class="modal modal-close" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true" style="margin-top: 4%;" data-backdrop="static" data-keyboard="false">
+    <div class="modal-content">
+        <p>Are you sure you want to leave this page?</p>
+        <div class="btn-row">
+            <button class="btn btn-primary" id="yesBtn" >Yes</button>
+            <button class="btn btn-primary" id="noBtn">No</button>
+        </div>
+    </div>
+</div>
 
 <!-- Bootstrap JavaScript -->
 <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
 <script th:src="@{/custom-js/marketing/marketing-main.js}"></script>
+<script th:src="@{/custom-js/marketing/modal-alert.js}"></script>
 <script>
     $(document).ready(function () {
-
         $('#invoiceLimitModal').modal('show');
         $('#invNumDuplicateModal').modal('show');
         $('#suppDuplicateModal').modal('show');
