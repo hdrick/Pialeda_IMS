@@ -210,7 +210,6 @@ addRowBtn.addEventListener('click', () => {
     });
     rowCounter++;
     computeInvoiceTotals();
-    generatePONumber();
   } else {
     alert('Maximum row limit reached!');
   }
@@ -304,8 +303,8 @@ cashierNameInput.value = cashierName.textContent;
 // generateInvNum();
 
   // Invoice number pair
-//  const invoiceSpan = document.getElementById('invoice-number');
-//  const invoiceInput = document.getElementById('invoice-number-input');
+ const invoiceSpan = document.getElementById('invoice-number');
+ const invoiceInput = document.getElementById('invoice-number-input');
 //  invoiceInput.value = invoiceSpan.innerText;
 
 //to update input hidden to have same value on span invoice number

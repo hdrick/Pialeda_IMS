@@ -26,7 +26,10 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
     @Query(value = "SELECT * FROM invoice WHERE status LIKE 'Unpaid' OR status LIKE 'In Progress' ORDER BY invoice_date_created DESC", nativeQuery = true)
     List<Invoice> findInvoicesByStatusUnpaid();
-    
+    // SELECT * FROM invoice WHERE supplier_name = 'Supplier Test1' AND client_name = 'client test1' AND (status = 'In Progress' OR status = 'UnPaid');
+    @Query(value = "SELECT * FROM invoice WHERE supplier_name = :supplierName AND client_name = :clientName AND (status = 'In Progress' OR status = 'UnPaid') ORDER BY invoice_date_created DESC;", nativeQuery = true)
+    List<Invoice> findBySupplierNameAndClientNameAndStatusInProgressAndUnPaid(@Param("clientName") String clientName, @Param("supplierName") String supplierName);
+
     Invoice findByInvoiceNum(String invNum);
     Page<Invoice> findByClientNameContainingIgnoreCase(String name, Pageable pageable);
     Page<Invoice> findByClientNameAndDateCreatedContainingIgnoreCase(String name, String month, Pageable pageable);

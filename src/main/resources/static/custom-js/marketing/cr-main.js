@@ -68,7 +68,7 @@ function formatNumber(input) {
     
     ewtInput.value = ewt.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     let newTotal = totalAmountNoComma - ewt; 
-    totalInput.value = newTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    // totalInput.value = newTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     displayEwt.innerHTML = inputElement.value+"%";
   }
 
@@ -101,11 +101,12 @@ function formatNumber(input) {
             $('#inv1').val(data.invoiceNum);
             $('#inv1-amt').val(data.grandTotal);
             $('#amt-due').val(data.grandTotal);
+            $('#total').val(data.grandTotal);
 
             $('#add-vat').val(null);
             $('#lw-tax').val(null);
             $('#ewt').val(null);
-            $('#total').val(null);
+            
 
         }
     });
