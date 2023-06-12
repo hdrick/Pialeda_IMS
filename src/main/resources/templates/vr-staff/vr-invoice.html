@@ -396,7 +396,7 @@ font-size: 35px!important;
                 </div>
 
             </div>
-            <div class="officialReceipt-con" id="print-content" th:if="${invoiceDetails.getStatus() != 'Unpaid'}">
+            <div class="officialReceipt-con" id="print-content" th:if="${noCollectionReceipt}">
                 <div class="row-1">
                     <table border="1">
                         <tbody><tr>
@@ -500,6 +500,7 @@ font-size: 35px!important;
 
                 </div>
             </div>
+
             <div class="invoice-footer">
                 <h7 id="date-time"></h7>
             </div>
