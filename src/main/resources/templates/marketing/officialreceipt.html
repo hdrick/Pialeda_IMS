@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8">
-  <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}"/>
+  <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}" />
   <title>Pialeda</title>
 
   <!-- Bootstrap css -->
@@ -11,302 +12,333 @@
   <script th:src="@{/fontawesome/2302251f1c.js}" crossorigin="anonymous"></script>
   <!--custom css for vr-->
   <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/or-style.css}">
-<!--  <link rel="stylesheet" th:href="@{/custom-css/marketing/or-print.css}" media="print">-->
+  <!--  <link rel="stylesheet" th:href="@{/custom-css/marketing/or-print.css}" media="print">-->
 
 </head>
+
 <body class="body">
 
 
-<div class="main-con">
+  <div class="main-con">
 
-<form method="POST" th:action="@{/createOfficialReceipt}" th:object="${officialReceiptInfo}">
-<div class="btn-actions">
-  <div class="selection">
-    <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()" required>
-        <option value="" selected>Select Supplier</option>
-        <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}" style="font-weight: bolder;"></option>
-    </select>
-    <select id="my-client" style="font-weight: bolder;" onchange="getClientInfo()" required>
-      <option value="" selected>Select Client</option>
-      <option  th:each="client : ${clientList}" th:value="${client.name}" th:text="${client.name}" style="font-weight: bolder;"></option>
-    </select>
-    <!-- <select id="my-invNum" style="font-weight: bolder;" onchange="getInvoiceInfo()" required>
+    <form method="POST" th:action="@{/createOfficialReceipt}" th:object="${officialReceiptInfo}">
+      <div class="btn-actions">
+        <div class="selection">
+          <select id="my-supplier" style="font-weight: bolder;" onchange="getSupplierInfo()" required>
+            <option value="" selected>Select Supplier</option>
+            <option th:each="supplier : ${supplierList}" th:value="${supplier.name}" th:text="${supplier.name}"
+              style="font-weight: bolder;"></option>
+          </select>
+          <select id="my-client" style="font-weight: bolder;" onchange="getClientInfo()" required>
+            <option value="" selected>Select Client</option>
+            <option th:each="client : ${clientList}" th:value="${client.name}" th:text="${client.name}"
+              style="font-weight: bolder;"></option>
+          </select>
+          <!-- <select id="my-invNum" style="font-weight: bolder;" onchange="getInvoiceInfo()" required>
       <option value="" selected>Select Invoice</option>
       <option  th:each="invoice : ${invoiceList}" th:value="${invoice.invoiceNum}" th:text="${invoice.invoiceNum}" style="font-weight: bolder;"></option>
     </select> -->
-  </div>
-  <div>
-    <!-- <a class="btn btn-info" style="color: white;" onclick="computeEWT()">compute EWT</a> -->
-    <a class="btn btn-info" style="color: white;" data-toggle="modal" data-target="#ewtModal">compute EWT</a>
-    <a class="btn btn-warning" style="color: white;" onclick="computeVat()">compute VAT</a>
-    <a class="btn btn-danger" style="color: white;" onclick="clearFields()">Clear fields</a>
-  </div>
-</div>
-  <div class="main-con2">
-    
-    <div class="officialReceipt-con" id="print-content">
-        <div class="row-1">
-          <table border=1>
-            <tr>
-              <td colspan="3" style="text-align: center;">IN SETTLEMENT OF THE FOLLOWING:</td>
-            </tr>
-            <tr>
-              <td colspan="1" style="text-align: center;">INVOICE NO.</td>
-              <td id="amt" colspan="2" style="text-align: center;">AMOUNT</td>
-            </tr>
-            <!-- Start invoice number input -->
-            <tr>
-              <td class="amt-r1">
-                <select id="my-invNum" style="width: 100%;" onchange="getInvoiceInfo()" required>
-                  <option value="" selected>Select Invoice</option>
-<!--                  <option  th:each="invoice : ${invoiceList}" th:value="${invoice.invoiceNum}" th:text="${invoice.invoiceNum}" style="font-weight: bolder;"></option>-->
-                </select>
-              </td>
-              <td class="amt-r1"><input name="inv1-amt" th:value="${curAmount}" id="inv1-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
-              <td class="amt-r1"><input name="inv1" id="inv1" type="hidden" required></td>
-              <td class="amt-r3"><input readonly></td>
-            </tr>
-            <tr>
-              <td><input type="text" name="inv2"></td>
-              <td class="amt-r1"><input name="inv2-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
-              <td class="amt-r3"><input readonly></td>
-            </tr>
-            <tr>
-              <td><input type="text" name="inv3"></td>
-              <td class="amt-r1"><input name="inv3-amt"  class="myNumber" onchange="formatNumber(this)" type="text"></td>
-              <td class="amt-r3"><input readonly></td>
-            </tr>
-            <tr>
-              <td><input name="inv4" type="text"></td>
-              <td class="amt-r1"><input name="inv4-amt"  class="myNumber" onchange="formatNumber(this)" type="text"></td>
-              <td class="amt-r3"><input readonly></td>
-            </tr>
-            <tr>
-              <td><input name="inv5" type="text"></td>
-              <td><input name="inv5-amt"  class="myNumber"  onchange="formatNumber(this)" type="text"></td>
-              <td class="amt-r3"><input readonly></td>
-            </tr>
-            <tr>
-              <td><input name="inv6" type="text"></td>
-              <td><input name="inv6-amt"  class="myNumber" onchange="formatNumber(this)" type="text"></td>
-              <td class="amt-r3"><input readonly></td>
-            </tr>
-            <tr>
-              <td><input name="inv7" type="text"></td>
-              <td><input name="inv7-amt"  class="myNumber" onchange="formatNumber(this)" type="text"></td>
-              <td class="amt-r3"><input readonly></td>
-            </tr>
-            <tr>
-              <td><input name="inv8" type="text"></td>
-              <td><input name="inv8-amt"  class="myNumber" onchange="formatNumber(this)" type="text"></td>
-              <td class="amt-r3"><input readonly></td>
-            </tr>
-            <!-- End invoice number input -->
-            <tr>
-              <td >Total Sales</td>
-              <td><input  name="totalSales" id="total-sales" th:value="${curAmount}" type="text" style="color:red; font-weight: bolder;" readonly></td>
-              <td class="amt-r3"><input></td>
-            </tr>
-            <tr>
-              <td>Add: VAT</td>
-              <td><input name="addVat" id="add-vat" type="text" readonly></td>
-              <td class="amt-r3"><input></td>
-            </tr>
-            <tr>
-              <td style="font-size: 10px;">Net Of VAT</td>
-              <td><input name="lwTax" id="lw-tax" type="text" readonly></td>
-              <td class="amt-r3"><input></td>
-            </tr>
-            <tr>
-              <td>Amount Due</td>
-              <td style="display: flex; border:0; justify-content: center;">₱
-                <!-- <label id="lbl-amtDue" style="color:red; font-weight: bolder; text-align: center;">1200</label> -->
-                <input  name="amtDue" id="amt-due"  th:value="${curAmount}" type="text" style="color:red; font-weight: bolder;" readonly></td>
-              <td class="amt-r3"><input></td>
-            </tr>
-            <tr>
-              <td><span id="ewt-input"></span> EWT</td>
-              <td><input type="text" name="ewt" id="ewt" readonly ></td>
-              <td class="amt-r3"><input></td>
-            </tr>
-            <tr>
-              <td>Total:</td>
-              <td style="display: flex; border:0; justify-content: center;">₱<input  type="text" name="total" id="total" readonly style="color:red; font-weight: bolder;"></td>
-              <td class="amt-r3"><input></td>
-            </tr>
-            <tr>
-              <td style="padding: 5px;"></td>
-              <td></td>
-              <td class="amt-r3"></td>
-            </tr>
-            <tr>
-              <td colspan="3" style="text-align: center;">PAYMENT IN FORM OF</td>
-            </tr>
-            <tr>
-              <td>CASH</td>
-              <td colspan="2"><input  name="cash" required></td>
-
-            </tr>
-            <tr>
-              <td>CHECK/NO.</td>
-              <td colspan="2"><input  name="chckNo"></td>
-            </tr>
-            <tr>
-              <td>AMOUNT</td>
-              <!-- <td colspan="2" style="display: flex; border:0;">₱<input name="orAmount" style="color:red; font-weight: bolder;" required></td> -->
-              <td colspan="2" style="display: flex; border:0;">₱<input name="orAmount" id="orAmount" type="number" step="0.01" required onblur="convertNumberToWords()"></td>
-            </tr>
-          </table>
         </div>
+        <div>
+          <!-- <a class="btn btn-info" style="color: white;" onclick="computeEWT()">compute EWT</a> -->
+          <a class="btn btn-info" style="color: white;" data-toggle="modal" data-target="#ewtModal">compute EWT</a>
+          <a class="btn btn-warning" style="color: white;" onclick="computeVat()">compute VAT</a>
+          <a class="btn btn-danger" style="color: white;" onclick="clearFields()">Clear fields</a>
+        </div>
+      </div>
+      <div class="main-con2">
+
+        <div class="officialReceipt-con" id="print-content">
+          <div class="row-1">
+            <table border=1>
+              <tr>
+                <td colspan="3" style="text-align: center;">IN SETTLEMENT OF THE FOLLOWING:</td>
+              </tr>
+              <tr>
+                <td colspan="1" style="text-align: center;">INVOICE NO.</td>
+                <td id="amt" colspan="2" style="text-align: center;">AMOUNT</td>
+              </tr>
+              <!-- Start invoice number input -->
+              <tr>
+                <td class="amt-r1">
+                  <select id="my-invNum" style="width: 100%;" onchange="getInvoiceInfo()" required>
+                    <option value="" selected>Select Invoice</option>
+                    <!--                  <option  th:each="invoice : ${invoiceList}" th:value="${invoice.invoiceNum}" th:text="${invoice.invoiceNum}" style="font-weight: bolder;"></option>-->
+                  </select>
+                </td>
+                <td class="amt-r1"><input name="inv1-amt" th:value="${curAmount}" id="inv1-amt" class="myNumber"
+                    onchange="formatNumber(this)" type="text"></td>
+                <td class="amt-r1"><input name="inv1" id="inv1" type="hidden" required></td>
+                <td class="amt-r3"><input readonly></td>
+              </tr>
+              <tr>
+                <td><input type="text" name="inv2"></td>
+                <td class="amt-r1"><input name="inv2-amt" class="myNumber" onchange="formatNumber(this)" type="text">
+                </td>
+                <td class="amt-r3"><input readonly></td>
+              </tr>
+              <tr>
+                <td><input type="text" name="inv3"></td>
+                <td class="amt-r1"><input name="inv3-amt" class="myNumber" onchange="formatNumber(this)" type="text">
+                </td>
+                <td class="amt-r3"><input readonly></td>
+              </tr>
+              <tr>
+                <td><input name="inv4" type="text"></td>
+                <td class="amt-r1"><input name="inv4-amt" class="myNumber" onchange="formatNumber(this)" type="text">
+                </td>
+                <td class="amt-r3"><input readonly></td>
+              </tr>
+              <tr>
+                <td><input name="inv5" type="text"></td>
+                <td><input name="inv5-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                <td class="amt-r3"><input readonly></td>
+              </tr>
+              <tr>
+                <td><input name="inv6" type="text"></td>
+                <td><input name="inv6-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                <td class="amt-r3"><input readonly></td>
+              </tr>
+              <tr>
+                <td><input name="inv7" type="text"></td>
+                <td><input name="inv7-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                <td class="amt-r3"><input readonly></td>
+              </tr>
+              <tr>
+                <td><input name="inv8" type="text"></td>
+                <td><input name="inv8-amt" class="myNumber" onchange="formatNumber(this)" type="text"></td>
+                <td class="amt-r3"><input readonly></td>
+              </tr>
+              <!-- End invoice number input -->
+              <tr>
+                <td>Total Sales</td>
+                <td><input name="totalSales" id="total-sales" th:value="${curAmount}" type="text"
+                    style="color:red; font-weight: bolder;" readonly></td>
+                <td class="amt-r3"><input></td>
+              </tr>
+              <tr>
+                <td>Add: VAT</td>
+                <td><input name="addVat" id="add-vat" type="text" readonly></td>
+                <td class="amt-r3"><input></td>
+              </tr>
+              <tr>
+                <td style="font-size: 10px;">Net Of VAT</td>
+                <td><input name="lwTax" id="lw-tax" type="text" readonly></td>
+                <td class="amt-r3"><input></td>
+              </tr>
+              <tr>
+                <td>Amount Due</td>
+                <td style="display: flex; border:0; justify-content: center;">₱
+                  <!-- <label id="lbl-amtDue" style="color:red; font-weight: bolder; text-align: center;">1200</label> -->
+                  <input name="amtDue" id="amt-due" th:value="${curAmount}" type="text"
+                    style="color:red; font-weight: bolder;" readonly>
+                </td>
+                <td class="amt-r3"><input></td>
+              </tr>
+              <tr>
+                <td><span id="ewt-input"></span> EWT</td>
+                <td><input type="text" name="ewt" id="ewt" readonly></td>
+                <td class="amt-r3"><input></td>
+              </tr>
+              <tr>
+                <td>Total:</td>
+                <td style="display: flex; border:0; justify-content: center;">₱<input type="text" name="total"
+                    id="total" readonly style="color:red; font-weight: bolder;"></td>
+                <td class="amt-r3"><input></td>
+              </tr>
+              <tr>
+                <td style="padding: 5px;"></td>
+                <td></td>
+                <td class="amt-r3"></td>
+              </tr>
+              <tr>
+                <td colspan="3" style="text-align: center;">PAYMENT IN FORM OF</td>
+              </tr>
+              <tr>
+                <td>CASH</td>
+                <td colspan="2"><input name="cash" required></td>
+
+              </tr>
+              <tr>
+                <td>CHECK/NO.</td>
+                <td colspan="2"><input name="chckNo"></td>
+              </tr>
+              <tr>
+                <td>AMOUNT</td>
+                <!-- <td colspan="2" style="display: flex; border:0;">₱<input name="orAmount" style="color:red; font-weight: bolder;" required></td> -->
+                <td colspan="2" style="display: flex; border:0;">₱<input name="orAmount" id="orAmount" type="number"
+                    step="0.01" required onblur="convertNumberToWords()"></td>
+              </tr>
+            </table>
+          </div>
 
 
-        <div class="row-2">
-          <div class="r2-header">
-            <div class="d-flex align-items-center hstyle" style="justify-content: space-between;">
-              <h2 id="logo-suppName" class="mt-2 mx-4" contenteditable="true" style="font-size: 10px; width: 10%; font-weight: bolder; font-style: italic;">SUPPLIER NAME</h2>
-              <div id="supp-details">
-                <!-- Supplier Name-->
-<!--                <h5 id="supp-name" class="mt-2 mx-4" contenteditable="true">SUPPLIER NAME</h5>-->
-                <input type="text"  class="h-input" th:field="*{supplierName}" id="supp-name"  placeholder="SUPPLIER NAME">
+          <div class="row-2">
+            <div class="r2-header">
+              <div class="d-flex align-items-center hstyle" style="justify-content: space-between;">
+                <h2 id="logo-suppName" class="mt-2 mx-4" contenteditable="true"
+                  style="font-size: 10px; width: 10%; font-weight: bolder; font-style: italic;">SUPPLIER NAME</h2>
+                <div id="supp-details">
+                  <!-- Supplier Name-->
+                  <!--                <h5 id="supp-name" class="mt-2 mx-4" contenteditable="true">SUPPLIER NAME</h5>-->
+                  <input type="text" class="h-input" th:field="*{supplierName}" id="supp-name"
+                    placeholder="SUPPLIER NAME">
 
-                <!-- Supplier Address-->
-<!--                <span id="supp-addrs">Supplier address and city address</span>-->
-                <input type="text" class="h-input"  th:field="*{supplierAddress}" id="supp-addrs" placeholder="SUPPLIER Address and City">
+                  <!-- Supplier Address-->
+                  <!--                <span id="supp-addrs">Supplier address and city address</span>-->
+                  <input type="text" class="h-input" th:field="*{supplierAddress}" id="supp-addrs"
+                    placeholder="SUPPLIER Address and City">
 
-                <!-- Supplier TIN-->
-<!--                <span id="supp-tin" >Supplier TIN</span>-->
-                <input type="text" class="h-input" id="supp-tin" placeholder="SUPPLIER TIN">
-                <input type="hidden" class="h-input" th:field="*{supplierTin}" id="supp-tin-hidden" placeholder="SUPPLIER TIN">
-              </div>
-              <div style="font-weight: bolder;">
-                <div id="s-invo-con">
-                  <label id="or-number" style="width: 150px; color:red;" th:text="${generateORNumber}"></label>
-                  <input type="hidden" name="orNumber" id="invoice-number-input" th:value="${generateORNumber}">
+                  <!-- Supplier TIN-->
+                  <!--                <span id="supp-tin" >Supplier TIN</span>-->
+                  <input type="text" class="h-input" id="supp-tin" placeholder="SUPPLIER TIN">
+                  <input type="hidden" class="h-input" th:field="*{supplierTin}" id="supp-tin-hidden"
+                    placeholder="SUPPLIER TIN">
+                </div>
+                <div style="font-weight: bolder;">
+                  <div id="s-invo-con">
+                    <label id="or-number" style="width: 150px; color:red;" th:text="${generateORNumber}"></label>
+                    <input type="hidden" name="orNumber" id="invoice-number-input" th:value="${generateORNumber}">
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="r2-body">
-            <div id="hdate" class="con"><h5>OFFICIAL RECEIPT</h5> <div><label>Date</label><input type="date" id="orDate" th:field="*{officialReceiptDate}" name="orDate" required></div></div>
-            <div class="con"><label >Received from</label><input th:field="*{recvFrom}" id="c-name" name="c-name"  required></div>
-            <div class="con"><label>and Address at</label><input th:field="*{clientAddress}" id="c-address" name="c-address" required></div>
-            <div class="con"><label>with TIN</label><input th:field="*{clientTin}" id="tin" name="tin"><label>engaged in the</label></div>
-            <div class="con"><label>Bus. Style of from</label><input th:field="*{clientBus}" id="busStyle" name="busStyle"><label>,the sum of</label></div>
-            <div class="con"><input  th:field="*{clientSumOf}" id="sumOf" name="sumOf" required><label>Pesos</label></div>
-            <div class="con"><label>(₱<input th:field="*{clientPayment}" type="text" id="clientPayment" name="clientPayment" step="0.01" style="color: red;" onchange="formatNumber(this)" required>) in full/partial payment for</label> <input th:field="*{partialPaymentFor}" id="paymentFor" name="paymentFor" required></div>
-          </div>
-          <div class="r2-footer">
+            <div class="r2-body">
+              <div id="hdate" class="con">
+                <h5>OFFICIAL RECEIPT</h5>
+                <div><label>Date</label><input type="date" id="orDate" th:field="*{officialReceiptDate}" name="orDate"
+                    required></div>
+              </div>
+              <div class="con"><label>Received from</label><input th:field="*{recvFrom}" id="c-name" name="c-name"
+                  required></div>
+              <div class="con"><label>and Address at</label><input th:field="*{clientAddress}" id="c-address"
+                  name="c-address" required></div>
+              <div class="con"><label>with TIN</label><input th:field="*{clientTin}" id="tin" name="tin"><label>engaged
+                  in the</label></div>
+              <div class="con"><label>Bus. Style of from</label><input th:field="*{clientBus}" id="busStyle"
+                  name="busStyle"><label>,the sum of</label></div>
+              <div class="con"><input th:field="*{clientSumOf}" id="sumOf" name="sumOf" required><label>Pesos</label>
+              </div>
+              <div class="con"><label>(₱<input th:field="*{clientPayment}" type="text" id="clientPayment"
+                    name="clientPayment" step="0.01" style="color: red;" onchange="formatNumber(this)" required>) in
+                  full/partial payment for</label> <input th:field="*{partialPaymentFor}" id="paymentFor"
+                  name="paymentFor" required></div>
+            </div>
+            <div class="r2-footer">
               <input type="text" name="cashierName" id="cashier-name-input" th:value="${fullName}">
-              <label style="font-size: 10px; margin-right: 25px; text-align: center;">Cashier/Authorized Representative</label>
+              <label style="font-size: 10px; margin-right: 25px; text-align: center;">Cashier/Authorized
+                Representative</label>
+            </div>
           </div>
         </div>
-    </div>
-    <div class="officialReceipt-btn">
-      <button class="btn btn-success">Save OR</button>
-      <a class="btn btn-dark" th:href="@{/official-receipt-list}" style="color: white;">List of Official Receipt</a>
-      <a class="btn btn-secondary" style="color: white;" th:href="@{marketing-invoice}">back</a>
-    </div>
-    
-  </div>
-</form>
-</div>
-<!-- Logout Modal -->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to logout?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn" style="background-color: #003D2B; color: white;">Logout</button>
-      </div>
-    </div>
-  </div>
-</div>
+        <div class="officialReceipt-btn">
+          <button class="btn btn-success">Save OR</button>
+          <a class="btn btn-dark" th:href="@{/official-receipt-list}" style="color: white;">List of Official Receipt</a>
+          <a class="btn btn-secondary" style="color: white;" th:href="@{marketing-invoice}">back</a>
+        </div>
 
-<!-- Modal -->
-
-<div class="modal fade" id="orCreatedModal" tabindex="-1" role="dialog" aria-labelledby="orCreatedModalLabel" aria-hidden="true" th:if="${hideDivSuccessOR}">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+      </div>
+    </form>
+  </div>
+  <!-- Logout Modal -->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="orCreatedModalLabel" style="color:green">Success</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-              </button>
-          </div>
-          <div class="modal-body">
-              <p>Your Official Reciept has been successfully created.</p>
-          </div>
-          <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
-          </div>
-      </div>
-  </div>
-</div>
-<!-- Modal for entering EWT percentage -->
-<div class="modal fade" id="ewtModal" tabindex="-1" role="dialog" aria-labelledby="ewtModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <!-- Header section -->
-      <div class="modal-header">
-        <h5 class="modal-title" id="ewtModalLabel" style="color:green">Enter EWT Percentage</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <!-- Body section -->
-      <div class="modal-body">
-        <p>Please input the EWT percentage:</p>
-        <input id="ewtInput" type="text" ><span>%</span>
-      </div>
-      <!-- Footer section -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" onclick="computeEWT()" data-dismiss="modal">Ok</button>
+        <div class="modal-header">
+          <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to logout?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn" style="background-color: #003D2B; color: white;">Logout</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+  <!-- Modal -->
+
+  <div class="modal fade" id="orCreatedModal" tabindex="-1" role="dialog" aria-labelledby="orCreatedModalLabel"
+    aria-hidden="true" th:if="${hideDivSuccessOR}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="orCreatedModalLabel" style="color:green">Success</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Your Official Reciept has been successfully created.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal for entering EWT percentage -->
+  <div class="modal fade" id="ewtModal" tabindex="-1" role="dialog" aria-labelledby="ewtModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <!-- Header section -->
+        <div class="modal-header">
+          <h5 class="modal-title" id="ewtModalLabel" style="color:green">Enter EWT Percentage</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <!-- Body section -->
+        <div class="modal-body">
+          <p>Please input the EWT percentage:</p>
+          <input id="ewtInput" type="text"><span>%</span>
+        </div>
+        <!-- Footer section -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="computeEWT()" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
-<!-- Bootstrap JavaScript -->
-<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
-<script th:src="@{/custom-js/marketing/or-main.js}"></script>
-<script>
-  $(document).ready(function () {
+  <!-- Bootstrap JavaScript -->
+  <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+  <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+  <script th:src="@{/custom-js/marketing/or-main.js}"></script>
+  <script>
+    $(document).ready(function () {
 
       $('#orCreatedModal').modal('show');
-      setTimeout(function() {
-          $('#orCreatedModal').modal('hide');
+      setTimeout(function () {
+        $('#orCreatedModal').modal('hide');
       }, 3000);
-  });
+    });
 
     // Get today's date as a string in the format that the input element expects
     const today = new Date().toISOString().substr(0, 10);
-  
-  // Set the value of the input element to today's date
-  document.getElementById("orDate").value = today;
+
+    // Set the value of the input element to today's date
+    document.getElementById("orDate").value = today;
 
 
-// Get the orAmount and clientPayment input fields
-var orAmountInput = document.getElementById("orAmount");
-var clientPaymentInput = document.getElementById("clientPayment");
+    // Get the orAmount and clientPayment input fields
+    var orAmountInput = document.getElementById("orAmount");
+    var clientPaymentInput = document.getElementById("clientPayment");
 
-// Add an input event listener to orAmount input field
-orAmountInput.addEventListener("input", function() {
-  var amount = parseFloat(orAmountInput.value);
+    // Add an input event listener to orAmount input field
+    orAmountInput.addEventListener("input", function () {
+      var amount = parseFloat(orAmountInput.value);
 
-  // Update the value of clientPayment input field
-  clientPaymentInput.value = amount.toFixed(2);
-});
+      // Update the value of clientPayment input field
+      clientPaymentInput.value = amount.toFixed(2);
+    });
 
 
     function convertNumberToWords() {
@@ -324,12 +356,12 @@ orAmountInput.addEventListener("input", function() {
 
       // Set the converted value to the sumOf input field
       var sumOfInput = document.getElementById("sumOf");
-      
+
       var output = wholePartWords;
       if (decimalPart > 0) {
         output += (wholePartWords !== '' ? ' and ' : '') + decimalPartWords + " cents";
       }
-      
+
       sumOfInput.value = output;
     }
 
@@ -398,6 +430,7 @@ orAmountInput.addEventListener("input", function() {
 
       return units[number] + ' hundred ' + words;
     }
-</script>
+  </script>
 </body>
+
 </html>

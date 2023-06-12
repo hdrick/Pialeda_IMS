@@ -233,8 +233,8 @@ public class MarketingController {
     @GetMapping("/getORInvoiceDetails")
     @ResponseBody
     public List<Invoice> getORInvoiceInfo(@RequestParam("supplier") String supplierName, @RequestParam("client") String clientName) {
-        List<Invoice> crInvoice = invoiceService.getORInvoice(supplierName, clientName);
-        return crInvoice;
+        List<Invoice> orInvoice = invoiceService.getORInvoice(supplierName, clientName);
+        return orInvoice;
     }
 
     @GetMapping("/official-receipt-list")
@@ -367,6 +367,8 @@ public class MarketingController {
             @RequestParam("addVat") String addVat,
             @RequestParam("amtNetVat") String amtNetVat,
             @RequestParam("totalSalesVatInc") String totalSalesVatInc,
+            @RequestParam("client-terms") String clientTerms,
+            @RequestParam("client-bStyle") String clientBStyle,
             @RequestParam("qty-input") List<String> qtyList,
             @RequestParam("unit-input") List<String> unitList,
             @RequestParam("articles-input") List<String> articlesList,
@@ -378,7 +380,8 @@ public class MarketingController {
     ) {
 
          boolean ifSuccess = invoiceService.updateInvoices(invoiceNumber, dateCreated, supplierName, clientName, 
-         clientContactPerson, totalAmt, addVat, amtNetVat, totalSalesVatInc, qtyList, unitList, articlesList, unitPriceList, amountList, prodIdList);
+         clientContactPerson, totalAmt, addVat, amtNetVat, totalSalesVatInc, qtyList, unitList, articlesList, 
+         unitPriceList, amountList, prodIdList, clientTerms, clientBStyle);
 
          if(ifSuccess == true){
              boolean hideDivSuccess = true;
