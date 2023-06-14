@@ -39,6 +39,7 @@ public class Invoice {
     private double addVat;
     private double amountNetOfVat;
     private double totalSalesVatInc;
+    private double clientPayment;
     private String cashier;
 
     private String status;
@@ -51,7 +52,7 @@ public class Invoice {
     public Invoice(String invoiceNum, String poNum, LocalDate dateCreated, String clientContactPerson,
             String supplierName, String supplierAddress, String supplierTin, String clientName, String clientTin,
             String clientAddress, String clientBusStyle, String clientTerms, double grandTotal, double addVat,
-            double amountNetOfVat, double totalSalesVatInc, String cashier, String status) {
+            double amountNetOfVat, double totalSalesVatInc, double clientPayment,String cashier, String status) {
         this.invoiceNum = invoiceNum;
         this.poNum = poNum;
         this.dateCreated = dateCreated;
@@ -68,6 +69,7 @@ public class Invoice {
         this.addVat = addVat;
         this.amountNetOfVat = amountNetOfVat;
         this.totalSalesVatInc = totalSalesVatInc;
+        this.clientPayment = clientPayment;
         this.cashier = cashier;
         this.status = status;
     }
@@ -222,6 +224,15 @@ public class Invoice {
     public void setTotalSalesVatInc(double totalSalesVatInc) {
         this.totalSalesVatInc = totalSalesVatInc;
     }
+
+    public double getClientPayment(){
+        return clientPayment;
+    }
+
+    public void setClientPayment(double clientPayment){
+        this.clientPayment = clientPayment;
+    }
+
     public String getCashier() {
         return cashier;
     }

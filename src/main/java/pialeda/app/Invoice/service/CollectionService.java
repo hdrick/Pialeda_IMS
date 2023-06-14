@@ -40,19 +40,49 @@ public class CollectionService {
                          CollectionReceiptInfo crDTO){
         CollectionReceipt cr = new CollectionReceipt();                       
 
-        List<CollectionReceiptInvoices> items = new ArrayList<>();                                
-
+        List<CollectionReceiptInvoices> items = new ArrayList<>();      
+        double converted_crAmount = Double.parseDouble(crAmount);
+        double converted_Total = Double.parseDouble(total);                             
+        double roundedAmount = Math.round(converted_crAmount * 100.0) / 100.0;
         for (int i = 1; i <= 8; i++) {
             String invoice = requestParams.get("inv" + i);
             String amount = requestParams.get("inv" + i + "-amt");
+
+
             if (invoice != null && !invoice.isEmpty()) {
                 CollectionReceiptInvoices crInv = new CollectionReceiptInvoices();
                 // Invoice invoiceObject = invoiceRepository.findByInvoiceNum(invoice);
 
                 Invoice inv = invoiceRepository.findByInvoiceNum(invoice);
-                
-                inv.setStatus("In Progress");
-                invoiceRepository.save(inv);
+                double clientPaymentTotal = inv.getClientPayment();
+                double clientSumOfPayment = clientPaymentTotal + roundedAmount;
+
+
+                System.out.println("SUM OF CLIENT PAYMENT: "+clientPaymentTotal);
+                System.out.println("roundedAmount: "+roundedAmount);
+                // System.out.println("SUM OF CLIENT PAYMENT: "+roundedAmount);
+                if(clientPaymentTotal < 1){//first time to pay if cp is 0
+                    if (roundedAmount < converted_Total){
+                        inv.setStatus("In Progress");
+                        inv.setClientPayment(clientSumOfPayment);
+                        invoiceRepository.save(inv);
+                    }
+                }else{
+                    
+                    System.out.println("clientSumOfPayment: "+clientSumOfPayment);
+                    if(clientSumOfPayment >= converted_Total){
+                        inv.setStatus("Paid");
+                        inv.setClientPayment(clientSumOfPayment);
+                        invoiceRepository.save(inv);
+                    }else{
+                        inv.setStatus("In Progress");
+                        inv.setClientPayment(clientSumOfPayment);
+                        invoiceRepository.save(inv);
+                    }
+                }
+
+
+
 
                 crInv.setInvoice(invoice);
                 // crInv.setInvoice(invoiceObject);

@@ -56,8 +56,9 @@ public class InvoiceService {
     }
     public List<Invoice> getCRInvoice(String supplierName, String clientName)
     {
-        String unpaidStatus = "Unpaid";
-        return invoiceRepository.findBySupplierNameAndClientNameAndStatus(supplierName, clientName, unpaidStatus);
+        // String unpaidStatus = "Unpaid";
+        // return invoiceRepository.findBySupplierNameAndClientNameAndStatus(supplierName, clientName, unpaidStatus);
+        return invoiceRepository.findBySupplierNameAndClientNameAndStatusInProgressAndUnPaid(clientName, supplierName);
     }
 
     public List<Invoice> getORInvoice(String supplierName, String clientName)
@@ -286,7 +287,7 @@ public class InvoiceService {
     public boolean updateInvoices(String invoiceNumber, LocalDate dateCreated,
                                  String supplierName, String clientName, String clientContactPerson,
                                  String totalAmt, String addVat, String amtNetVat, String totalSalesVatInc, List<String> qtyList, List<String> unitList, List<String> articlesList,
-                                 List<String> unitPriceList, List<String> amountList, List<String> prodIdList){
+                                 List<String> unitPriceList, List<String> amountList, List<String> prodIdList, String clientTerms, String clientBStyle){
 
        try {
            Invoice invDb = invoiceRepository.findByInvoiceNum(invoiceNumber);
@@ -302,6 +303,8 @@ public class InvoiceService {
 
            invDb.setClientName(client.getName());
            invDb.setClientContactPerson(clientContactPerson);
+           invDb.setClientBusStyle(clientBStyle);
+           invDb.setClientTerms(clientTerms);
            invDb.setClientTin(client.getTin());
            invDb.setClientAddress(client.getAddress());
       
