@@ -156,7 +156,7 @@
      margin-right: 1%;
      margin-left: 1%;
 }
- .main-bx1 #my-client,#my-supplier{
+ .main-bx1 #my-client,#my-supplier,#clientSearchInput, #suppSearchInput{
     padding: 5px;
     margin-top: 10px;
     width: 100%;

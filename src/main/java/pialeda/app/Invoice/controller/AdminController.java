@@ -12,8 +12,6 @@ import pialeda.app.Invoice.dto.GlobalUser;
 import pialeda.app.Invoice.model.User;
 import pialeda.app.Invoice.service.UserService;
 
-import javax.sql.DataSource;
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -23,8 +21,6 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private DataSource dataSource;
 
     //    ADMIN
 //    @GetMapping("admin-dashboard")
