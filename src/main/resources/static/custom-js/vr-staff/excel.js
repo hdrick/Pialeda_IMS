@@ -1,36 +1,39 @@
-    (function($) {
+(function($) {
   $.saveAs = function(blob, filename) {
     saveAs(blob, filename);
   };
 })(jQuery);
 
-
-  $(document).ready(function() {
+$(document).ready(function() {
   $('#download-btn').click(function() {
-    // Get the table element
-    var table = document.getElementById('my-table');
-    // Get the values of all dynamic parameters from the URL
+    // Get the table elements
+    var table1 = document.getElementById('my-table');
+    var table2 = document.getElementById('my-table-total');
 
-    // Convert the table to a worksheet object
-    var worksheet = XLSX.utils.table_to_sheet(table);
-    // Create a workbook with the worksheet
+// Check if the tables have data
+    if (table1.rows.length === 0 || table2.rows.length === 0) {
+      // Handle the case when tables are empty
+      alert('Tables are empty. Please populate the tables before downloading.');
+      return;
+    }
+    // Convert the tables to worksheet objects
+    var worksheet1 = XLSX.utils.table_to_sheet(table1);
+    var worksheet2 = XLSX.utils.table_to_sheet(table2);
+
+    // Create a workbook with the worksheets
     var workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+    XLSX.utils.book_append_sheet(workbook, worksheet1, 'Sheet1');
+    XLSX.utils.book_append_sheet(workbook, worksheet2, 'Sheet2');
+
     // Convert the workbook to a binary string
     var binaryString = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
 
-    var today = new Date();
-    var day = today.getDate();
-    var month = today.getMonth() + 1;
-    var year = today.getFullYear();
-
-    var time = today.toLocaleTimeString('en-US', {hour12: false});
-
-    var cleanName = day + '-' + month + '-' + year+'-'+time+'.xlsx';
-
+    // Generate a timestamp as the download name
+    var timestamp = new Date().getTime();
+    var filename = timestamp + '.xlsx';
 
     // Save the file
-    saveAs(new Blob([s2ab(binaryString)], {type:"application/octet-stream"}), cleanName);
+    saveAs(new Blob([s2ab(binaryString)], {type: "application/octet-stream"}), filename);
   });
 });
 
@@ -38,6 +41,6 @@
 function s2ab(s) {
   var buf = new ArrayBuffer(s.length);
   var view = new Uint8Array(buf);
-  for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+  for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
   return buf;
 }

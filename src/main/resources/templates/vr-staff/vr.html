@@ -260,7 +260,6 @@
               <td th:text="${invoice.grandTotal}"></td>
               <td th:text="${#temporals.format(invoice.dateCreated, 'MMMM d, yyyy')}"></td>
             </tr>
-
             </tbody>
           </table>
           <table th:if="${isSupplierPresent}" class="table table-sm table-bordered" id="my-table-total">
@@ -451,187 +450,100 @@
                     </li>
                   </ul>
                 </div>
-
-                <div th:if="${totalPages > 0 || totalItems > 0}" style="font-size: 14px; position: absolute; right: 1px; bottom: 1px;">
+                <div th:if="${isClientPresent && isSupplierPresent && totalPages > 0 || totalItems > 0}" style="font-size: 14px; position: absolute; right: 1px; bottom: 1px;">
                   <button id="download-btn" type="button" class="btn btn-primary">Download</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="view-panel-report">
-          <table class="tg">
-            <colgroup>
-              <col style="width: 102.2px">
-              <col style="width: 153.2px">
-              <col style="width: 67.2px">
-              <col style="width: 115.2px">
-              <col style="width: 96.2px">
-              <col style="width: 58.2px">
-              <col style="width: 64.2px">
-              <col style="width: 59.2px">
-              <col style="width: 144.2px">
-              <col style="width: 81.2px">
-            </colgroup>
-            <thead>
-            <tr>
-              <th class="tg-c3ow" colspan="10">Client Report</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="tg-0pky">Client Name </td>
-              <td class="tg-0pky" colspan="9">
-                <input type="text" name="clientName" id="clientName-field" pattern="[A-Za-z]+" title="Only alphabetic characters are allowed" required>
-                <button id="btn-generate" type="button" class="btn btn-danger" style="position: absolute; right: 50px; display: none">Generate</button>
-              </td>
-            </tr>
-            <tr>
-              <td class="tg-0pky">Tin </td>
-              <td class="tg-0pky" colspan="9"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky">Address</td>
-              <td class="tg-0pky" colspan="9"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky">Date</td>
-              <td class="tg-0pky">From</td>
-              <td class="tg-0pky" colspan="2"><input type="date" name="fr-date"></td>
-              <td class="tg-0pky">To</td>
-              <td class="tg-0pky" colspan="5"><input type="date" name="to-date"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky" colspan="10"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky" colspan="10"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky"></td>
-              <td class="tg-c3ow">Supplier Name</td>
-              <td class="tg-pb0m">TIN</td>
-              <td class="tg-pb0m">Address</td>
-              <td class="tg-pb0m">SI #</td>
-              <td class="tg-pb0m">CR #</td>
-              <td class="tg-pb0m">OR#</td>
-              <td class="tg-pb0m">Date </td>
-              <td class="tg-pb0m">Date Created</td>
-              <td class="tg-pb0m">Total Amount</td>
-            </tr>
-            <tr>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky">Total</td>
-              <td class="tg-0pky"></td>
-            </tr>
-            </tbody>
-          </table>
-
-          <table class="tg">
-            <colgroup>
-              <col style="width: 102.2px">
-              <col style="width: 153.2px">
-              <col style="width: 67.2px">
-              <col style="width: 115.2px">
-              <col style="width: 96.2px">
-              <col style="width: 58.2px">
-              <col style="width: 64.2px">
-              <col style="width: 59.2px">
-              <col style="width: 144.2px">
-              <col style="width: 81.2px">
-            </colgroup>
-            <thead>
-            <tr>
-              <th class="tg-c3ow" colspan="10">Supplier Report</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td class="tg-0pky">Supplier Name </td>
-              <td class="tg-0pky" colspan="9">
-                <input type="text" name="supplierName" id="supplierName-field" pattern="[A-Za-z]+" title="Only alphabetic characters are allowed" required>
-                <button id="btn-generate-sr" type="button" class="btn btn-danger" style="position: absolute; right: 50px; display: none">Generate</button>
-              </td>
-            </tr>
-            <tr>
-              <td class="tg-0pky">Tin </td>
-              <td class="tg-0pky" colspan="9"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky">Address</td>
-              <td class="tg-0pky" colspan="9"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky">Date</td>
-              <td class="tg-0pky">From</td>
-              <td class="tg-0pky" colspan="2"><input type="date" name="fr-date"></td>
-              <td class="tg-0pky">To</td>
-              <td class="tg-0pky" colspan="5"><input type="date" name="to-date"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky" colspan="10"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky" colspan="10"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky"></td>
-              <td class="tg-c3ow">Client Name</td>
-              <td class="tg-pb0m">TIN</td>
-              <td class="tg-pb0m">Address</td>
-              <td class="tg-pb0m">SI #</td>
-              <td class="tg-pb0m">CR #</td>
-              <td class="tg-pb0m">OR#</td>
-              <td class="tg-pb0m">Date </td>
-              <td class="tg-pb0m">Date Created</td>
-              <td class="tg-pb0m">Total Amount</td>
-            </tr>
-            <tr>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-            </tr>
-            <tr>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky"></td>
-              <td class="tg-0pky">Total</td>
-              <td class="tg-0pky"></td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
+<!--        <div class="view-panel-report">-->
+<!--          <table class="tg">-->
+<!--            <colgroup>-->
+<!--              <col style="width: 102.2px">-->
+<!--              <col style="width: 153.2px">-->
+<!--              <col style="width: 67.2px">-->
+<!--              <col style="width: 115.2px">-->
+<!--              <col style="width: 96.2px">-->
+<!--              <col style="width: 58.2px">-->
+<!--              <col style="width: 64.2px">-->
+<!--              <col style="width: 59.2px">-->
+<!--              <col style="width: 144.2px">-->
+<!--              <col style="width: 81.2px">-->
+<!--            </colgroup>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--              <th class="tg-c3ow" colspan="10">Client Report</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr>-->
+<!--              <td class="tg-0pky">Client Name </td>-->
+<!--              <td class="tg-0pky" colspan="9">-->
+<!--                <input type="text" name="clientName" id="clientName-field" pattern="[A-Za-z]+" title="Only alphabetic characters are allowed" required>-->
+<!--                <button id="btn-generate" type="button" class="btn btn-danger" style="position: absolute; right: 50px; display: none">Generate</button>-->
+<!--              </td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="tg-0pky">Tin </td>-->
+<!--              <td class="tg-0pky" colspan="9"></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="tg-0pky">Address</td>-->
+<!--              <td class="tg-0pky" colspan="9"></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="tg-0pky">Date</td>-->
+<!--              <td class="tg-0pky">From</td>-->
+<!--              <td class="tg-0pky" colspan="2"><input type="date" name="fr-date"></td>-->
+<!--              <td class="tg-0pky">To</td>-->
+<!--              <td class="tg-0pky" colspan="5"><input type="date" name="to-date"></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="tg-0pky" colspan="10"></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="tg-0pky" colspan="10"></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-c3ow">Supplier Name</td>-->
+<!--              <td class="tg-pb0m">TIN</td>-->
+<!--              <td class="tg-pb0m">Address</td>-->
+<!--              <td class="tg-pb0m">SI #</td>-->
+<!--              <td class="tg-pb0m">CR #</td>-->
+<!--              <td class="tg-pb0m">OR#</td>-->
+<!--              <td class="tg-pb0m">Date </td>-->
+<!--              <td class="tg-pb0m">Date Created</td>-->
+<!--              <td class="tg-pb0m">Total Amount</td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--            </tr>-->
+<!--            <tr>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--              <td class="tg-0pky">Total</td>-->
+<!--              <td class="tg-0pky"></td>-->
+<!--            </tr>-->
+<!--            </tbody>-->
+<!--          </table>-->
+<!--        </div>-->
       </div>
     </div>
   </div>
@@ -835,13 +747,28 @@
          else
          {
              console.log('String is invalid');
+             var isNumeric = isNumericWithoutSpecialCharacters(keyword);
+             if(isNumeric == true)
+             {
+                var query = keyword.replace(/\s+/g, '%20');
+                window.location.href =  baseURL+"/search" + "?query=" + query + "&page=1";
+             }
+             else
+             {
               $('#popup-message .modal-title').html('<h5 style="color: red">Error Message</h5>');
-              $('#popup-message .modal-body').html('<p>Invalid search keyword! Please use letters only.</p>');
+              $('#popup-message .modal-body').html('<p>Invalid search keyword! Please use alphanumeric only.</p>');
               $('#popup-message').modal({
                 backdrop: 'static',
                 keyboard: false
               });
+              }
          }
+    }
+
+    function isNumericWithoutSpecialCharacters(input)
+    {
+      var pattern = /^\d+$/;
+      return pattern.test(input);
     }
     function isValidDate(startDate, endDate)
     {

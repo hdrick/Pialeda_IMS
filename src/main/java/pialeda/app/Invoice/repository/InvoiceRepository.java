@@ -57,6 +57,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     @Query("SELECT COALESCE(SUM(i.grandTotal), 0) FROM Invoice i WHERE i.clientName = :clientName AND  i.supplierName = :supplierName AND i.dateCreated BETWEEN :startDate AND :endDate")
     BigDecimal sumOfGrandTotalByClientNameAndSupplierNameBetweenDateCreated(@Param("clientName") String clientName, @Param("supplierName") String supplierName, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
-    @Query("SELECT i FROM Invoice i WHERE CONCAT(i.clientName, i.supplierName, i.clientAddress, i.supplierAddress, i.clientBusStyle, i.cashier) LIKE %:keyword%")
+    @Query("SELECT i FROM Invoice i WHERE CONCAT(i.invoiceNum, i.clientName, i.supplierName, i.clientAddress, i.supplierAddress, i.clientBusStyle, i.cashier) LIKE %:keyword%")
     Page<Invoice> searchByKeyword(@Param("keyword") String keyword, Pageable pageable);
 }
