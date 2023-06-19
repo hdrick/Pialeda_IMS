@@ -31,6 +31,7 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     List<Invoice> findBySupplierNameAndClientNameAndStatusInProgressAndUnPaid(@Param("clientName") String clientName, @Param("supplierName") String supplierName);
 
     Invoice findByInvoiceNum(String invNum);
+    Invoice findByPoNum(String poNum);
     Page<Invoice> findByClientNameContainingIgnoreCase(String name, Pageable pageable);
     Page<Invoice> findByClientNameAndDateCreatedContainingIgnoreCase(String name, String month, Pageable pageable);
     Page<Invoice> findBySupplierNameContainingIgnoreCase(String name, Pageable pageable);

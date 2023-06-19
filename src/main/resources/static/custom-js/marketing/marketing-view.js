@@ -173,6 +173,126 @@ function searchInvoices() {
   });
 }
 
+
+function specificInvoiceID(invoiceId) {
+  document.getElementById('invoiceIdPlaceholder').textContent = invoiceId;
+  // Additional code to handle other modal fields
+}
+
+// document.getElementById('btn-duplicate').addEventListener('click', function() {
+//   var invoiceId = document.getElementById('invoiceIdPlaceholder').textContent;
+//   var supdupInvoiceNumpName = document.getElementById('invoiceNumber').value;
+//   var dupPoNum = document.getElementById('poNumber').value;
+//   var dupDate = document.getElementById('date').value;
+  
+//   // Check if any of the input fields are empty
+//   if (!supdupInvoiceNumpName || !dupPoNum || !dupDate) {
+//     // Display the error message within the modal
+//     document.getElementById('errorContainer').textContent = "Please fill in all the required fields.";
+//     return;
+//   }
+  
+//   var xhr = new XMLHttpRequest();
+//   xhr.open('POST', '/duplicate/' + invoiceId, true);
+//   xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+//   xhr.onreadystatechange = function() {
+//     if (xhr.readyState === 4 && xhr.status === 200) {
+//       // Handle the response from the server
+//       var result = xhr.responseText;
+//       console.log(result);
+      
+//       // Perform actions based on the result
+//       if (result === "success") {
+//         // Redirect or perform other actions
+//         alert("Invoice duplicated successfully.");
+//       } else if (result === "invoiceNumberFound") {
+//         // Handle invoice number found case
+//         alert("Invoice number already exists.");
+//       } else if (result === "purchaseNumberFound") {
+//         // Handle purchase number found case
+//         alert("Purchase number already exists.");
+//       } else {
+//         // Handle other cases or errors
+//         alert("An error occurred. Please try again.");
+//       }
+//     }
+//   };
+//   var params = 'd-invName=' + encodeURIComponent(supdupInvoiceNumpName) + '&d-poNum=' + encodeURIComponent(dupPoNum) + '&d-date=' + encodeURIComponent(dupDate);
+//   xhr.send(params);
+// });
+
+
+
+document.getElementById('btn-duplicate').addEventListener('click', function() {
+  var invoiceId = document.getElementById('invoiceIdPlaceholder').textContent;
+  var supdupInvoiceNumpName = document.getElementById('invoiceNumber').value;
+  var dupPoNum = document.getElementById('poNumber').value;
+  var dupDate = document.getElementById('date').value;
+  
+  // Check if any of the input fields are empty
+  if (!supdupInvoiceNumpName || !dupPoNum || !dupDate) {
+    // Display the error message within the modal
+    document.getElementById('errorContainer').textContent = "Please fill in all the required fields.";
+    return;
+  }
+  
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/duplicate/' + invoiceId, true);
+  xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      // Handle the response from the server
+      var result = xhr.responseText;
+      console.log(result);
+      
+      // Perform actions based on the result
+      if (result === "success") {
+        // Display success message
+        document.getElementById('successContainer').textContent = "Invoice duplicated successfully.";
+        
+        // Reload the page after 3 seconds
+        setTimeout(function() {
+          location.reload();
+        }, 3000);
+      } else if (result === "invoiceNumberFound") {
+        // Display invoice duplicate message
+        document.getElementById('invoiceDuplicateContainer').textContent = "Invoice number already exists.";
+      } else if (result === "purchaseNumberFound") {
+        // Display PO number duplicate message
+        document.getElementById('poNumberContainer').textContent = "Purchase number already exists.";
+      } else if (result === "supplierLimitExceed"){
+        // Display PO number duplicate message
+        document.getElementById('suppLimitContainer').textContent = "Unfortunately, you have reached the maximum amount limit and are unable to create a new invoice at this time. Please try again later or contact support for further assistance";
+      // Reload the page after 3 seconds
+      setTimeout(function() {
+        location.reload();
+      }, 3000);
+      }else {
+        // Handle other cases or errors
+        alert("An error occurred. Please try again.");
+      }
+    }
+  };
+  var params = 'd-invName=' + encodeURIComponent(supdupInvoiceNumpName) + '&d-poNum=' + encodeURIComponent(dupPoNum) + '&d-date=' + encodeURIComponent(dupDate);
+  xhr.send(params);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Call the search function when the search button is clicked
 $("#searchButton").click(searchInvoices);
 

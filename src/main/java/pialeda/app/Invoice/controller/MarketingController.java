@@ -11,12 +11,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pialeda.app.Invoice.dto.*;
 import pialeda.app.Invoice.model.*;
 import pialeda.app.Invoice.repository.CurrentInvoiceRepo;
+import pialeda.app.Invoice.repository.InvoiceRepository;
 import pialeda.app.Invoice.service.ClientService;
 import pialeda.app.Invoice.service.CollectionService;
 import pialeda.app.Invoice.service.OfficialRecptService;
 import pialeda.app.Invoice.service.SupplierService;
 import pialeda.app.Invoice.service.InvoiceService;
-import pialeda.app.Invoice.dto.GlobalUser;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -42,6 +42,9 @@ public class MarketingController {
     private CollectionService collectionService;
     @Autowired
     private CurrentInvoiceRepo currentInvoiceRepo;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @GetMapping("marketing-view/invoices")
     public String viewInvoices(Model model){
@@ -760,4 +763,50 @@ public class MarketingController {
             return "redirect:/supplier-list";
         } 
     }
+
+
+
+
+    // @PostMapping("/duplicate/{id}")
+    // public String duplicateInvoice(@PathVariable("id") int id,
+    //                                  @RequestParam("d-invName") String invoiceNum,
+    //                                  @RequestParam("d-poNum") String poNum,
+    //                                  @RequestParam("d-date") String date,
+    //                                  RedirectAttributes redirectAttributes){
+        
+    //    String result = invoiceService.duplicateSpecificInvoice(id, invoiceNum, poNum, date);
+    //    System.out.println("result: "+result);
+    //    if(result.equals("success")){
+    //         return "success";
+    //    }else{
+    //      return "failed";
+    //    }
+    // }
+
+@PostMapping("/duplicate/{id}")
+public ResponseEntity<String> duplicateInvoice(@PathVariable("id") int id,
+                               @RequestParam("d-invName") String invoiceNum,
+                               @RequestParam("d-poNum") String poNum,
+                               @RequestParam("d-date") String date,
+                               RedirectAttributes redirectAttributes, Model model) {
+  
+    Invoice invoiceToDuplicate = invoiceRepository.findById(id);
+
+    double remainingLimitOfSupp = invoiceService.getSuppTotalLimit(invoiceToDuplicate.getSupplierName());
+    double supplierLimit = supplierService.findLimitByName(invoiceToDuplicate.getSupplierName());
+    double remainingLimit = supplierLimit - remainingLimitOfSupp;
+
+     if(invoiceToDuplicate.getGrandTotal() <= remainingLimit){
+        String result = invoiceService.duplicateSpecificInvoice(id, invoiceNum, poNum, date);
+        return ResponseEntity.ok(result);
+     }else{
+        String result2 = "supplierLimitExceed";
+        return ResponseEntity.ok(result2);
+     }
+
+    
+}
+
+
+
 }
