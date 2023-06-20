@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" th:href="@{/icon/PialedaLOGOcircle.png}" />
@@ -13,284 +14,390 @@
     <!--custom css for vr-->
     <!--    <link rel="stylesheet" type="text/css" th:href="@{/custom-css/marketing/style.css}">-->
     <style>
-      .div1 .div2 .div3 input,#total-amt,#addVat,#amtNetVat,#totalSalesVatInc{
-          border: none;
-          outline: none;
-    }
+        .div1 .div2 .div3 input,
+        #total-amt,
+        #addVat,
+        #amtNetVat,
+        #totalSalesVatInc {
+            border: none;
+            outline: none;
+        }
     </style>
 </head>
+
 <body class="body">
-<div class="container">
-    <h2 style="margin-top: 2%;">List of Invoice</h2>
-    <label for="clientNameInput" style="font-weight: bolder;">Client Name:</label>
-    <input type="text" id="clientNameInput" placeholder="Enter client name">
+    <div class="container">
+        <h2 style="margin-top: 2%;">List of Invoice</h2>
+        <label for="clientNameInput" style="font-weight: bolder;">Client Name:</label>
+        <input type="text" id="clientNameInput" placeholder="Enter client name">
 
-    <label for="supplierNameInput" style="font-weight: bolder;">Supplier Name:</label>
-    <input type="text" id="supplierNameInput" placeholder="Enter supplier name">
+        <label for="supplierNameInput" style="font-weight: bolder;">Supplier Name:</label>
+        <input type="text" id="supplierNameInput" placeholder="Enter supplier name">
 
 
-    <label for="invoiceNumInput" style="font-weight: bolder;">Invoice Number:</label>
-    <input type="text" id="invoiceNumInput" placeholder="Enter invoice number">
-    <button id="searchButton" class="btn btn-primary">Search</button>
+        <label for="invoiceNumInput" style="font-weight: bolder;">Invoice Number:</label>
+        <input type="text" id="invoiceNumInput" placeholder="Enter invoice number">
+        <button id="searchButton" class="btn btn-primary">Search</button>
 
-    <div class="table-responsive">
-        <table id="invoicesTable" class="table table-bordered">
-          <thead class="thead-dark">
-            <tr>
-              <th>Invoice Number</th>
-              <th>PO Number</th>
-              <th>Client Name</th>
-              <th>Client Address</th>
-              <th>Supplier Address</th>
-              <th>Supplier Name</th>
-              <th>Created Date</th>
-              <th>Contact Person</th>
-              <th>Total Amount</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr th:each="inv: ${invoiceList}">
-              <td id="inv-id" th:text="${inv.id}" style="display: none;"></td>
-              <td th:text="${inv.invoiceNum}" style="font-weight: bolder;"></td>
-              <td th:text="${inv.poNum}" style="font-weight: bolder;"></td>
-              <td th:text="${inv.clientName}"></td>
-              <td th:text="${inv.clientAddress}"></td>
-              <td th:text="${inv.supplierAddress}"></td>
-              <td th:text="${inv.supplierName}"></td>
-              <td th:text="${inv.dateCreated}"></td>
-              <td th:text="${inv.clientContactPerson}"></td>
-              <td th:text="${inv.grandTotal}" style="font-weight: bolder; color:red;"></td>
-              <td>
-                <!-- Button trigger modal -->
-                <a class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" th:data-id="${inv.id}" onclick="fillModalFields(this.getAttribute('data-id'))"> View </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      
-</div>
-<div class="container">
-    <p>Total Invoice: [[${totalItem}]]</p>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <li th:if="${currentPage !=0}" class="page-item">
-                <a class="page-link" th:href="@{'/page/'+${currentPage-1}}">Previous</a>
-            </li>
-            <li th:if="${currentPage > 5}" class="page-item">
-                <a class="page-link" th:href="@{'/page/0'}">1</a>
-            </li>
-            <li th:if="${currentPage > 6}" class="page-item disabled">
-                <a class="page-link">...</a>
-            </li>
-            <li th:each="i:${#numbers.sequence(currentPage - 4, currentPage + 5)}" th:classappend="${currentPage==i-1? 'active': '' }" class="page-item" th:if="${i >= 1 and i <= totalPages}">
-                <a class="page-link" th:href="@{'/page/'+${i-1}}">[[${i}]]</a>
-            </li>
-            <li th:if="${currentPage < totalPages - 7}" class="page-item disabled">
-                <a class="page-link">...</a>
-            </li>
-            <li th:if="${currentPage < totalPages - 6}" class="page-item">
-                <a class="page-link" th:href="@{'/page/'+${totalPages-1}}">[[${totalPages}]]</a>
-            </li>
-            <li th:if="${currentPage+1!=totalPages}" class="page-item">
-                <a class="page-link" th:href="@{'/page/'+${currentPage+1}}">Next</a>
-            </li>
-            <a  th:href="@{/marketing-invoice}" class="btn ml-auto btn-dark" style="color: white;">Go Back</a>
-        </ul>
+        <div class="table-responsive">
+            <table id="invoicesTable" class="table table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Invoice Number</th>
+                        <th>PO Number</th>
+                        <th>Client Name</th>
+                        <th>Client Address</th>
+                        <th>Supplier Address</th>
+                        <th>Supplier Name</th>
+                        <th>Created Date</th>
+                        <th>Contact Person</th>
+                        <th>Total Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="inv: ${invoiceList}">
+                        <td id="inv-id" th:text="${inv.id}" style="display: none;"></td>
+                        <td th:text="${inv.invoiceNum}" style="font-weight: bolder;"></td>
+                        <td th:text="${inv.poNum}" style="font-weight: bolder;"></td>
+                        <td th:text="${inv.clientName}"></td>
+                        <td th:text="${inv.clientAddress}"></td>
+                        <td th:text="${inv.supplierAddress}"></td>
+                        <td th:text="${inv.supplierName}"></td>
+                        <td th:text="${inv.dateCreated}"></td>
+                        <td th:text="${inv.clientContactPerson}"></td>
+                        <td th:text="${inv.grandTotal}" style="font-weight: bolder; color:red;"></td>
+                        <td>
+                            <!-- Button trigger modal -->
 
-    </nav>
 
-</div>
 
+                            <div class="btn-group" role="group" aria-label="Actions">
+                                <a class="btn btn-primary mr-2" data-toggle="modal" data-target="#exampleModal"
+                                    th:data-id="${inv.id}" onclick="fillModalFields(this.getAttribute('data-id'))"> View
+                                </a>
+
+                                <!-- Add the button with the "Duplicate" class -->
+                                <a class="btn btn-warning duplicate-btn" data-toggle="modal"
+                                    data-target="#duplicateModal" th:data-id="${inv.id}"
+                                    onclick="specificInvoiceID(this.getAttribute('data-id'))">Duplicate</a>
+
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="container">
+        <p>Total Invoice: [[${totalItem}]]</p>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li th:if="${currentPage !=0}" class="page-item">
+                    <a class="page-link" th:href="@{'/page/'+${currentPage-1}}">Previous</a>
+                </li>
+                <li th:if="${currentPage > 5}" class="page-item">
+                    <a class="page-link" th:href="@{'/page/0'}">1</a>
+                </li>
+                <li th:if="${currentPage > 6}" class="page-item disabled">
+                    <a class="page-link">...</a>
+                </li>
+                <li th:each="i:${#numbers.sequence(currentPage - 4, currentPage + 5)}"
+                    th:classappend="${currentPage==i-1? 'active': '' }" class="page-item"
+                    th:if="${i >= 1 and i <= totalPages}">
+                    <a class="page-link" th:href="@{'/page/'+${i-1}}">[[${i}]]</a>
+                </li>
+                <li th:if="${currentPage < totalPages - 7}" class="page-item disabled">
+                    <a class="page-link">...</a>
+                </li>
+                <li th:if="${currentPage < totalPages - 6}" class="page-item">
+                    <a class="page-link" th:href="@{'/page/'+${totalPages-1}}">[[${totalPages}]]</a>
+                </li>
+                <li th:if="${currentPage+1!=totalPages}" class="page-item">
+                    <a class="page-link" th:href="@{'/page/'+${currentPage+1}}">Next</a>
+                </li>
+                <a th:href="@{/marketing-invoice}" class="btn ml-auto btn-dark" style="color: white;">Go Back</a>
+            </ul>
+
+        </nav>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <form id="my-form" method="post" th:action="@{/submit-form}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Invoice Details</h5>
+                        <a type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</a>
+                    </div>
+                    <div class="modal-body div1">
+                        <div class="row mb-3 div2">
+
+                            <div class="col-6 div3">
+                                <p>
+                                    <strong>Invoice Number:
+                                        <input id="inv-num" name="inv-num" readonly>
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>Purchase Order Number:
+                                        <input id="po-num" name="po-num" readonly>
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>Date Created:
+                                        <input type="date" id="date-created" name="date-created">
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>Client Contact Person:
+                                        <input id="client-cp" name="client-cp">
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>Client Bus. Style:
+                                        <input id="client-bStyle" name="client-bStyle">
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>Client Terms:
+                                        <input id="client-terms" name="client-terms">
+                                    </strong>
+                                </p>
+                            </div>
+                            <div class="col-6 div3">
+                                <p>
+                                    <strong>Supplier Name:
+                                        <input id="supp-name" name="supp-name">
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>Supplier Address:
+                                        <input id="supp-address" name="supp-address">
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>Supplier TIN:
+                                        <input id="supp-tin" name="supp-tin">
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>Client Name:
+                                        <input id="client-name" name="client-name">
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>Client Address:
+                                        <input id="client-address" name="client-address">
+                                    </strong>
+                                </p>
+                                <p>
+                                    <strong>Client TIN:
+                                        <input id="client-tin" name="client-tin">
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
+                        <div style="height: 400px; overflow-y: auto;">
+                            <table class="table table-striped table-hover" id="product-table">
+                                <thead class="sticky-top thead-dark">
+                                    <tr>
+                                        <th scope="col">QTY</th>
+                                        <th scope="col">UNIT</th>
+                                        <th scope="col">ARTICLE</th>
+                                        <th scope="col">UNIT PRICE</th>
+                                        <th scope="col">AMOUNT</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                    <!-- Repeat the above row for each product as needed -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div>
+                            <label style="color: red; font-weight: bolder;">Grand Total: <input id="total-amt"
+                                    name="total-amt" readonly style="font-weight: bolder"></label>
+                            <label style="color: red; font-weight: bolder;">Add VAT: <input id="addVat" name="addVat"
+                                    readonly style="font-weight: bolder"></label>
+                            <label style="color: red; font-weight: bolder;">Amount Net Of VAT: <input id="amtNetVat"
+                                    name="amtNetVat" readonly style="font-weight: bolder"></label>
+                            <label style="color: red; font-weight: bolder;">Total Sales VAT INC: <input
+                                    id="totalSalesVatInc" name="totalSalesVatInc" readonly
+                                    style="font-weight: bolder"></label>
+                        </div>
+
+
+                        <!-- <a type="button" class="btn btn-warning" style="width: max-content;">Update total</a> -->
+                        <!-- <a type="button" class="btn btn-warning" style="width: max-content; text-align: center;">Update total</a> -->
+                        <!-- <a type="button" id="btnUpdteVat" class="btn btn-warning" style="white-space: nowrap;"
+                            onclick="updateVat()">Update VAT</a> -->
+
+
+
+                        <button type="submit" id="submitButton" class="btn btn-primary">Save</button>
+                        <a type="button" class="btn btn-secondary" data-dismiss="modal">Close</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to logout?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn" style="background-color: #003D2B; color: white;">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="invoiceCreatedModal" tabindex="-1" role="dialog"
+        aria-labelledby="invoiceCreatedModalLabel" aria-hidden="true" th:if="${hideDivSuccess}">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invoiceCreatedModalLabel" style="color:green">Success</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Your invoice has been successfully Updated.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+
+    <div class="modal fade" id="invoiceLimitModal" tabindex="-1" role="dialog" aria-labelledby="invoiceLimitModalLabel"
+        aria-hidden="true" th:if="${hideDivError}">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="invoiceLimitModalLabel" style="color:red;">WARNING</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Update failed. Please ensure that all fields have been input correctly.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- The modal -->
+    <div class="modal fade" id="duplicateModal" tabindex="-1" role="dialog" aria-labelledby="duplicateModalLabel"
+        aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="duplicateModalLabel">Duplicate Invoice</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span id="invoiceIdPlaceholder" style="display: none;"></span>
+                    <!-- Form fields for invoice number, PO number, and date -->
+                    <div class="form-group">
+                        <label for="invoiceNumber">Invoice Number</label>
+                        <input type="text" name="d-invName" class="form-control" id="invoiceNumber"
+                            placeholder="Enter New Invoice number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="poNumber">PO Number</label>
+                        <input type="text" name="d-poNum" class="form-control" id="poNumber"
+                            placeholder="Enter New PO number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" name="d-date" class="form-control" id="date" required>
+                    </div>
+                    <!-- Add a container for the error message -->
+                    <div class="text-center mt-3">
+                        <span id="errorContainer" class="text-danger"></span>
+                    </div>
+                    <!-- Add a container for the success message -->
+                    <div class="text-center mt-3">
+                        <span id="successContainer" class="text-success"></span>
+                    </div>
+                    <!-- Add a container for the invoice duplicate message -->
+                    <div class="text-center mt-3">
+                        <span id="invoiceDuplicateContainer" class="text-danger"></span>
+                    </div>
+                    <!-- Add a container for the PO number duplicate message -->
+                    <div class="text-center mt-3">
+                        <span id="poNumberContainer" class="text-danger"></span>
+                    </div>
+                    <!-- Add a container for the supplier limit exceed message -->
+                    <div class="text-center mt-3">
+                        <span id="suppLimitContainer" class="text-danger"></span>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" id="btn-duplicate" class="btn btn-primary">Duplicate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <form id="my-form"  method="post" th:action="@{/submit-form}">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Invoice Details</h5>
-                <a type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</a>
-            </div>
-            <div class="modal-body div1">
-                <div class="row mb-3 div2">
-
-                    <div class="col-6 div3">
-                        <p>
-                            <strong>Invoice Number:
-                                <input id="inv-num" name="inv-num" readonly>
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Purchase Order Number:
-                                <input id="po-num" name="po-num" readonly>
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Date Created:
-                                <input type="date" id="date-created" name="date-created">
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Client Contact Person:
-                                <input id="client-cp" name="client-cp">
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Client Bus. Style:
-                                <input id="client-bStyle" name="client-bStyle">
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Client Terms:
-                                <input id="client-terms" name="client-terms">
-                            </strong>
-                        </p>
-                    </div>
-                    <div class="col-6 div3">
-                        <p>
-                            <strong>Supplier Name:
-                                <input id="supp-name" name="supp-name">
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Supplier Address:
-                                <input id="supp-address" name="supp-address">
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Supplier TIN:
-                                <input id="supp-tin" name="supp-tin">
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Client Name:
-                                <input id="client-name" name="client-name">
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Client Address:
-                                <input id="client-address" name="client-address">
-                            </strong>
-                        </p>
-                        <p>
-                            <strong>Client TIN:
-                                <input id="client-tin" name="client-tin">
-                            </strong>
-                        </p>
-                    </div>
-                </div>
-                <div style="height: 400px; overflow-y: auto;">
-                    <table class="table table-striped table-hover" id="product-table">
-                        <thead class="sticky-top thead-dark">
-                        <tr>
-                            <th scope="col">QTY</th>
-                            <th scope="col">UNIT</th>
-                            <th scope="col">ARTICLE</th>
-                            <th scope="col">UNIT PRICE</th>
-                            <th scope="col">AMOUNT</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <!-- Repeat the above row for each product as needed -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <div>
-                    <label style="color: red; font-weight: bolder;">Grand Total: <input id="total-amt" name="total-amt" readonly style="font-weight: bolder"></label>
-                    <label style="color: red; font-weight: bolder;">Add VAT: <input id="addVat" name="addVat" readonly style="font-weight: bolder"></label>
-                    <label style="color: red; font-weight: bolder;">Amount Net Of VAT: <input id="amtNetVat" name="amtNetVat" readonly style="font-weight: bolder"></label>
-                    <label style="color: red; font-weight: bolder;">Total Sales VAT INC: <input id="totalSalesVatInc" name="totalSalesVatInc" readonly style="font-weight: bolder"></label>
-                </div>
-                
-                
-                <!-- <a type="button" class="btn btn-warning" style="width: max-content;">Update total</a> -->
-                <!-- <a type="button" class="btn btn-warning" style="width: max-content; text-align: center;">Update total</a> -->
-                <a type="button" id="btnUpdteVat" class="btn btn-warning" style="white-space: nowrap;" onclick="updateVat()">Update VAT</a>
-
-
-                  
-                <button type="submit" id="submitButton" class="btn btn-primary">Save</button>
-                <a type="button" class="btn btn-secondary" data-dismiss="modal">Close</a>
-            </div>
-        </div>
-        </form>
-    </div>
-</div>
-<!-- Logout Modal -->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="logoutModalLabel">Logout</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to logout?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn" style="background-color: #003D2B; color: white;">Logout</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="invoiceCreatedModal" tabindex="-1" role="dialog" aria-labelledby="invoiceCreatedModalLabel" aria-hidden="true" th:if="${hideDivSuccess}">
+<!-- <div class="modal fade" id="invoiceLimitModal" tabindex="-1" role="dialog" aria-labelledby="invoiceLimitModalLabel" aria-hidden="true" th:if="${hideDivSuccessDel}">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="invoiceCreatedModalLabel" style="color:green">Success</h5>
+                <h5 class="modal-title" id="invoiceLimitModalLabel" style="color:green;">Success</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>Your invoice has been successfully Updated.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal -->
-
-<div class="modal fade" id="invoiceLimitModal" tabindex="-1" role="dialog" aria-labelledby="invoiceLimitModalLabel" aria-hidden="true" th:if="${hideDivError}">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="invoiceLimitModalLabel" style="color:red;">WARNING</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>Update failed. Please ensure that all fields have been input correctly.</p>
+                <p>Supplier successfully deleted.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
-</div>
-
-<!-- Bootstrap JavaScript -->
-<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
-<script th:src="@{/custom-js/marketing/marketing-main.js}"></script>
-<script th:src="@{/custom-js/marketing/marketing-view.js}"></script>
+  </div> -->
+        <!-- Bootstrap JavaScript -->
+        <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+        <script th:src="@{/custom-js/marketing/marketing-main.js}"></script>
+        <script th:src="@{/custom-js/marketing/marketing-view.js}"></script>
 </body>
+
 </html>

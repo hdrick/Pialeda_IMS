@@ -11,12 +11,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pialeda.app.Invoice.dto.*;
 import pialeda.app.Invoice.model.*;
 import pialeda.app.Invoice.repository.CurrentInvoiceRepo;
+import pialeda.app.Invoice.repository.InvoiceRepository;
+import pialeda.app.Invoice.repository.OfficialRecptRepository;
 import pialeda.app.Invoice.service.ClientService;
 import pialeda.app.Invoice.service.CollectionService;
 import pialeda.app.Invoice.service.OfficialRecptService;
 import pialeda.app.Invoice.service.SupplierService;
 import pialeda.app.Invoice.service.InvoiceService;
-import pialeda.app.Invoice.dto.GlobalUser;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -42,6 +43,9 @@ public class MarketingController {
     private CollectionService collectionService;
     @Autowired
     private CurrentInvoiceRepo currentInvoiceRepo;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     @GetMapping("marketing-view/invoices")
     public String viewInvoices(Model model){
@@ -150,25 +154,20 @@ public class MarketingController {
                                         @ModelAttribute("officialReceiptInfo") OfficialReceiptInfo officialReceiptInfo,
                                         RedirectAttributes redirectAttributes
         ) {
-            System.out.print("orNumber: " + orNumber);
-            System.out.print("totalSales: " + totalSales);
-            System.out.print("addVat: " + addVat);
-            System.out.print("lwTax: " + lwTax);
-            System.out.print("amtDue: " + amtDue);
-            System.out.print("ewt: " + ewt);
-            System.out.print("total: " + total);
-            System.out.print("cash: " + cash);
-            System.out.print("chckNo: " + chckNo);
-            System.out.print("orAmount: " + orAmount);
-            System.out.print("cashierName: " + cashierName);
-            System.out.print("requestParams: " + requestParams);
-            System.out.print("officialReceiptInfo: " + officialReceiptInfo);
-            
-            officialRecptService.createOR(orNumber, totalSales, addVat, lwTax, amtDue, ewt, total, cash, chckNo, orAmount, cashierName, requestParams, officialReceiptInfo);
+            System.out.println("ifExistssss: ");
+            OfficialReceipt ifExist = officialRecptService.getOrNumByOrNum(orNumber);
+            System.out.println("ifExist: "+ifExist);
+            if(ifExist != null){
+                boolean hideDivDuplicateOR = true;
+                redirectAttributes.addFlashAttribute("hideDivDuplicateOR", hideDivDuplicateOR);
+                return "redirect:/marketing-officialreceipt";
+            }else{
+                officialRecptService.createOR(orNumber, totalSales, addVat, lwTax, amtDue, ewt, total, cash, chckNo, orAmount, cashierName, requestParams, officialReceiptInfo);
 
-      boolean hideDivSuccessOR = true;
-      redirectAttributes.addFlashAttribute("hideDivSuccessOR", hideDivSuccessOR);
-      return "redirect:/marketing-officialreceipt";
+                boolean hideDivSuccessOR = true;
+                redirectAttributes.addFlashAttribute("hideDivSuccessOR", hideDivSuccessOR);
+                return "redirect:/marketing-officialreceipt";
+            }
     }
 
 
@@ -186,10 +185,19 @@ public class MarketingController {
                                         @ModelAttribute("collectionReceiptInfo") CollectionReceiptInfo collectionReceiptInfo,
                                         RedirectAttributes redirectAttributes
         ) {
-      collectionService.createCR(orNumber, amtDue, ewt, total, cash, chckNo, crAmount, cashierName, requestParams, collectionReceiptInfo);
-      boolean hideDivSuccessOR = true;
-      redirectAttributes.addFlashAttribute("hideDivSuccessOR", hideDivSuccessOR);
-      return "redirect:/marketing-collectionreceipt";
+
+      CollectionReceipt ifExist = collectionService.getCrNumByCrNum(orNumber);
+
+      if(ifExist !=null){
+        boolean hideDivDuplicateCR = true;
+        redirectAttributes.addFlashAttribute("hideDivDuplicateCR", hideDivDuplicateCR);
+        return "redirect:/marketing-collectionreceipt";
+      }else{
+        collectionService.createCR(orNumber, amtDue, ewt, total, cash, chckNo, crAmount, cashierName, requestParams, collectionReceiptInfo);
+        boolean hideDivSuccessOR = true;
+        redirectAttributes.addFlashAttribute("hideDivSuccessOR", hideDivSuccessOR);
+        return "redirect:/marketing-collectionreceipt";
+      }
     }
       
     @GetMapping("/getInvoiceInfo")
@@ -760,4 +768,50 @@ public class MarketingController {
             return "redirect:/supplier-list";
         } 
     }
+
+
+
+
+    // @PostMapping("/duplicate/{id}")
+    // public String duplicateInvoice(@PathVariable("id") int id,
+    //                                  @RequestParam("d-invName") String invoiceNum,
+    //                                  @RequestParam("d-poNum") String poNum,
+    //                                  @RequestParam("d-date") String date,
+    //                                  RedirectAttributes redirectAttributes){
+        
+    //    String result = invoiceService.duplicateSpecificInvoice(id, invoiceNum, poNum, date);
+    //    System.out.println("result: "+result);
+    //    if(result.equals("success")){
+    //         return "success";
+    //    }else{
+    //      return "failed";
+    //    }
+    // }
+
+@PostMapping("/duplicate/{id}")
+public ResponseEntity<String> duplicateInvoice(@PathVariable("id") int id,
+                               @RequestParam("d-invName") String invoiceNum,
+                               @RequestParam("d-poNum") String poNum,
+                               @RequestParam("d-date") String date,
+                               RedirectAttributes redirectAttributes, Model model) {
+  
+    Invoice invoiceToDuplicate = invoiceRepository.findById(id);
+
+    double remainingLimitOfSupp = invoiceService.getSuppTotalLimit(invoiceToDuplicate.getSupplierName());
+    double supplierLimit = supplierService.findLimitByName(invoiceToDuplicate.getSupplierName());
+    double remainingLimit = supplierLimit - remainingLimitOfSupp;
+
+     if(invoiceToDuplicate.getGrandTotal() <= remainingLimit){
+        String result = invoiceService.duplicateSpecificInvoice(id, invoiceNum, poNum, date);
+        return ResponseEntity.ok(result);
+     }else{
+        String result2 = "supplierLimitExceed";
+        return ResponseEntity.ok(result2);
+     }
+
+    
+}
+
+
+
 }

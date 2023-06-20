@@ -472,4 +472,67 @@ public class InvoiceService {
         return invoiceRepository.findByInvoiceNum(invoiceNum);
     }
 
+
+    public String duplicateSpecificInvoice(int id, String invoiceNum, String poNum, String date){
+        // lets get the content the content of the specific invoice
+        Invoice invoiceToDuplicate = invoiceRepository.findById(id);
+
+        Invoice newInvoice = new Invoice();   
+        
+
+        Invoice ifInvExist = findByInvNum(invoiceNum);
+        //check if invoice number is in the db
+        if(ifInvExist == null){
+            Invoice ifPOExist = invoiceRepository.findByPoNum(poNum);
+            //check if PO exist
+            if(ifPOExist == null){
+                newInvoice.setInvoiceNum(invoiceNum);
+                newInvoice.setPoNum(poNum);
+                newInvoice.setDateCreated(LocalDate.parse(date));
+
+                newInvoice.setClientContactPerson(invoiceToDuplicate.getClientContactPerson());
+                newInvoice.setSupplierName(invoiceToDuplicate.getSupplierName());
+                newInvoice.setSupplierAddress(invoiceToDuplicate.getSupplierAddress());
+                newInvoice.setSupplierTin(invoiceToDuplicate.getSupplierTin());
+
+                newInvoice.setClientName(invoiceToDuplicate.getClientName());
+                newInvoice.setClientTin(invoiceToDuplicate.getClientTin());
+                newInvoice.setClientAddress(invoiceToDuplicate.getClientAddress());
+                newInvoice.setClientBusStyle(invoiceToDuplicate.getClientBusStyle());
+                newInvoice.setClientTerms(invoiceToDuplicate.getClientTerms());
+
+                newInvoice.setGrandTotal(invoiceToDuplicate.getGrandTotal());
+                newInvoice.setAddVat(invoiceToDuplicate.getAddVat());
+                newInvoice.setAmountNetOfVat(invoiceToDuplicate.getAmountNetOfVat());
+                newInvoice.setTotalSalesVatInc(invoiceToDuplicate.getTotalSalesVatInc());
+                newInvoice.setCashier(invoiceToDuplicate.getCashier());
+                newInvoice.setStatus("Unpaid");
+                invoiceRepository.save(newInvoice);
+
+                List<InvoiceProductInfo> invProd = invoiceProdInfoRepository.findByInvoiceNumber(invoiceToDuplicate.getInvoiceNum());
+                List<InvoiceProductInfo> duplicatedInvProd = new ArrayList<>();
+
+                for (InvoiceProductInfo invoiceProductInfo : invProd) {
+                    InvoiceProductInfo duplicatedInvoiceProductInfo = new InvoiceProductInfo();
+                    duplicatedInvoiceProductInfo.setInvoiceNumber(invoiceNum); // Set the new invoice number
+                    duplicatedInvoiceProductInfo.setPurchaseOrderNumber(poNum); // Set the new purchase order number
+                    // Copy other properties from the original object
+                    duplicatedInvoiceProductInfo.setAmount(invoiceProductInfo.getAmount());
+                    duplicatedInvoiceProductInfo.setArticles(invoiceProductInfo.getArticles());
+                    duplicatedInvoiceProductInfo.setQty(invoiceProductInfo.getQty());
+                    duplicatedInvoiceProductInfo.setUnit(invoiceProductInfo.getUnit());
+                    duplicatedInvoiceProductInfo.setUnitPrice(invoiceProductInfo.getUnitPrice());
+                    // Add the duplicated object to the list
+                    duplicatedInvProd.add(duplicatedInvoiceProductInfo);
+                }
+                invoiceProdInfoRepository.saveAll(duplicatedInvProd);
+
+                return "success";
+            }else{
+                return "purchaseNumberFound";
+            }
+        }else{
+            return "invoiceNumberFound";
+        }
+    }
 }
