@@ -178,6 +178,8 @@ function checkRowsIfEmpty(){
 const tableBody = document.getElementById('table-body');
 const addRowBtn = document.getElementById('add-row-btn');
 const deleteRowBtn = document.getElementById('delete-row-btn');
+
+
 let rowCounter = 0;
 
 addRowBtn.addEventListener('click', () => {
@@ -267,16 +269,33 @@ function computeInvoiceTotals() {
   grandTotalInput.value = grandTotal.toFixed(2);
 }
 // Delete last row
+// deleteRowBtn.addEventListener('click', () => {
+//   const rows = tableBody.getElementsByTagName('tr');
+//   if (rows.length > 0) {
+//     rows[rows.length - 1].remove();
+//     rowCounter--;
+//   }else {
+//        alert('At least one row is required!');
+//      }
+//   computeInvoiceTotals();
+// });
+
+// Delete last row
 deleteRowBtn.addEventListener('click', () => {
   const rows = tableBody.getElementsByTagName('tr');
   if (rows.length > 0) {
-    rows[rows.length - 1].remove();
-    rowCounter--;
-  }else {
-       alert('At least one row is required!');
-     }
+    // Ask for confirmation
+    const confirmed = confirm('Are you sure you want to delete the last row?');
+    if (confirmed) {
+      rows[rows.length - 1].remove();
+      rowCounter--;
+    }
+  } else {
+    alert('At least one row is required!');
+  }
   computeInvoiceTotals();
 });
+
 
 const clientBusStyleSpan = document.getElementById('client-busStyle');
 const clientBusStyleInput = document.getElementById('client-busStyle-input');

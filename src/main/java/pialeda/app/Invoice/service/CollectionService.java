@@ -146,6 +146,10 @@ public class CollectionService {
         return collectionRecptInvoicesRepo.findByCollectionReceiptNum(orNum);
     }
 
+    public CollectionReceipt getCrNumByCrNum(int crNum){
+        return collectionRecptRepository.findByCollectionReceiptNum(crNum);
+    }
+
     public Boolean updateCr(int id, String clientName, String clientAddress,
                             String clientTIN, String busStyle,
                             String wPayment, Double nPayment,

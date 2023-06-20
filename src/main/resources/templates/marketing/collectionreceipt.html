@@ -177,8 +177,8 @@
               </div>
               <div style="font-weight: bolder;">
                 <div id="s-invo-con">
-                  <label id="or-number" style="width: 150px; color:red;" th:text="${generateORNumber}"></label>
-                  <input type="hidden" name="orNumber" id="invoice-number-input" th:value="${generateORNumber}">
+                  <!-- <label id="or-number" style="width: 150px; color:red;" th:text="${generateORNumber}"></label> -->
+                  <input type="textt" name="orNumber" id="invoice-number-input" placeholder="Enter CR number.." required style="color: red; font-weight: bolder; text-align: center;">
                 </div>
               </div>
             </div>
@@ -281,6 +281,29 @@
     </div>
   </div>
 </div>
+
+  <!-- Modal duplicate-->
+  <div class="modal fade" id="crDuplicateModal" tabindex="-1" role="dialog" aria-labelledby="crDuplicateModalLabel"
+    aria-hidden="true" th:if="${hideDivDuplicateCR}">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="crDuplicateModalLabel" style="color:rgb(241, 204, 35)">Warning</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Warning: Collection receipt number is already exist please create a new one.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 <!-- Bootstrap JavaScript -->
 <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
@@ -290,6 +313,7 @@
   $(document).ready(function () {
 
       $('#orCreatedModal').modal('show');
+      $('#crDuplicateModal').modal('show');
       setTimeout(function() {
           $('#orCreatedModal').modal('hide');
       }, 3000);

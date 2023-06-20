@@ -144,6 +144,10 @@ public class OfficialRecptService {
         return officialRecptInvoicesRepo.findByOfficialReceiptNum(orNum);
     }
 
+    public OfficialReceipt getOrNumByOrNum(int orNum){
+        return officialRecptRepository.findByOfficialReceiptNum(orNum);
+    }
+
     public Boolean updateOr(int id, String clientName, String clientAddress,
                          String clientTIN, String busStyle,
                          String wPayment, Double nPayment,
