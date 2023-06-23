@@ -577,7 +577,17 @@
             </div>
         </div>
     </div>
-
+    <div id="confirmationModal" class="modal modal-close" tabindex="-1" role="dialog"
+         aria-labelledby="confirmationModalLabel" aria-hidden="true" style="margin-top: 4%;" data-backdrop="static"
+         data-keyboard="false">
+        <div class="modal-content">
+            <p>Are you sure you want to leave this page?</p>
+            <div class="btn-row">
+                <button class="btn btn-primary" id="yesBtn">Yes</button>
+                <button class="btn btn-primary" id="noBtn">No</button>
+            </div>
+        </div>
+    </div>
     <!-- Bootstrap JavaScript -->
     <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>

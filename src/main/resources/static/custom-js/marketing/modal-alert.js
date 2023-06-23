@@ -9,6 +9,7 @@ $(document).ready(function() {
   var IP;
   var CRB;
   var LCR;
+  var LOR;
 //  function storeInputValues() {
 //    localStorage.setItem("clientName", clientName.val());
 //  }
@@ -69,6 +70,14 @@ $(document).ready(function() {
                 window.location.href = href;
             }
         }
+    function invConfirmationExitLOR(cond)
+        {
+            if(cond == true)
+            {
+                var href="/official-receipt-list";
+                window.location.href = href;
+            }
+        }
   // Add a click event listener to the add client button
   $(".btn-close").on("click", function() {
         parentModalId = $(this).closest('.modal').attr('id');
@@ -114,6 +123,10 @@ $(document).ready(function() {
         if(getCondition(LCR) == true)
         {
             invConfirmationExitLCR(true);
+        }
+        if(getCondition(LOR) == true)
+        {
+            invConfirmationExitLOR(true);
         }
     });
 
@@ -206,6 +219,7 @@ $(document).ready(function() {
                 }
             });
 
+
             $("#btn-ListCR").on("click", function() {
                 var clientName = $('#my-client').val();
                 var supplierName = $('#my-supplier').val();
@@ -226,4 +240,23 @@ $(document).ready(function() {
                 }
             });
 
+            $("#btn-ListOR").on("click", function() {
+                var clientName = $('#my-client').val();
+                var supplierName = $('#my-supplier').val();
+
+                if(clientName == '' && supplierName == '')
+                {
+                    invConfirmationExitLOR(true);
+                }
+                else
+                {
+                    LOR = true;
+                    IP = false;
+                    OR = false;
+                    CR = false;
+                    CRB = false;
+                    confirmationModal.css('z-index', '9999');
+                    confirmationModal.modal('show');
+                }
+            });
 });
