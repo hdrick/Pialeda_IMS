@@ -22,8 +22,8 @@ $(document).ready(function() {
 
     // Create a workbook with the worksheets
     var workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet1, 'Sheet1');
-    XLSX.utils.book_append_sheet(workbook, worksheet2, 'Sheet2');
+    XLSX.utils.book_append_sheet(workbook, worksheet1, 'Invoice');
+    XLSX.utils.book_append_sheet(workbook, worksheet2, 'Total');
 
     // Convert the workbook to a binary string
     var binaryString = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
