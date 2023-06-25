@@ -1,13 +1,23 @@
 $(function() {
+
       $('#table-body').on('mouseenter', 'tr', function() {
-        $(this).addClass('hover');
+      var id = $(this).attr('id');
+        if(id == "not-found"){}
+        else{
+            $(this).addClass('hover');}
       }).on('mouseleave', 'tr', function() {
-        $(this).removeClass('hover');
+      var id = $(this).attr('id');
+        if(id == "not-found"){}
+        else{
+            $(this).removeClass('hover');}
       });
 
     $('#table-body').on('click', 'tr', function() {
-        $('tr').removeClass('active');
-        $(this).addClass('active');
+        var id = $(this).attr('id');
+        if(id == "not-found"){}
+        else{
+            $('tr').removeClass('active');
+            $(this).addClass('active');}
     });
 
     $('tbody').on('click','tr', function() {

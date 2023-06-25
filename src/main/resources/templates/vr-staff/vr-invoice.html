@@ -320,6 +320,7 @@ font-size: 35px!important;
                     <div class="invoice-from">
                         <ul class="list-unstyled text-right" >
                             <strong><li class="supplier-name" th:text="${supplierDetails.getName()}"></li></strong>
+                            <li th:text="${supplierDetails.getTin()}"></li>
                             <li th:text="${supplierDetails.getAddress()}"></li>
                             <li th:text="${supplierDetails.getCityAddress()}"></li>
                         </ul>
@@ -350,6 +351,7 @@ font-size: 35px!important;
                         <ul class="list-unstyled">
                             <li><strong>Invoiced To</strong></li>
                             <li th:text="${clientDetails.getName()}"></li>
+                                <li th:text="${clientDetails.getTin()}"></li>
                             <li th:text="${clientDetails.getAddress()}"></li>
                             <li th:text="${clientDetails.getCityAddress()}"></li>
                         </ul>
@@ -366,24 +368,24 @@ font-size: 35px!important;
                                 </thead>
                                 <tbody>
                                 <tr th:each="invoicePurchaseProduct: ${invoicePurchaseProducts}">
-                                    <td class="text-center" th:text="${invoicePurchaseProduct.articles}"></td>
-                                    <td class="text-center" th:text="${invoicePurchaseProduct.qty}"></td>
-                                    <td class="text-center" th:text="${invoicePurchaseProduct.amount}"></td>
+                                    <td class="text-center" th:text="${invoicePurchaseProduct.articles}" style="background-color: #f2f2f2"></td>
+                                    <td class="text-center" th:text="${invoicePurchaseProduct.qty}" style="background-color: #f2f2f2"></td>
+                                    <td class="text-center" th:text="${invoicePurchaseProduct.amount}" style="background-color: #f2f2f2"></td>
                                 </tr>
 
                                 </tbody>
                                 <tfoot>
                                 <tr>
                                     <th colspan="2" class="text-right">Total Sales (VAT Inclusive):</th>
-                                    <th class="text-center" th:text="${invoiceDetails.getTotalSalesVatInc()}"></th>
+                                    <th class="text-center" th:text="${invoiceDetails.getTotalSalesVatInc()}" style="background-color: #f2f2f2"></th>
                                 </tr>
                                 <tr>
                                     <th colspan="2" class="text-right">Amount: Net of VAT</th>
-                                    <th class="text-center" th:text="${invoiceDetails.getAmountNetOfVat()}"></th>
+                                    <th class="text-center" th:text="${invoiceDetails.getAmountNetOfVat()}" style="background-color: #f2f2f2"></th>
                                 </tr>
                                 <tr>
                                     <th colspan="2" class="text-right">Add: VAT</th>
-                                    <th class="text-center" th:text="${invoiceDetails.getAddVat()}"></th>
+                                    <th class="text-center" th:text="${invoiceDetails.getAddVat()}" style="background-color: #f2f2f2"></th>
                                 </tr>
                                 <tr>
                                     <th colspan="2" class="text-right">Total Amount Due:</th>

@@ -186,6 +186,10 @@ public class InvoiceService {
         Pageable pageable = PageRequest.of(pageNumber -1, 7);
         return invoiceRepository.searchByKeyword(keyword, pageable);
     }
+    public List<Invoice> getClientOfSupplier(String supplierName)
+    {
+        return invoiceRepository.findClientNameBySupplierName(supplierName);
+    }
     public Page<Invoice> filterPageByClient(String name, int pageNumber)
     {
         Pageable pageable = PageRequest.of(pageNumber -1, 7);
@@ -248,6 +252,9 @@ public class InvoiceService {
     public BigDecimal getTotalAmountBySupplierName(String supplierName) {
         return invoiceRepository.getSumOfAllInvoiceAmountsBySupplierName(supplierName);
     }
+    public BigDecimal getTotalReceiptBySupplierName(String supplierName) {
+        return officialRecptRepository.getSumOfAllOfficialReceiptAmountsBySupplierName(supplierName);
+    }
     public BigDecimal getTotalAmountByClientNameAndSupplierName(String clientName, String supplierName) {
         return invoiceRepository.getSumOfAllInvoiceAmountsByClientNameAndSupplierName(clientName, supplierName);
     }
@@ -257,7 +264,10 @@ public class InvoiceService {
     public BigDecimal getTotalAmountByClientNameAndSupplierNameBetweenDateRange(String clientName, String supplierName, LocalDate startDate, LocalDate endDate) {
         return invoiceRepository.sumOfGrandTotalByClientNameAndSupplierNameBetweenDateCreated(clientName, supplierName, startDate, endDate);
     }
-
+    public List<OfficialReceipt> getSupplierOR(String supplierName)
+    {
+        return officialRecptRepository.findBySupplierName(supplierName);
+    }
     // public List<CollectionReceiptInvoices> getCollectionReceipt(Invoice invoiceNum)
     // {
     //     return collectionRecptInvoicesRepo.findByInvoice(invoiceNum);

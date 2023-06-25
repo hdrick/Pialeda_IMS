@@ -75,18 +75,22 @@
     {
         border: 2px solid red;
     }
-    #my-table
+    #invoice-table
     {
-        min-height: 450px;
+        min-height: 300px;
         font-size: 13px;
     }
-    #my-table-total
+    #receipt-table
+    {
+        font-size: 13px;
+    }
+    #total-table
     {
         height: 33px;
         font-size: 13px;
         width: 100%;
     }
-    #my-table-total th
+    #total-table th
     {
        color: #fff;
        background-color: #343a40;
@@ -149,7 +153,13 @@
         background-color: #25b389;
         color: white;
     }
-    #my-table th
+    #invoice-table th
+    {
+        min-width: 105px;
+        max-width: 200px;
+        text-align: center;
+    }
+    #receipt-table th
     {
         min-width: 105px;
         max-width: 200px;
@@ -204,17 +214,19 @@
       <div class="content-body">
         <div class="row">
           <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 left-panel">
-            <select class="form-select" id="filterByClient">
-              <option value="default" selected>Filter by Client</option>
-              <option th:each="client : ${clients}" th:value="${client.name}" th:text="${client.name}"
-                      th:selected="${selectedClient == client.name}">
-              </option>
-
-            </select>
             <select class="form-select" id="filterBySupplier">
               <option value="default" selected>Filter by Supplier</option>
               <option th:each="supplier : ${suppliers}" th:value="${supplier}" th:text="${supplier}"
                       th:selected="${selectedSupplier == supplier}">
+              </option>
+            </select>
+            <select class="form-select" id="filterByClient">
+              <option value="default" selected>Filter by Client</option>
+              <option th:if="${isSupplierPresent}" th:each="client : ${clients}" th:value="${client.clientName}" th:text="${client.clientName}"
+                      th:selected="${selectedClient == client.clientName}">
+              </option>
+              <option th:unless="${isSupplierPresent}" th:each="client : ${clients}" th:value="${client.name}" th:text="${client.name}"
+                      th:selected="${selectedClient == client.name}">
               </option>
             </select>
           </div>
@@ -233,44 +245,78 @@
 
 
         <div class="view-panel">
-          <table class="table table-sm table-bordered" id="my-table" th:value="${'invoices-'+selectedClient+'-'+selectedSupplier+'-'+selectedMonth+'-page-'+currentPage}">
+          <table class="table table-sm table-bordered" id="invoice-table">
             <thead class="table-dark">
             <tr>
 
               <th>Invoice #</th>
-              <th>Client Name</th>
-              <th>Client Address</th>
-              <th>Client TIN</th>
+              <th>Supplier TIN</th>
               <th>Supplier Name</th>
               <th>Supplier Address</th>
-              <th>Supplier TIN</th>
-              <th>Amount Due</th>
+              <th>Client TIN</th>
+              <th>Client Name</th>
+              <th>Client Address</th>
+              <th>Total</th>
               <th>Date</th>
             </tr>
             </thead>
             <tbody id="table-body">
-            <tr  class="table-row" th:each="invoice: ${invoices}">
+            <tr th:if="${totalItems > 0}" class="table-row" th:each="invoice: ${invoices}">
               <td th:text="${invoice.invoiceNum}"></td>
-              <td th:text="${invoice.clientName}"></td>
-              <td th:text="${invoice.clientAddress}"></td>
-              <td th:text="${invoice.clientTin}"></td>
+              <td th:text="${invoice.supplierTin}"></td>
               <td th:text="${invoice.supplierName}"></td>
               <td th:text="${invoice.supplierAddress}"></td>
-              <td th:text="${invoice.supplierTin}"></td>
+              <td th:text="${invoice.clientTin}"></td>
+              <td th:text="${invoice.clientName}"></td>
+              <td th:text="${invoice.clientAddress}"></td>
               <td th:text="${invoice.grandTotal}"></td>
               <td th:text="${#temporals.format(invoice.dateCreated, 'MMMM d, yyyy')}"></td>
             </tr>
+            <tr id="not-found" th:unless="${totalItems > 0}" style="text-align: center; position: relative; top: 5em;">
+              <td colspan="9"><h2>No Result Found</h2></td>
+            </tr>
             </tbody>
           </table>
-          <table th:if="${isSupplierPresent}" class="table table-sm table-bordered" id="my-table-total">
+          <table th:if="${receiptItems > 0}" class="table table-sm table-bordered" id="receipt-table">
+            <thead class="table-dark">
+            <tr>
+              <th>OR #</th>
+              <th>Supplier TIN</th>
+              <th>Supplier Name</th>
+              <th>Supplier Address</th>
+              <th>Client TIN</th>
+              <th>Client Name</th>
+              <th>Client Address</th>
+              <th>Total</th>
+              <th>Date</th>
+            </tr>
+            </thead>
+            <tbody id="table-body-2">
+            <tr class="table-row" th:each="officialReceipt: ${officialReceipts}">
+              <td th:text="${officialReceipt.officialReceiptNum}"></td>
+              <td th:text="${officialReceipt.supplierTin}"></td>
+              <td th:text="${officialReceipt.supplierName}"></td>
+              <td th:text="${officialReceipt.supplierAddress}"></td>
+              <td th:text="${officialReceipt.clientTin}"></td>
+              <td th:text="${officialReceipt.recvFrom}"></td>
+              <td th:text="${officialReceipt.clientAddress}"></td>
+              <td th:text="${officialReceipt.total}"></td>
+              <td th:text="${officialReceipt.officialReceiptDate}"></td>
+            </tr>
+            </tbody>
+          </table>
+          <button type="button" class="btn btn-info" id="showAllReceipt" style="display: none">Show All OR</button>
+          <table th:if="${isSupplierPresent}" class="table table-sm table-bordered" id="total-table">
+            <tbody style="text-align: center; ">
             <tr>
               <th>Invoices Total Amount</th>
-              <td th:text="${totalInvoicesAmount}"></td>
+              <td th:text="${totalInvoicesAmount}" style=" background-color: #f2f2f2;"></td>
               <th style="background-color: green">Supplier Reach</th>
-              <td th:text="${supplierReachAmount}"></td>
-              <th style="background-color: orange">Supplier Limit</th>
-              <b><td th:text="${supplierLimit}" style="font-weight: bold; color: red"></td></b>
+              <td th:text="${supplierReachAmount}" style=" background-color: #f2f2f2;"></td>
+              <th style="background-color: #ab0707">Supplier Limit</th>
+              <b><td th:text="${supplierLimit}" style="font-weight: bold; color: red; background-color: #f2f2f2;"></td></b>
             </tr>
+            </tbody>
           </table>
           <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -450,100 +496,13 @@
                     </li>
                   </ul>
                 </div>
-                <div th:if="${isClientPresent && isSupplierPresent && totalItems > 0}" style="font-size: 14px; position: absolute; right: 1px; bottom: 1px;">
+                <div th:if="${isSupplierPresent && totalItems > 0}" style="font-size: 14px; position: absolute; right: 1px; bottom: 1px;">
                   <button id="download-btn" type="button" class="btn btn-primary">Download</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-<!--        <div class="view-panel-report">-->
-<!--          <table class="tg">-->
-<!--            <colgroup>-->
-<!--              <col style="width: 102.2px">-->
-<!--              <col style="width: 153.2px">-->
-<!--              <col style="width: 67.2px">-->
-<!--              <col style="width: 115.2px">-->
-<!--              <col style="width: 96.2px">-->
-<!--              <col style="width: 58.2px">-->
-<!--              <col style="width: 64.2px">-->
-<!--              <col style="width: 59.2px">-->
-<!--              <col style="width: 144.2px">-->
-<!--              <col style="width: 81.2px">-->
-<!--            </colgroup>-->
-<!--            <thead>-->
-<!--            <tr>-->
-<!--              <th class="tg-c3ow" colspan="10">Client Report</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody>-->
-<!--            <tr>-->
-<!--              <td class="tg-0pky">Client Name </td>-->
-<!--              <td class="tg-0pky" colspan="9">-->
-<!--                <input type="text" name="clientName" id="clientName-field" pattern="[A-Za-z]+" title="Only alphabetic characters are allowed" required>-->
-<!--                <button id="btn-generate" type="button" class="btn btn-danger" style="position: absolute; right: 50px; display: none">Generate</button>-->
-<!--              </td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td class="tg-0pky">Tin </td>-->
-<!--              <td class="tg-0pky" colspan="9"></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td class="tg-0pky">Address</td>-->
-<!--              <td class="tg-0pky" colspan="9"></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td class="tg-0pky">Date</td>-->
-<!--              <td class="tg-0pky">From</td>-->
-<!--              <td class="tg-0pky" colspan="2"><input type="date" name="fr-date"></td>-->
-<!--              <td class="tg-0pky">To</td>-->
-<!--              <td class="tg-0pky" colspan="5"><input type="date" name="to-date"></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td class="tg-0pky" colspan="10"></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td class="tg-0pky" colspan="10"></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-c3ow">Supplier Name</td>-->
-<!--              <td class="tg-pb0m">TIN</td>-->
-<!--              <td class="tg-pb0m">Address</td>-->
-<!--              <td class="tg-pb0m">SI #</td>-->
-<!--              <td class="tg-pb0m">CR #</td>-->
-<!--              <td class="tg-pb0m">OR#</td>-->
-<!--              <td class="tg-pb0m">Date </td>-->
-<!--              <td class="tg-pb0m">Date Created</td>-->
-<!--              <td class="tg-pb0m">Total Amount</td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--            </tr>-->
-<!--            <tr>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--              <td class="tg-0pky">Total</td>-->
-<!--              <td class="tg-0pky"></td>-->
-<!--            </tr>-->
-<!--            </tbody>-->
-<!--          </table>-->
-<!--        </div>-->
       </div>
     </div>
   </div>
@@ -807,6 +766,29 @@
 });
 
 
+</script>
+  <script>
+  $(document).ready(function() {
+    var table = document.getElementById("receipt-table");
+    var rows = table.getElementsByTagName("tr");
+    var maxRowsToShow = 5;
+
+    if (rows.length <= maxRowsToShow) {
+      $("#showAllReceipt").hide();
+    } else {
+      for (var i = maxRowsToShow; i < rows.length; i++) {
+        $(rows[i]).hide();
+      }
+      if (rows.length > maxRowsToShow) {
+        $("#showAllReceipt").click(function() {
+          $(rows).show();
+          $(this).hide();
+        });
+      } else {
+        $("#showAllReceipt").hide();
+      }
+    }
+  });
 </script>
 </body>
 </html>

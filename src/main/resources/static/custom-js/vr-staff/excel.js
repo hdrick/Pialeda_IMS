@@ -7,8 +7,9 @@
 $(document).ready(function() {
   $('#download-btn').click(function() {
     // Get the table elements
-    var table1 = document.getElementById('my-table');
-    var table2 = document.getElementById('my-table-total');
+    var table1 = document.getElementById('invoice-table');
+    var table2 = document.getElementById('receipt-table');
+    var table3 = document.getElementById('total-table');
 
 // Check if the tables have data
     if (table1.rows.length === 0 || table2.rows.length === 0) {
@@ -19,12 +20,13 @@ $(document).ready(function() {
     // Convert the tables to worksheet objects
     var worksheet1 = XLSX.utils.table_to_sheet(table1);
     var worksheet2 = XLSX.utils.table_to_sheet(table2);
+    var worksheet3 = XLSX.utils.table_to_sheet(table3);
 
     // Create a workbook with the worksheets
     var workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet1, 'Invoice');
+    XLSX.utils.book_append_sheet(workbook, worksheet2, 'OR');
     XLSX.utils.book_append_sheet(workbook, worksheet2, 'Total');
-
     // Convert the workbook to a binary string
     var binaryString = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
 

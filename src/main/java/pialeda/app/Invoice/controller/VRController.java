@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pialeda.app.Invoice.config.DateUtils;
+import pialeda.app.Invoice.config.MonthEnum;
 import pialeda.app.Invoice.model.*;
 import pialeda.app.Invoice.service.ClientService;
 import pialeda.app.Invoice.service.CollectionService;
@@ -54,7 +55,18 @@ public class VRController {
             return destination = "redirect:/marketing-invoice";
         } else if (role.equals("vr-staff"))
         {
-            Page<Invoice> page = invoiceService.getPageByKeyword(query, currentPage);
+            String keyword;
+            String monthValue = MonthEnum.getMonthValueByName(query);
+//            if (isValidMonth)
+//            {
+//                keyword = String.valueOf(monthValue);
+//            }
+//            else
+//            {
+//                keyword = query;
+//            }
+
+            Page<Invoice> page = invoiceService.getPageByKeyword(monthValue, currentPage);
             List<Client> clients = clientService.getAllClient();
             List<String> suppliers = supplierService.getAllSupplierName();
             List<Invoice> invoices = page.getContent();
@@ -153,16 +165,19 @@ public class VRController {
     public String filterSortClientSupplierPage(Model model, String client, String supplier, int currentPage, String fullName)
     {
         Page<Invoice> page = invoiceService.filterPageByClientAndSupplier(client, supplier, currentPage);
-        BigDecimal totalAmount = invoiceService.getTotalAmountByClientNameAndSupplierName(client, supplier);
-        BigDecimal supplierReachAmount = invoiceService.getTotalAmountBySupplierName(supplier);
+        BigDecimal totalInvoice = invoiceService.getTotalAmountByClientNameAndSupplierName(client, supplier);
+        BigDecimal totalAmount = invoiceService.getTotalAmountBySupplierName(supplier);
+        BigDecimal totalReceipt = invoiceService.getTotalReceiptBySupplierName(supplier);
+        BigDecimal supplierReachAmount = totalAmount.add(totalReceipt);
         double supplierLimit = supplierService.findLimitByName(supplier);
 
         NumberFormat format = new DecimalFormat("#,##0.00");
-        String formattedTotalAmount = format.format(totalAmount);
+        String formattedTotalAmount = format.format(totalInvoice);
         String formattedSupplierReachAmount = format.format(supplierReachAmount);
         String formattedSupplierLimit = format.format(supplierLimit);
 
-        List<Client> clients = clientService.getAllClient();
+//        List<Client> clients = clientService.getAllClient();
+        List<Invoice> clients = invoiceService.getClientOfSupplier(supplier);
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
 
@@ -259,7 +274,9 @@ public class VRController {
     {
         Page<Invoice> page = invoiceService.filterPageBySupplier(supplier, currentPage);
         BigDecimal totalAmount = invoiceService.getTotalAmountBySupplierName(supplier);
-        BigDecimal supplierReachAmount = invoiceService.getTotalAmountBySupplierName(supplier);
+        BigDecimal totalReceipt = invoiceService.getTotalReceiptBySupplierName(supplier);
+        BigDecimal supplierReachAmount = totalAmount.add(totalReceipt);
+
         double supplierLimit = supplierService.findLimitByName(supplier);
 
         NumberFormat format = new DecimalFormat("#,##0.00");
@@ -267,12 +284,15 @@ public class VRController {
         String formattedSupplierReachAmount = format.format(supplierReachAmount);
         String formattedSupplierLimit = format.format(supplierLimit);
 
-        List<Client> clients = clientService.getAllClient();
+//        List<Client> clients = clientService.getAllClient();
+        List<Invoice> clients = invoiceService.getClientOfSupplier(supplier);
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
+        List<OfficialReceipt> officialReceipts = invoiceService.getSupplierOR(supplier);
 
         int totalPages = page.getTotalPages();
         long totalItems = page.getTotalElements();
+        long receiptItems = officialReceipts.size();
 
         int startPage = Math.max(0, currentPage - 2);
         int endPage = Math.min(totalPages - 1, startPage + 4);
@@ -297,6 +317,8 @@ public class VRController {
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalItems", totalItems);
         model.addAttribute("invoices", invoices);
+        model.addAttribute("officialReceipts", officialReceipts);
+        model.addAttribute("receiptItems", receiptItems);
 
         model.addAttribute("clients", clients);
         model.addAttribute("suppliers", suppliers);
@@ -386,16 +408,19 @@ public class VRController {
     public String filterSupplierSortByDateRange(Model model, String supplier, LocalDate startDate, LocalDate endDate, int currentPage, String fullName)
     {
         Page<Invoice> page = invoiceService.filterPageBySupplierSortByDateRange(supplier, startDate, endDate, currentPage);
-        BigDecimal totalAmount = invoiceService.getTotalAmountBySupplierNameBetweenDateRange(supplier,startDate, endDate);
-        BigDecimal supplierReachAmount = invoiceService.getTotalAmountBySupplierName(supplier);
+        BigDecimal totalInvoice = invoiceService.getTotalAmountBySupplierNameBetweenDateRange(supplier,startDate, endDate);
+        BigDecimal totalAmount = invoiceService.getTotalAmountBySupplierName(supplier);
+        BigDecimal totalReceipt = invoiceService.getTotalReceiptBySupplierName(supplier);
+        BigDecimal supplierReachAmount = totalAmount.add(totalReceipt);
         double supplierLimit = supplierService.findLimitByName(supplier);
 
         NumberFormat format = new DecimalFormat("#,##0.00");
-        String formattedTotalAmount = format.format(totalAmount);
+        String formattedTotalAmount = format.format(totalInvoice);
         String formattedSupplierReachAmount = format.format(supplierReachAmount);
         String formattedSupplierLimit = format.format(supplierLimit);
 
-        List<Client> clients = clientService.getAllClient();
+//        List<Client> clients = clientService.getAllClient();
+        List<Invoice> clients = invoiceService.getClientOfSupplier(supplier);
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
 
@@ -452,16 +477,19 @@ public class VRController {
     public String filterClientSupplierSortByDateRange(Model model, String client, String supplier, LocalDate startDate, LocalDate endDate, int currentPage, String fullName)
     {
         Page<Invoice> page = invoiceService.filterPageByClientAndSupplierSortByDateRange(client, supplier, startDate, endDate, currentPage);
-        BigDecimal totalAmount = invoiceService. getTotalAmountByClientNameAndSupplierNameBetweenDateRange(client, supplier,startDate, endDate);
-        BigDecimal supplierReachAmount = invoiceService.getTotalAmountBySupplierName(supplier);
+        BigDecimal totalInvoice = invoiceService. getTotalAmountByClientNameAndSupplierNameBetweenDateRange(client, supplier,startDate, endDate);
+        BigDecimal totalAmount = invoiceService.getTotalAmountBySupplierName(supplier);
+        BigDecimal totalReceipt = invoiceService.getTotalReceiptBySupplierName(supplier);
+        BigDecimal supplierReachAmount = totalAmount.add(totalReceipt);
         double supplierLimit = supplierService.findLimitByName(supplier);
 
         NumberFormat format = new DecimalFormat("#,##0.00");
-        String formattedTotalAmount = format.format(totalAmount);
+        String formattedTotalAmount = format.format(totalInvoice);
         String formattedSupplierReachAmount = format.format(supplierReachAmount);
         String formattedSupplierLimit = format.format(supplierLimit);
 
-        List<Client> clients = clientService.getAllClient();
+//        List<Client> clients = clientService.getAllClient();
+        List<Invoice> clients = invoiceService.getClientOfSupplier(supplier);
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
 
