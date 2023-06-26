@@ -64,25 +64,30 @@ public class CollectionService {
                 if(clientPaymentTotal < 1){//first time to pay if cp is 0
                     if (roundedAmount < converted_Total){
                         inv.setStatus("In Progress");
+                        System.out.println("status: In Progress");
+                        inv.setClientPayment(clientSumOfPayment);
+                        invoiceRepository.save(inv);
+                    } else{
+                        inv.setStatus("Paid");
+                        System.out.println("status: Paid");
                         inv.setClientPayment(clientSumOfPayment);
                         invoiceRepository.save(inv);
                     }
                 }else{
-                    
+
                     System.out.println("clientSumOfPayment: "+clientSumOfPayment);
                     if(clientSumOfPayment >= converted_Total){
+                        System.out.println("status: Paid");
                         inv.setStatus("Paid");
                         inv.setClientPayment(clientSumOfPayment);
                         invoiceRepository.save(inv);
                     }else{
+                        System.out.println("status: In Progress");
                         inv.setStatus("In Progress");
                         inv.setClientPayment(clientSumOfPayment);
                         invoiceRepository.save(inv);
                     }
                 }
-
-
-
 
                 crInv.setInvoice(invoice);
                 // crInv.setInvoice(invoiceObject);
