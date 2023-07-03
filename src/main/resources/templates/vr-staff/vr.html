@@ -306,6 +306,7 @@
             </tbody>
           </table>
           <button type="button" class="btn btn-info" id="showAllReceipt" style="display: none">Show All OR</button>
+          <button type="button" class="btn btn-info" id="showFiveRowsButton" style="display: none">Show 5 OR</button>
           <table th:if="${isSupplierPresent}" class="table table-sm table-bordered" id="total-table">
             <tbody style="text-align: center; ">
             <tr>
@@ -788,6 +789,14 @@
         $("#showAllReceipt").hide();
       }
     }
+
+     $("#receipt-table tr:gt(" + (maxRowsToShow - 1) + ")").hide();
+
+    $("#showFiveRowsButton").click(function() {
+      $("#myTable tr").hide();
+      $("#myTable tr:lt(" + maxRowsToShow + ")").show();
+      $("#showAllReceipt").show();
+    });
   });
 </script>
 </body>

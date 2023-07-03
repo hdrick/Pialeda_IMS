@@ -11,12 +11,6 @@ $(document).ready(function() {
     var table2 = document.getElementById('receipt-table');
     var table3 = document.getElementById('total-table');
 
-// Check if the tables have data
-    if (table1.rows.length === 0 || table2.rows.length === 0) {
-      // Handle the case when tables are empty
-      alert('Tables are empty. Please populate the tables before downloading.');
-      return;
-    }
     // Convert the tables to worksheet objects
     var worksheet1 = XLSX.utils.table_to_sheet(table1);
     var worksheet2 = XLSX.utils.table_to_sheet(table2);
