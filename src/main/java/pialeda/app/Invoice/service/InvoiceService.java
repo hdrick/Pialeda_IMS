@@ -264,6 +264,11 @@ public class InvoiceService {
     public BigDecimal getTotalAmountByClientNameAndSupplierNameBetweenDateRange(String clientName, String supplierName, LocalDate startDate, LocalDate endDate) {
         return invoiceRepository.sumOfGrandTotalByClientNameAndSupplierNameBetweenDateCreated(clientName, supplierName, startDate, endDate);
     }
+
+    public List<Invoice> getAllInvoiceBySupplier(String supplierName)
+    {
+        return invoiceRepository.findBySupplierName(supplierName);
+    }
     public List<OfficialReceipt> getSupplierOR(String supplierName)
     {
         return officialRecptRepository.findBySupplierName(supplierName);

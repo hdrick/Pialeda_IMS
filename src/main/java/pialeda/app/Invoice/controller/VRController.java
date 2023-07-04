@@ -591,4 +591,11 @@ public class VRController {
         return "vr-staff/vr-invoice";
     }
 
+    @GetMapping("/getAllInvoiceBySupplier")
+    @ResponseBody
+    public List<Invoice> showAllInvoice(@RequestParam("supplierName") String supplierName) {
+        List<Invoice> showInvoice = invoiceService.getAllInvoiceBySupplier(supplierName);
+        return showInvoice;
+    }
+
 }

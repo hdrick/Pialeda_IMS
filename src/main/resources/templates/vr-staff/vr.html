@@ -232,7 +232,7 @@
           </div>
           <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 right-panel">
             <select id="columnSelector" style="position: relative; top: 15px;">
-              <option value="0" selected >Choose Filter</option>
+              <option value="0" selected>Filter</option>
               <option value="1">Supplier</option>
               <option value="2">Client</option>
             </select>
@@ -276,9 +276,7 @@
               <td th:text="${#temporals.format(invoice.dateCreated, 'MMMM d, yyyy')}"></td>
               <td th:text="${invoice.invoiceNum}" class="invoice-num"></td>
             </tr>
-<!--            <tr class="default-column" th:unless="${totalItems == 0 or totalItems >= 7}" th:each="index : ${#numbers.sequence(totalItems + 1, 7)}" style="pointer-events: none!important;">-->
-<!--              <td th:each="item : ${#numbers.sequence(1, 9)}"></td>-->
-<!--            </tr>-->
+
 
             <tr id="not-found" th:unless="${totalItems > 0}" style="text-align: center; position: relative; top: 5em; pointer-events: none!important;">
               <td colspan="9"><h2>No Result Found</h2></td>
@@ -289,6 +287,8 @@
               <b><td colspan="1" th:text="${totalInvoicesAmount}" style=" background-color: #f2f2f2; font-weight: bold;"></td></b>
               <td colspan="2"></td>
             <tr>
+          </table>
+
 <!--            <tr id="supplier-reach" th:if="${isSupplierPresent}" style="pointer-events: none!important; height: 30px;!important">-->
 <!--              <td colspan="4"></td>-->
 <!--              <th colspan="2" style=" background-color: green!important; color: #fff!important">Supplier Reach</th>-->
@@ -302,7 +302,7 @@
 <!--              <td colspan="2"></td>-->
 <!--            <tr>-->
 <!--            </tbody>-->
-          </table>
+<!--          </table>-->
 <!--          <table th:if="${receiptItems > 0}" class="table table-sm table-bordered" id="receipt-table">-->
 <!--            <thead class="table-dark">-->
 <!--            <tr>-->
@@ -331,12 +331,11 @@
 <!--            </tr>-->
 <!--            </tbody>-->
 <!--          </table>-->
-          <button type="button" class="btn btn-info" id="showAllReceipt" style="display: none">Show All OR</button>
-          <button type="button" class="btn btn-info" id="showFiveRowsButton" style="display: none">Show 5 OR</button>
+
           <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" id="pager">
               <div id="pagination">
-                <div th:if="${totalPages > 0 || totalItems > 0}" style="font-size: 13px; position: absolute; left: 1px; bottom: 1px;">
+                <div th:if="${totalPages > 0 || totalItems > 0}"  id="totalPages" style="font-size: 13px; position: absolute; left: 1px; bottom: 1px;">
                   <strong> Total Items: [[${totalItems}]] <br> <em>  Page [[${currentPage}]] of [[${totalPages}]] </em> </strong>
                 </div>
                 <div class="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12"
@@ -512,6 +511,8 @@
                   </ul>
                 </div>
                 <div th:if="${isSupplierPresent && totalItems > 0}" style="font-size: 14px; position: absolute; right: 1px; bottom: 1px;">
+                  <button th:if="${totalItems > 7}" id="show-btn" type="button" class="btn btn-secondary">Show All</button>
+                  <button th:if="${totalItems > 7}" id="hide-btn" type="button" class="btn btn-secondary" style="display: none">Show Default</button>
                   <button id="download-btn" type="button" class="btn btn-primary">Download</button>
                 </div>
               </div>
