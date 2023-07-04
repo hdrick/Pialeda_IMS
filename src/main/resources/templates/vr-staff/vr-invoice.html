@@ -398,110 +398,110 @@ font-size: 35px!important;
                 </div>
 
             </div>
-            <div class="officialReceipt-con" id="print-content" th:if="${noCollectionReceipt}">
-                <div class="row-1">
-                    <table border="1">
-                        <tbody><tr>
-                            <td colspan="3" style="text-align: center;">IN SETTLEMENT OF THE FOLLOWING:</td>
-                        </tr>
-                        <tr>
-                            <td colspan="1" style="text-align: center;">INVOICE NO.</td>
-                            <td id="amt" colspan="2" style="text-align: center;">AMOUNT</td>
-                        </tr>
-                        <!-- Start invoice number input -->
-                        <tr>
-                            <td class="amt-r1 supplier-name" ><input name="inv1" type="text" th:value="${collectionReceipt.invoice}" readonly></td>
-                            <td class="amt-r1"><input name="inv1-amt"  th:value="${collectionReceipt.invoiceAmount}" readonly class="myNumber" type="text"></td>
-                            <td class="amt-r3"><input readonly=""></td>
-                        </tr>
-                        <!-- End invoice number input -->
-                        <tr>
-                            <td></td>
-                            <td><input name="totalSales" id="total-sales" type="hidden" style="color:red; font-weight: bolder;" readonly=""></td>
-                            <td class="amt-r3"><input></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td><input name="addVat" id="add-vat" type="text" readonly=""></td>
-                            <td class="amt-r3"><input></td>
-                        </tr>
-                        <tr>
-                            <td style="font-size: 10px;"></td>
-                            <td><input name="lwTax" id="lw-tax" type="text" readonly=""></td>
-                            <td class="amt-r3"><input></td>
-                        </tr>
-                        <tr>
-                            <td>Amount Due</td>
-                            <td style="display: flex; border:0; justify-content: center;">₱
+<!--            <div class="officialReceipt-con" id="print-content" th:if="${noCollectionReceipt}">-->
+<!--                <div class="row-1">-->
+<!--                    <table border="1">-->
+<!--                        <tbody><tr>-->
+<!--                            <td colspan="3" style="text-align: center;">IN SETTLEMENT OF THE FOLLOWING:</td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td colspan="1" style="text-align: center;">INVOICE NO.</td>-->
+<!--                            <td id="amt" colspan="2" style="text-align: center;">AMOUNT</td>-->
+<!--                        </tr>-->
+<!--                        &lt;!&ndash; Start invoice number input &ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td class="amt-r1 supplier-name" ><input name="inv1" type="text" th:value="${collectionReceipt.invoice}" readonly></td>-->
+<!--                            <td class="amt-r1"><input name="inv1-amt"  th:value="${collectionReceipt.invoiceAmount}" readonly class="myNumber" type="text"></td>-->
+<!--                            <td class="amt-r3"><input readonly=""></td>-->
+<!--                        </tr>-->
+<!--                        &lt;!&ndash; End invoice number input &ndash;&gt;-->
+<!--                        <tr>-->
+<!--                            <td></td>-->
+<!--                            <td><input name="totalSales" id="total-sales" type="hidden" style="color:red; font-weight: bolder;" readonly=""></td>-->
+<!--                            <td class="amt-r3"><input></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td></td>-->
+<!--                            <td><input name="addVat" id="add-vat" type="text" readonly=""></td>-->
+<!--                            <td class="amt-r3"><input></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td style="font-size: 10px;"></td>-->
+<!--                            <td><input name="lwTax" id="lw-tax" type="text" readonly=""></td>-->
+<!--                            <td class="amt-r3"><input></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td>Amount Due</td>-->
+<!--                            <td style="display: flex; border:0; justify-content: center;">₱-->
 
-                                <input name="amtDue" id="amt-due" type="text" style="color:red; font-weight: bolder;" readonly th:value="${collectionReceiptDetails.getAmountDue()}"></td>
-                            <td class="amt-r3"><input></td>
-                        </tr>
-                        <tr>
-                            <td>1% EWT</td>
-                            <td><input type="text" name="ewt" id="ewt" readonly th:value="${collectionReceiptDetails.getEwt()}"></td>
-                            <td class="amt-r3"><input></td>
-                        </tr>
-                        <tr>
-                            <td>Total:</td>
-                            <td style="display: flex; border:0; justify-content: center;">₱<input type="text" name="total" id="total" readonly th:value="${collectionReceiptDetails.getTotal()}" style="color:red; font-weight: bolder;"></td>
-                            <td class="amt-r3"><input></td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 5px;"></td>
-                            <td></td>
-                            <td class="amt-r3"></td>
-                        </tr>
-                        <tr>
-                            <td colspan="3" style="text-align: center;">PAYMENT IN FORM OF</td>
-                        </tr>
-                        <tr>
-                            <td>CASH</td>
-                            <td colspan="2"><input name="cash" readonly th:value="${collectionReceiptDetails.getCash()}"></td>
+<!--                                <input name="amtDue" id="amt-due" type="text" style="color:red; font-weight: bolder;" readonly th:value="${collectionReceiptDetails.getAmountDue()}"></td>-->
+<!--                            <td class="amt-r3"><input></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td>1% EWT</td>-->
+<!--                            <td><input type="text" name="ewt" id="ewt" readonly th:value="${collectionReceiptDetails.getEwt()}"></td>-->
+<!--                            <td class="amt-r3"><input></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td>Total:</td>-->
+<!--                            <td style="display: flex; border:0; justify-content: center;">₱<input type="text" name="total" id="total" readonly th:value="${collectionReceiptDetails.getTotal()}" style="color:red; font-weight: bolder;"></td>-->
+<!--                            <td class="amt-r3"><input></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td style="padding: 5px;"></td>-->
+<!--                            <td></td>-->
+<!--                            <td class="amt-r3"></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td colspan="3" style="text-align: center;">PAYMENT IN FORM OF</td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td>CASH</td>-->
+<!--                            <td colspan="2"><input name="cash" readonly th:value="${collectionReceiptDetails.getCash()}"></td>-->
 
-                        </tr>
-                        <tr>
-                            <td>CHECK/NO.</td>
-                            <td colspan="2"><input name="chckNo" readonly th:value="${collectionReceiptDetails.getCheckNo()}"></td>
-                        </tr>
-                        <tr>
-                            <td>AMOUNT</td>
-                            <td colspan="2" style="display: flex; border:0;">₱<input name="crAmount" style="color:red; font-weight: bolder;" readonly th:value="${collectionReceiptDetails.getAmount()}"></td>
-                        </tr>
-                        </tbody></table>
-                </div>
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td>CHECK/NO.</td>-->
+<!--                            <td colspan="2"><input name="chckNo" readonly th:value="${collectionReceiptDetails.getCheckNo()}"></td>-->
+<!--                        </tr>-->
+<!--                        <tr>-->
+<!--                            <td>AMOUNT</td>-->
+<!--                            <td colspan="2" style="display: flex; border:0;">₱<input name="crAmount" style="color:red; font-weight: bolder;" readonly th:value="${collectionReceiptDetails.getAmount()}"></td>-->
+<!--                        </tr>-->
+<!--                        </tbody></table>-->
+<!--                </div>-->
 
 
-                <div class="row-2">
-                    <div class="r2-header">
-                        <div class="d-flex align-items-center hstyle" style="flex-direction: column; justify-content: center;">
-                            <!--                            <h2 id="logo-suppName" class="mt-2 mx-4" contenteditable="true" style="font-size: 10px; width: 10%; font-weight: bolder; font-style: italic;">SUPPLIER NAME</h2>-->
-                            <div id="supp-details">
-                                <strong><label class="supplier-name" th:text="${supplierDetails.getName()}"></label></strong>
-                                <label th:text="${supplierDetails.getAddress()}"></label>
-                                <label th:text="${supplierDetails.getCityAddress()}"></label>
-                                <label th:text="${supplierDetails.getTin()}"></label>
-                            </div>
-                            <div style="font-weight: bolder;position: absolute;right: 65px;">
-                                <div id="s-invo-con">
-                                    <label id="or-number" style="color:red;">520197</label>
-                                    <input type="hidden" name="orNumber" id="invoice-number-input" value="520197">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="r2-body">
-                        <div id="hdate" class="con"><h5>COLLECTTION RECEIPT</h5> <div><label>Date</label><input type="text" id="orDate" name="officialReceiptDate" readonly th:value="${collectionReceiptDetails.getCollectionReceiptDate()}"></div></div>
-                        <div class="con"><label>Received from</label><input id="c-name" name="recvFrom" readonly th:value="${collectionReceiptDetails.getRecvFrom()}"></div>
-                        <div class="con"><label>and Address at</label><input id="c-address" name="clientAddress" readonly th:value="${collectionReceiptDetails.getClientAddress()}"></div>
-                        <div class="con"><label>with TIN</label><input id="tin" name="clientTin" readonly th:value="${collectionReceiptDetails.getClientTin()}"><label>engaged in the</label></div>
-                        <div class="con"><label>Bus. Style of from</label><input id="busStyle" readonly th:value="${collectionReceiptDetails.getClientBus()}" name="clientBus" value=""><label>,the sum of</label></div>
-                        <div class="con"><input id="sumOf" name="clientSumOf" readonly th:value="${collectionReceiptDetails.getClientSumOf()}"><label>Pesos</label></div>
-                        <div class="con"><label>(₱<input type="text" id="clientPayment" name="clientPayment" step="0.01" style="color: red;" readonly th:value="${collectionReceiptDetails.getAmount()}">) in full/partial payment for</label> <input id="paymentFor" name="partialPaymentFor" readonly th:value="${collectionReceiptDetails.getPartialPaymentFor()}"></div>
-                    </div>
+<!--                <div class="row-2">-->
+<!--                    <div class="r2-header">-->
+<!--                        <div class="d-flex align-items-center hstyle" style="flex-direction: column; justify-content: center;">-->
+<!--                            &lt;!&ndash;                            <h2 id="logo-suppName" class="mt-2 mx-4" contenteditable="true" style="font-size: 10px; width: 10%; font-weight: bolder; font-style: italic;">SUPPLIER NAME</h2>&ndash;&gt;-->
+<!--                            <div id="supp-details">-->
+<!--                                <strong><label class="supplier-name" th:text="${supplierDetails.getName()}"></label></strong>-->
+<!--                                <label th:text="${supplierDetails.getAddress()}"></label>-->
+<!--                                <label th:text="${supplierDetails.getCityAddress()}"></label>-->
+<!--                                <label th:text="${supplierDetails.getTin()}"></label>-->
+<!--                            </div>-->
+<!--                            <div style="font-weight: bolder;position: absolute;right: 65px;">-->
+<!--                                <div id="s-invo-con">-->
+<!--                                    <label id="or-number" style="color:red;">520197</label>-->
+<!--                                    <input type="hidden" name="orNumber" id="invoice-number-input" value="520197">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="r2-body">-->
+<!--                        <div id="hdate" class="con"><h5>COLLECTTION RECEIPT</h5> <div><label>Date</label><input type="text" id="orDate" name="officialReceiptDate" readonly th:value="${collectionReceiptDetails.getCollectionReceiptDate()}"></div></div>-->
+<!--                        <div class="con"><label>Received from</label><input id="c-name" name="recvFrom" readonly th:value="${collectionReceiptDetails.getRecvFrom()}"></div>-->
+<!--                        <div class="con"><label>and Address at</label><input id="c-address" name="clientAddress" readonly th:value="${collectionReceiptDetails.getClientAddress()}"></div>-->
+<!--                        <div class="con"><label>with TIN</label><input id="tin" name="clientTin" readonly th:value="${collectionReceiptDetails.getClientTin()}"><label>engaged in the</label></div>-->
+<!--                        <div class="con"><label>Bus. Style of from</label><input id="busStyle" readonly th:value="${collectionReceiptDetails.getClientBus()}" name="clientBus" value=""><label>,the sum of</label></div>-->
+<!--                        <div class="con"><input id="sumOf" name="clientSumOf" readonly th:value="${collectionReceiptDetails.getClientSumOf()}"><label>Pesos</label></div>-->
+<!--                        <div class="con"><label>(₱<input type="text" id="clientPayment" name="clientPayment" step="0.01" style="color: red;" readonly th:value="${collectionReceiptDetails.getAmount()}">) in full/partial payment for</label> <input id="paymentFor" name="partialPaymentFor" readonly th:value="${collectionReceiptDetails.getPartialPaymentFor()}"></div>-->
+<!--                    </div>-->
 
-                </div>
-            </div>
+<!--                </div>-->
+<!--            </div>-->
 
             <div class="invoice-footer">
                 <h7 id="date-time"></h7>

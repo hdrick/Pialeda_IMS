@@ -23,7 +23,7 @@ $(function() {
     $('tbody').on('click','tr', function() {
     event.preventDefault();
     if ($(this).hasClass('active')) {
-        var invoiceNum = $(this).find('td:first-child').text();
+        var invoiceNum = $(this).find('td.invoice-num').text();
         var newTab = window.open('', 'invoiceDetails', 'width=800,height=600');
         newTab.location.href = '/vr/user/invoice/invoiceDetails/' + invoiceNum;
       }

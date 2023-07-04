@@ -558,32 +558,35 @@ public class VRController {
         Supplier supplierDetails = supplierService.findByName(invoiceDetails.getSupplierName());
         Client clientDetails = clientService.findByName(invoiceDetails.getClientName());
         List<InvoiceProductInfo> invoicePurchaseProducts = invoiceService.getAllProdByInvNum(invoiceDetails.getInvoiceNum());
-        CollectionReceiptInvoices collectionReceipt;
-        CollectionReceipt collectionReceiptDetails;
+//        CollectionReceiptInvoices collectionReceipt;
+//        CollectionReceipt collectionReceiptDetails;
 
+//
+//        if (invoiceDetails.getStatus().equals("Unpaid")) {
+//
+//            model.addAttribute("noCollectionReceipt", false);
+//            model.addAttribute("supplierDetails", supplierDetails);
+//            model.addAttribute("invoiceDetails", invoiceDetails);
+//            model.addAttribute("clientDetails", clientDetails);
+//            model.addAttribute("invoicePurchaseProducts", invoicePurchaseProducts);
+//        }
+//        else
+//        {
+//            collectionReceipt = collectionService.getCollectionReceiptId(invoiceDetails.getInvoiceNum());
+//            collectionReceiptDetails = collectionService.getCollectionReceiptDetails(collectionReceipt.getCollectionReceiptNum());
+//            model.addAttribute("collectionReceiptDetails", collectionReceiptDetails);
+//            model.addAttribute("collectionReceipt", collectionReceipt);
+//            model.addAttribute("supplierDetails", supplierDetails);
+//            model.addAttribute("invoiceDetails", invoiceDetails);
+//            model.addAttribute("clientDetails", clientDetails);
+//            model.addAttribute("invoicePurchaseProducts", invoicePurchaseProducts);
+//            model.addAttribute("noCollectionReceipt", true);
+//        }
 
-        if (invoiceDetails.getStatus().equals("Unpaid")) {
-
-            model.addAttribute("noCollectionReceipt", false);
-            model.addAttribute("supplierDetails", supplierDetails);
-            model.addAttribute("invoiceDetails", invoiceDetails);
-            model.addAttribute("clientDetails", clientDetails);
-            model.addAttribute("invoicePurchaseProducts", invoicePurchaseProducts);
-        }
-        else
-        {
-            collectionReceipt = collectionService.getCollectionReceiptId(invoiceDetails.getInvoiceNum());
-            collectionReceiptDetails = collectionService.getCollectionReceiptDetails(collectionReceipt.getCollectionReceiptNum());
-            model.addAttribute("collectionReceiptDetails", collectionReceiptDetails);
-            model.addAttribute("collectionReceipt", collectionReceipt);
-            model.addAttribute("supplierDetails", supplierDetails);
-            model.addAttribute("invoiceDetails", invoiceDetails);
-            model.addAttribute("clientDetails", clientDetails);
-            model.addAttribute("invoicePurchaseProducts", invoicePurchaseProducts);
-            model.addAttribute("noCollectionReceipt", true);
-        }
-
-
+        model.addAttribute("supplierDetails", supplierDetails);
+        model.addAttribute("invoiceDetails", invoiceDetails);
+        model.addAttribute("clientDetails", clientDetails);
+        model.addAttribute("invoicePurchaseProducts", invoicePurchaseProducts);
 
         return "vr-staff/vr-invoice";
     }
