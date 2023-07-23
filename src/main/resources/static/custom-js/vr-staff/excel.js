@@ -6,22 +6,32 @@
 
 $(document).ready(function() {
   $('#download-btn').click(function() {
-    // Get the table elements
+    // Get the table element
     var table1 = document.getElementById('invoice-table');
-//    var table2 = document.getElementById('receipt-table');
 
-    // Convert the tables to worksheet objects
-    var worksheet1 = XLSX.utils.table_to_sheet(table1);
+    // Create a new table to store visible rows and columns
+    var visibleTable = document.createElement('table');
+    visibleTable.className = table1.className; // Copy the classes if needed
+
+    // Copy visible rows and columns to the new table
+    $(table1).find('tr').each(function() {
+      if ($(this).is(':visible')) {
+        var newRow = visibleTable.insertRow();
+        $(this).find('td, th').each(function() {
+          if ($(this).is(':visible')) {
+            var newCell = newRow.insertCell();
+            newCell.innerHTML = $(this).html();
+          }
+        });
+      }
+    });
+
+    // Convert the new table to a worksheet object
+    var worksheet1 = XLSX.utils.table_to_sheet(visibleTable);
 
     // Create a workbook with the worksheet(s)
     var workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet1, 'Invoice');
-
-    // Check if table2 is not null
-//    if (table2 !== null) {
-//      var worksheet2 = XLSX.utils.table_to_sheet(table2);
-//      XLSX.utils.book_append_sheet(workbook, worksheet2, 'OR');
-//    }
 
     // Convert the workbook to a binary string
     var binaryString = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });

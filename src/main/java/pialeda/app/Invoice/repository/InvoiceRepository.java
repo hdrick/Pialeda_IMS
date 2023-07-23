@@ -33,6 +33,8 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
     Invoice findByInvoiceNum(String invNum);
     Invoice findByPoNum(String poNum);
     List<Invoice> findClientNameBySupplierName(String name);
+    @Query("SELECT DISTINCT i.clientName FROM Invoice i WHERE i.supplierName = :supplierName")
+    List<String> findDistinctClientNameBySupplierName(@Param("supplierName") String supplierName, Sort sort);
     Page<Invoice> findByClientNameContainingIgnoreCase(String name, Pageable pageable);
     Page<Invoice> findByClientNameAndDateCreatedContainingIgnoreCase(String name, String month, Pageable pageable);
     Page<Invoice> findBySupplierNameContainingIgnoreCase(String name, Pageable pageable);

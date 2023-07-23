@@ -68,8 +68,10 @@ function formatNumber(input) {
     
     ewtInput.value = ewt.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     let newTotal = totalAmountNoComma - ewt; 
-    // totalInput.value = newTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    totalInput.value = newTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
     displayEwt.innerHTML = inputElement.value+"%";
+
+    convertNumberToWords();
   }
 
   function clearFields(){
@@ -106,12 +108,77 @@ function formatNumber(input) {
             $('#add-vat').val(null);
             $('#lw-tax').val(null);
             $('#ewt').val(null);
+
+            convertNumberToWords();
             
 
         }
     });
   }
+ function convertNumberToWords() {
+      // Get the input value
+      var amountInput = document.getElementById("total");
+      var clientPaymentInput = document.getElementById("clientPayment");
+      var amount = parseFloat(amountInput.value);
+      // Set the converted value to the sumOf input field
+      var sumOfInput = document.getElementById("sumOf");
 
+      // Check for null input
+      if (amountInput === null || isNaN(amount)) {
+        return sumOfInput.value = "please input in numbers only";
+      }
+
+      // Split the amount into whole and decimal parts
+      var wholePart = Math.floor(amount);
+      var decimalPart = Math.floor((amount % 1) * 100);
+
+      // Convert the whole and decimal parts to words
+      var wholePartWords = convertToWords(wholePart);
+      var decimalPartWords = convertToWords(decimalPart);
+
+
+
+      var output = wholePartWords;
+      if (decimalPart > 0) {
+        output += " and " + decimalPartWords + " cents";
+      }
+      // Update the value of clientPayment input field
+      clientPaymentInput.value = amount;
+      sumOfInput.value = output;
+    }
+    function convertToWords(number) {
+          // Define the arrays for units, tens, and scales
+          var units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+            'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+            'eighteen', 'nineteen'];
+
+          var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+          var scales = ['', 'thousand', 'million', 'billion'];
+
+          // Convert the number to words
+          var words = '';
+
+          if (number === 0) {
+            words = 'zero';
+          } else {
+            var count = 0;
+
+            do {
+              var hundreds = number % 1000;
+
+              if (hundreds !== 0) {
+                var hundredsWords = convertToWordsLessThanOneThousand(hundreds);
+                words = hundredsWords + ' ' + scales[count] + ' ' + words;
+              }
+
+              count++;
+              number = Math.floor(number / 1000);
+            } while (number > 0);
+          }
+
+          return words.trim();
+        }
 
 //   SUPPLIER AND CLIENT INFO
 function getSupplierInfo(){

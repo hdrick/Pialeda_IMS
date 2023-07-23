@@ -177,7 +177,7 @@ public class VRController {
         String formattedSupplierLimit = format.format(supplierLimit);
 
 //        List<Client> clients = clientService.getAllClient();
-        List<Invoice> clients = invoiceService.getClientOfSupplier(supplier);
+        List<String> clients = invoiceService.getClientOfSupplier(supplier);
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
 
@@ -285,7 +285,7 @@ public class VRController {
         String formattedSupplierLimit = format.format(supplierLimit);
 
 //        List<Client> clients = clientService.getAllClient();
-        List<Invoice> clients = invoiceService.getClientOfSupplier(supplier);
+        List<String> clients = invoiceService.getClientOfSupplier(supplier);
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
         List<OfficialReceipt> officialReceipts = invoiceService.getSupplierOR(supplier);
@@ -420,7 +420,7 @@ public class VRController {
         String formattedSupplierLimit = format.format(supplierLimit);
 
 //        List<Client> clients = clientService.getAllClient();
-        List<Invoice> clients = invoiceService.getClientOfSupplier(supplier);
+        List<String> clients = invoiceService.getClientOfSupplier(supplier);
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
 
@@ -489,7 +489,7 @@ public class VRController {
         String formattedSupplierLimit = format.format(supplierLimit);
 
 //        List<Client> clients = clientService.getAllClient();
-        List<Invoice> clients = invoiceService.getClientOfSupplier(supplier);
+        List<String> clients = invoiceService.getClientOfSupplier(supplier);
         List<String> suppliers = supplierService.getAllSupplierName();
         List<Invoice> invoices = page.getContent();
 

@@ -33,16 +33,45 @@
         flex-wrap: wrap;
         align-items: stretch;
     }
+
     .third-panel
     {
         font-size: 13px;
         padding-left: 18px;
     }
-    .left-panel select
+    .select-container
+    {
+       position: relative;
+       width: 100%;
+    }
+    #filterBySupplier
     {
         width: 150px;
         margin-right: 24px;
         border: none;
+        position: absolute;
+        z-index: 999;
+    }
+    #filterByClient
+    {
+        width: 150px;
+        max-height: 100px;
+        overflow-y:auto;
+        margin-right: 24px;
+        border: none;
+        position: absolute;
+        z-index: 999;
+        left: 198px;
+    }
+    #filterBySupplier option:hover
+    {
+        background-color: #007bff;
+        color: white;
+    }
+    #filterByClient option:hover
+    {
+        background-color: #007bff;
+        color: white;
     }
     .search-text
     {
@@ -172,6 +201,7 @@
         background-color: #fff;
         padding: 10px;
     }
+
     table.tg {table-layout: fixed; width: 100%; margin-bottom: 15px}
     .tg  {border-collapse:collapse;border-spacing:0;}
     .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
@@ -214,25 +244,27 @@
       <div class="content-body">
         <div class="row">
           <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 left-panel">
-            <select class="form-select" id="filterBySupplier">
-              <option value="default" selected>Filter by Supplier</option>
-              <option th:each="supplier : ${suppliers}" th:value="${supplier}" th:text="${supplier}"
-                      th:selected="${selectedSupplier == supplier}">
-              </option>
-            </select>
-            <select class="form-select" id="filterByClient">
-              <option value="default" selected>Filter by Client</option>
-              <option th:if="${isSupplierPresent}" th:each="client : ${clients}" th:value="${client.clientName}" th:text="${client.clientName}"
-                      th:selected="${selectedClient == client.clientName}">
-              </option>
-              <option th:unless="${isSupplierPresent}" th:each="client : ${clients}" th:value="${client.name}" th:text="${client.name}"
-                      th:selected="${selectedClient == client.name}">
-              </option>
-            </select>
+            <div class="select-container">
+              <select class="form-select" id="filterBySupplier" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                <option value="default" selected>Select Supplier</option>
+                <option th:each="supplier : ${suppliers}" th:value="${supplier}" th:text="${supplier}"
+                        th:selected="${selectedSupplier == supplier}">
+                </option>
+              </select>
+              <select class="form-select" id="filterByClient" onfocus='this.size=5;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+                <option value="default" selected>Select Client</option>
+                <option th:if="${isSupplierPresent}" th:each="client : ${clients}" th:value="${client}" th:text="${client}"
+                        th:selected="${selectedClient == client}">
+                </option>
+                <option th:unless="${isSupplierPresent}" th:each="client : ${clients}" th:value="${client.name}" th:text="${client.name}"
+                        th:selected="${selectedClient == client.name}">
+                </option>
+              </select>
+            </div>
           </div>
           <div class="col-xxl-6 col-xl-6 col-lg-6 col-md-6 col-sm-6 right-panel">
-            <select id="columnSelector" style="position: relative; top: 15px;">
-              <option value="0" selected>Filter</option>
+            <select id="columnSelector" style="position: relative; top: 8px; border: none; font-size: 13px">
+              <option value="0" selected>Filter Column</option>
               <option value="1">Supplier</option>
               <option value="2">Client</option>
             </select>
@@ -259,9 +291,9 @@
               <th class="supplier-info">Supplier TIN</th>
               <th class="supplier-info">Supplier Name</th>
               <th class="supplier-info">Supplier Address</th>
-              <th>Total</th>
               <th>Date</th>
               <th>Invoice #</th>
+              <th>Total</th>
             </tr>
             </thead>
             <tbody id="table-body">
@@ -272,9 +304,9 @@
               <td th:text="${invoice.supplierTin}" class="supplier-info"></td>
               <td th:text="${invoice.supplierName}" class="supplier-info"></td>
               <td th:text="${invoice.supplierAddress}" class="supplier-info"></td>
-              <td th:text="${invoice.grandTotal}"></td>
               <td th:text="${#temporals.format(invoice.dateCreated, 'MMMM d, yyyy')}"></td>
               <td th:text="${invoice.invoiceNum}" class="invoice-num"></td>
+              <td th:text="${invoice.grandTotal}"></td>
             </tr>
 
 
@@ -282,10 +314,15 @@
               <td colspan="9"><h2>No Result Found</h2></td>
             </tr>
             <tr id="invoices-total" th:if="${isSupplierPresent}" style="pointer-events: none!important; height: 30px;!important">
-              <td colspan="4"></td>
-              <th colspan="2" style=" background-color: #343a40!important; color: #fff!important">Invoices Total Amount</th>
-              <b><td colspan="1" th:text="${totalInvoicesAmount}" style=" background-color: #f2f2f2; font-weight: bold;"></td></b>
-              <td colspan="2"></td>
+              <td colspan="1" class="colspan-blank-1"></td>
+              <td colspan="1" class="colspan-blank-2"></td>
+              <td colspan="1" class="colspan-blank-3"></td>
+              <td colspan="1" class="colspan-blank-4"></td>
+              <td colspan="1" class="colspan-blank-5"></td>
+              <td colspan="1" class="colspan-blank-6"></td>
+              <td colspan="1" class="colspan-blank-7"></td>
+              <th colspan="1" style=" background-color: #ad1e1e!important; color: #fff!important">Invoices Total</th>
+              <b><td colspan="1" th:text="${totalInvoicesAmount}" style=" background-color: #f2f2f2; color: #ff0000!important; font-weight: bold;"></td></b>
             <tr>
           </table>
 
@@ -579,12 +616,10 @@
   <script>
   $(document).ready(function() {
   var invoice1 = $('#invoices-total td:first');
-  var reach1 = $('#supplier-reach td:first');
-  var limit1 = $('#supplier-limit td:first');
-
   var invoice2 = $('#invoices-total th:first');
-  var reach2 = $('#supplier-reach th:first');
-  var limit2 = $('#supplier-limit th:first');
+  var dummyColumn1 = $('.colspan-blank-4');
+  var dummyColumn2 = $('.colspan-blank-5');
+  var dummyColumn3 = $('.colspan-blank-6');
 
     $('#columnSelector').on('change', function() {
     event.preventDefault();
@@ -592,39 +627,24 @@
         if (selectedOption == '1') {
           $('.client-info').hide();
           $('.supplier-info').show();
-          invoice1.attr('colspan', '2');
-          reach1.attr('colspan', '2');
-          limit1.attr('colspan', '2');
-
-          invoice2.attr('colspan', '1');
-          reach2.attr('colspan', '1');
-          limit2.attr('colspan', '1');
+          dummyColumn1.hide();
+          dummyColumn2.hide();
+          dummyColumn3.hide();
 
         } else if (selectedOption == '2') {
           $('.client-info').show();
           $('.supplier-info').hide();
-
-          invoice1.attr('colspan', '2');
-          reach1.attr('colspan', '2');
-          limit1.attr('colspan', '2');
-
-          invoice2.attr('colspan', '1');
-          reach2.attr('colspan', '1');
-          limit2.attr('colspan', '1');
+          dummyColumn1.hide();
+          dummyColumn2.hide();
+          dummyColumn3.hide();
 
         }
          else if (selectedOption == '0') {
           $('.client-info').show();
           $('.supplier-info').show();
-
-          invoice1.attr('colspan', '4');
-          reach1.attr('colspan', '4');
-          limit1.attr('colspan', '4');
-
-          invoice2.attr('colspan', '2');
-          reach2.attr('colspan', '2');
-          limit2.attr('colspan', '2');
-
+          dummyColumn1.show();
+          dummyColumn2.show();
+          dummyColumn3.show();
         }
       });
   });
@@ -835,36 +855,5 @@
 
 
 </script>
-<!--  <script>-->
-<!--  $(document).ready(function() {-->
-<!--    var table = document.getElementById("receipt-table");-->
-<!--    var rows = table.getElementsByTagName("tr");-->
-<!--    var maxRowsToShow = 5;-->
-
-<!--    if (rows.length <= maxRowsToShow) {-->
-<!--      $("#showAllReceipt").hide();-->
-<!--    } else {-->
-<!--      for (var i = maxRowsToShow; i < rows.length; i++) {-->
-<!--        $(rows[i]).hide();-->
-<!--      }-->
-<!--      if (rows.length > maxRowsToShow) {-->
-<!--        $("#showAllReceipt").click(function() {-->
-<!--          $(rows).show();-->
-<!--          $(this).hide();-->
-<!--        });-->
-<!--      } else {-->
-<!--        $("#showAllReceipt").hide();-->
-<!--      }-->
-<!--    }-->
-
-<!--     $("#receipt-table tr:gt(" + (maxRowsToShow - 1) + ")").hide();-->
-
-<!--    $("#showFiveRowsButton").click(function() {-->
-<!--      $("#myTable tr").hide();-->
-<!--      $("#myTable tr:lt(" + maxRowsToShow + ")").show();-->
-<!--      $("#showAllReceipt").show();-->
-<!--    });-->
-<!--  });-->
-<!--</script>-->
 </body>
 </html>

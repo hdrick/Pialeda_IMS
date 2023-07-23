@@ -186,9 +186,14 @@ public class InvoiceService {
         Pageable pageable = PageRequest.of(pageNumber -1, 7);
         return invoiceRepository.searchByKeyword(keyword, pageable);
     }
-    public List<Invoice> getClientOfSupplier(String supplierName)
+    public List<String> getClientOfSupplier(String supplierName)
     {
-        return invoiceRepository.findClientNameBySupplierName(supplierName);
+//        return invoiceRepository.findClientNameBySupplierName(supplierName);
+        // Create a Sort object to specify the sorting criteria
+        Sort sort = Sort.by(Sort.Direction.ASC, "clientName");
+
+        // Call the repository method with the sorting criteria
+        return invoiceRepository.findDistinctClientNameBySupplierName(supplierName, sort);
     }
     public Page<Invoice> filterPageByClient(String name, int pageNumber)
     {
