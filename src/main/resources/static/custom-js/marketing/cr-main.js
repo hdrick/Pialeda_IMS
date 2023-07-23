@@ -59,7 +59,7 @@ function formatNumber(input) {
 
     // let totalAmount = getTotalAmount();
     const totalAmount = document.getElementById("amt-due").value;
-    let valueWithCommas = totalAmount; // e.g. "1,200.00"
+    let valueWithCommas = totalInput.value; // e.g. "1,200.00"
     let totalAmountNoComma = valueWithCommas.replace(/,/g, ''); // e.g. "1200.00"
     console.log("totalAmount: "+totalAmountNoComma);
 
@@ -67,11 +67,12 @@ function formatNumber(input) {
     let ewt = result;
     
     ewtInput.value = ewt.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-    let newTotal = totalAmountNoComma - ewt; 
-    totalInput.value = newTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    let newTotal = totalAmountNoComma - ewt;
+    let cleanTotal = newTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+    totalInput.value = cleanTotal;
     displayEwt.innerHTML = inputElement.value+"%";
 
-    convertNumberToWords();
+    convertNumberToWords(newTotal);
   }
 
   function clearFields(){
@@ -109,76 +110,125 @@ function formatNumber(input) {
             $('#lw-tax').val(null);
             $('#ewt').val(null);
 
-            convertNumberToWords();
+            convertNumberToWords(data.grandTotal);
             
 
         }
     });
   }
- function convertNumberToWords() {
-      // Get the input value
-      var amountInput = document.getElementById("total");
-      var clientPaymentInput = document.getElementById("clientPayment");
-      var amount = parseFloat(amountInput.value);
-      // Set the converted value to the sumOf input field
-      var sumOfInput = document.getElementById("sumOf");
+     function convertNumberToWords(amount) {
+       // Get the input value
+       var amountInput = document.getElementById("total");
+       var clientPaymentInput = document.getElementById("clientPayment");
+       var amount = parseFloat(amount);
+       // Set the converted value to the sumOf input field
+       var sumOfInput = document.getElementById("sumOf");
 
-      // Check for null input
-      if (amountInput === null || isNaN(amount)) {
-        return sumOfInput.value = "please input in numbers only";
-      }
+       // Check for null input
+       if (amountInput === null || isNaN(amount)) {
+         return sumOfInput.value = "please input in numbers only";
+       }
 
-      // Split the amount into whole and decimal parts
-      var wholePart = Math.floor(amount);
-      var decimalPart = Math.floor((amount % 1) * 100);
+       // Split the amount into whole and decimal parts
+       var wholePart = Math.floor(amount);
+       var decimalPart = Math.round((amount % 1) * 100);
 
-      // Convert the whole and decimal parts to words
-      var wholePartWords = convertToWords(wholePart);
-      var decimalPartWords = convertToWords(decimalPart);
+       // Convert the whole and decimal parts to words
+       var wholePartWords = convertToWords(wholePart);
+       var decimalPartWords = convertToWordsLessThanOneHundred(decimalPart);
 
+       var output = wholePartWords;
+       if (decimalPart > 0) {
+         output += " and " + decimalPartWords + " cents";
+       }
 
+       // Update the value of clientPayment input field
+       var cleanTotal = parseFloat(amount);
+       clientPaymentInput.value = cleanTotal.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+       sumOfInput.value = output;
+     }
 
-      var output = wholePartWords;
-      if (decimalPart > 0) {
-        output += " and " + decimalPartWords + " cents";
-      }
-      // Update the value of clientPayment input field
-      clientPaymentInput.value = amount;
-      sumOfInput.value = output;
-    }
-    function convertToWords(number) {
-          // Define the arrays for units, tens, and scales
-          var units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
-            'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
-            'eighteen', 'nineteen'];
+     function convertToWords(number) {
+       // Define the arrays for units, tens, and scales
+       var units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+         'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+         'eighteen', 'nineteen'];
 
-          var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+       var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
 
-          var scales = ['', 'thousand', 'million', 'billion'];
+       var scales = ['', 'thousand', 'million', 'billion'];
 
-          // Convert the number to words
-          var words = '';
+       // Convert the number to words
+       var words = '';
 
-          if (number === 0) {
-            words = 'zero';
-          } else {
-            var count = 0;
+       if (number === 0) {
+         words = 'zero';
+       } else {
+         var count = 0;
 
-            do {
-              var hundreds = number % 1000;
+         do {
+           var hundreds = number % 1000;
 
-              if (hundreds !== 0) {
-                var hundredsWords = convertToWordsLessThanOneThousand(hundreds);
-                words = hundredsWords + ' ' + scales[count] + ' ' + words;
-              }
+           if (hundreds !== 0) {
+             var hundredsWords = convertToWordsLessThanOneThousand(hundreds);
+             words = hundredsWords + ' ' + scales[count] + ' ' + words;
+           }
 
-              count++;
-              number = Math.floor(number / 1000);
-            } while (number > 0);
-          }
+           count++;
+           number = Math.floor(number / 1000);
+         } while (number > 0);
+       }
 
-          return words.trim();
-        }
+       return words.trim();
+     }
+
+     function convertToWordsLessThanOneThousand(number) {
+       // Define the arrays for units and tens
+       var units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+         'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+         'eighteen', 'nineteen'];
+
+       var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+       // Convert the number to words less than one thousand
+       var words = '';
+
+       if (number % 100 < 20) {
+         words = units[number % 100];
+         number = Math.floor(number / 100);
+       } else {
+         words = units[number % 10];
+         number = Math.floor(number / 10);
+
+         if (number % 10 !== 0) {
+           words = tens[number % 10] + ' ' + words;
+         }
+
+         number = Math.floor(number / 10);
+       }
+
+       if (number === 0) {
+         return words;
+       }
+
+       return units[number] + ' hundred ' + words;
+     }
+
+     // New function for converting the decimal part less than one hundred
+     function convertToWordsLessThanOneHundred(number) {
+       var units = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+         'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen',
+         'eighteen', 'nineteen'];
+
+       var tens = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
+
+       if (number < 20) {
+         return units[number];
+       } else {
+         return tens[Math.floor(number / 10)] + (number % 10 !== 0 ? ' ' + units[number % 10] : '');
+       }
+     }
+
 
 //   SUPPLIER AND CLIENT INFO
 function getSupplierInfo(){
