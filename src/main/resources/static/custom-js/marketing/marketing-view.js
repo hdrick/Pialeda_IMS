@@ -18,7 +18,8 @@ function fillModalFields(invId) {
         success: function(data) {
             $('#inv-num').val(data.invoiceNum);
             $('#po-num').val(data.poNum);
-            $('#date-created').val(data.dateCreated);
+            $('#si-created').val(data.saleInvoiceDate);
+            $('#order-created').val(data.dateCreated);
 
             $('#supp-name').val(data.supplierName);
             $('#supp-address').val(data.supplierAddress);

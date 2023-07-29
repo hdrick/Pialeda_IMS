@@ -278,7 +278,6 @@
 
 #client-date-input{
     align-items: center;
-    flex-grow: 1;
     text-align: start;
     outline: none;
     box-shadow: none;
@@ -287,7 +286,16 @@
     font-size: 12px;
     font-weight: bolder;
 }
-
+#sales-invoice-date-input{
+    align-items: center;
+    text-align: start;
+    outline: none;
+    box-shadow: none;
+    padding: 0 0 0 5px;
+    border: 0;
+    font-size: 12px;
+    font-weight: bolder;
+}
 tr.highlight {
     background-color: #ffcccc;
   }

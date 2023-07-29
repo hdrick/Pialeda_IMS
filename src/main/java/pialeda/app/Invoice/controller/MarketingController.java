@@ -341,6 +341,7 @@ public class MarketingController {
 
         Map<String, Object> result = new HashMap<>();
         result.put("invoiceNum", inv.getInvoiceNum());
+        result.put("saleInvoiceDate", inv.getSaleInvoiceDate());
         result.put("poNum", inv.getPoNum());
         result.put("dateCreated", inv.getDateCreated());
 
