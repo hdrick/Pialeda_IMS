@@ -75,13 +75,14 @@ public class InvoiceService {
         return invoiceRepository.findByClientNameContainingIgnoreCase(query);
     }
 
-    public void createInvoice(InvoiceInfo invoiceInfo, String date,List<String> qtyList, List<String> unitList,
+    public void createInvoice(InvoiceInfo invoiceInfo, String date, String saleInvoiceDateStr, List<String> qtyList, List<String> unitList,
                             List<String> articlesList, List<String> unitPriceList, List<String> amountList){
                                 Invoice invoice = new Invoice();     
         //Insert invoice info
         invoice.setInvoiceNum(invoiceInfo.getInvoiceNum());
         invoice.setPoNum(invoiceInfo.getPoNum());
         invoice.setDateCreated(LocalDate.parse(date));
+        invoice.setSaleInvoiceDate(LocalDate.parse(saleInvoiceDateStr));
         invoice.setClientContactPerson(invoiceInfo.getClientContactPerson());
 
         invoice.setSupplierName(invoiceInfo.getSupplierName());

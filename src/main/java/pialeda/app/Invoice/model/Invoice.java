@@ -22,6 +22,8 @@ public class Invoice {
     private String poNum;
     @Column(columnDefinition = "DATE", nullable = false, name="invoice_date_created")
     private LocalDate dateCreated;
+    @Column(columnDefinition = "DATE", nullable = false, name = "sale_invoice_date")
+    private LocalDate saleInvoiceDate;
     @Column(nullable = false, name="invoice_client_contact_person")
     private String clientContactPerson;
 
@@ -46,13 +48,11 @@ public class Invoice {
 
     public Invoice(){}
 
-    
-
-
     public Invoice(String invoiceNum, String poNum, LocalDate dateCreated, String clientContactPerson,
-            String supplierName, String supplierAddress, String supplierTin, String clientName, String clientTin,
-            String clientAddress, String clientBusStyle, String clientTerms, double grandTotal, double addVat,
-            double amountNetOfVat, double totalSalesVatInc, double clientPayment,String cashier, String status) {
+                   String supplierName, String supplierAddress, String supplierTin, String clientName, String clientTin,
+                   String clientAddress, String clientBusStyle, String clientTerms, double grandTotal, double addVat,
+                   double amountNetOfVat, double totalSalesVatInc, double clientPayment, String cashier, String status,
+                   LocalDate saleInvoiceDate) {
         this.invoiceNum = invoiceNum;
         this.poNum = poNum;
         this.dateCreated = dateCreated;
@@ -72,9 +72,13 @@ public class Invoice {
         this.clientPayment = clientPayment;
         this.cashier = cashier;
         this.status = status;
+        this.saleInvoiceDate = saleInvoiceDate;
     }
 
-    public Invoice(String invoiceNum, String poNum, LocalDate dateCreated, String clientContactPerson, String supplierName, String supplierAddress, String supplierTin, String clientName, String clientTin, String clientAddress, String clientBusStyle, String clientTerms, double grandTotal, String cashier) {
+    public Invoice(String invoiceNum, String poNum, LocalDate dateCreated, String clientContactPerson,
+                   String supplierName, String supplierAddress, String supplierTin, String clientName, String clientTin,
+                   String clientAddress, String clientBusStyle, String clientTerms, double grandTotal, String cashier,
+                   LocalDate saleInvoiceDate) {
         this.invoiceNum = invoiceNum;
         this.poNum = poNum;
         this.dateCreated = dateCreated;
@@ -89,9 +93,13 @@ public class Invoice {
         this.clientTerms = clientTerms;
         this.grandTotal = grandTotal;
         this.cashier = cashier;
+        this.saleInvoiceDate = saleInvoiceDate;
     }
 
-    public Invoice(String invoiceNum, String poNum, LocalDate dateCreated, String clientContactPerson, String supplierName, String supplierAddress, String supplierTin, String clientName, String clientTin, String clientAddress, String clientBusStyle, String clientTerms, double grandTotal, double addVat, double amountNetOfVat, double totalSalesVatInc, String cashier) {
+    public Invoice(String invoiceNum, String poNum, LocalDate dateCreated, String clientContactPerson,
+                   String supplierName, String supplierAddress, String supplierTin, String clientName, String clientTin,
+                   String clientAddress, String clientBusStyle, String clientTerms, double grandTotal, double addVat,
+                   double amountNetOfVat, double totalSalesVatInc, String cashier, LocalDate saleInvoiceDate) {
         this.invoiceNum = invoiceNum;
         this.poNum = poNum;
         this.dateCreated = dateCreated;
@@ -109,19 +117,20 @@ public class Invoice {
         this.amountNetOfVat = amountNetOfVat;
         this.totalSalesVatInc = totalSalesVatInc;
         this.cashier = cashier;
+        this.saleInvoiceDate = saleInvoiceDate;
     }
 
-    public Invoice(String invoiceNum) {
-    }
-
-    public Invoice(String invoiceNum, String poNum, LocalDate dateCreated, String supplierName, String clientName, String clientContactPerson) {
+    public Invoice(String invoiceNum, String poNum, LocalDate dateCreated, String supplierName, String clientName,
+                   String clientContactPerson, LocalDate saleInvoiceDate) {
         this.invoiceNum = invoiceNum;
         this.poNum = poNum;
         this.dateCreated = dateCreated;
         this.supplierName = supplierName;
         this.clientName = clientName;
         this.clientContactPerson = clientContactPerson;
+        this.saleInvoiceDate = saleInvoiceDate;
     }
+
     public int getId() {
         return id;
     }
@@ -146,6 +155,8 @@ public class Invoice {
     public void setDateCreated(LocalDate dateCreated) {
         this.dateCreated = dateCreated;
     }
+    public LocalDate getSaleInvoiceDate() {return saleInvoiceDate;}
+    public void setSaleInvoiceDate(LocalDate saleInvoiceDate) {this.saleInvoiceDate = saleInvoiceDate;}
     public String getClientContactPerson() {
         return clientContactPerson;
     }

@@ -218,6 +218,63 @@ addRowBtn.addEventListener('click', () => {
   
 });
 
+// Add a global event listener to the keydown event
+document.addEventListener('keydown', (event) => {
+  // Check if the pressed key is the Tab key (key code 9)
+  if (event.keyCode === 9) {
+    event.preventDefault(); // Prevent the default Tab behavior
+    if (rowCounter < 40) {
+        const newRow = document.createElement('tr');
+        const index = rowCounter; // Get the index for this row
+        newRow.innerHTML = `
+          <td>
+            <input name="qty" type="number" class="compute_qty" onfocus="if (this.value == '0') { this.value = ''; }" onblur="if (this.value == '') { this.value = '0'; }" required>
+          </td>
+          <td>
+            <input name="unit" type="text" required>
+          </td>
+          <td>
+            <input name="article" type="text" required>
+          </td>
+          <td>
+            <input name="unitPrice" type="text" class="compute_unit_price" required>
+          </td>
+          <td>
+            <input name="amount" type="text" class="compute_amount" readonly>
+          </td>
+        `;
+        tableBody.appendChild(newRow);
+        const inputs = newRow.querySelectorAll('.compute_qty, .compute_unit_price');
+        inputs.forEach(input => {
+          input.addEventListener('input', () => {
+            updateAmount(newRow);
+          });
+        });
+        rowCounter++;
+        computeInvoiceTotals();
+      } else {
+        alert('Maximum row limit reached!');
+      }
+  }
+  if (event.keyCode === 192) {
+      event.preventDefault(); // Prevent the default behavior of the backtick key
+
+        const rows = tableBody.getElementsByTagName('tr');
+          if (rows.length > 0) {
+            // Ask for confirmation
+            const confirmed = confirm('Are you sure you want to delete the last row?');
+            if (confirmed) {
+              rows[rows.length - 1].remove();
+              rowCounter--;
+            }
+          } else {
+            alert('At least one row is required!');
+          }
+          computeInvoiceTotals();
+    }
+});
+
+
 function updateAmount(row) {
   const qty = row.querySelector('.compute_qty').value;
   const unitPrice = row.querySelector('.compute_unit_price').value;

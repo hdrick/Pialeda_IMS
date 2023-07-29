@@ -49,6 +49,7 @@
         width: 150px;
         margin-right: 24px;
         border: none;
+        overflow-y: auto;
         position: absolute;
         z-index: 999;
     }
@@ -285,19 +286,21 @@
           <table class="table table-sm table-bordered" id="invoice-table">
             <thead class="table-dark">
             <tr>
+              <th class="invoice-info">S.I. Date</th>
               <th class="client-info">Client TIN</th>
               <th class="client-info">Client Name</th>
               <th class="client-info">Client Address</th>
               <th class="supplier-info">Supplier TIN</th>
               <th class="supplier-info">Supplier Name</th>
               <th class="supplier-info">Supplier Address</th>
-              <th>Date</th>
+              <th>Order Date</th>
               <th>Invoice #</th>
               <th>Total</th>
             </tr>
             </thead>
             <tbody id="table-body">
             <tr th:if="${totalItems > 0}" class="table-row" th:each="invoice: ${invoices}">
+              <td th:text="${#temporals.format(invoice.saleInvoiceDate, 'MMMM d, yyyy')}"></td>
               <td th:text="${invoice.clientTin}"  class="client-info"></td>
               <td th:text="${invoice.clientName}"  class="client-info"></td>
               <td th:text="${invoice.clientAddress}"  class="client-info"></td>
@@ -306,7 +309,7 @@
               <td th:text="${invoice.supplierAddress}" class="supplier-info"></td>
               <td th:text="${#temporals.format(invoice.dateCreated, 'MMMM d, yyyy')}"></td>
               <td th:text="${invoice.invoiceNum}" class="invoice-num"></td>
-              <td th:text="${invoice.grandTotal}"></td>
+              <td th:text="${#numbers.formatDecimal(invoice.grandTotal, 0, 'COMMA', 2, 'POINT')}"></td>
             </tr>
 
 
@@ -321,6 +324,7 @@
               <td colspan="1" class="colspan-blank-5"></td>
               <td colspan="1" class="colspan-blank-6"></td>
               <td colspan="1" class="colspan-blank-7"></td>
+              <td colspan="1" class="colspan-blank-8"></td>
               <th colspan="1" style=" background-color: #ad1e1e!important; color: #fff!important">Invoices Total</th>
               <b><td colspan="1" th:text="${totalInvoicesAmount}" style=" background-color: #f2f2f2; color: #ff0000!important; font-weight: bold;"></td></b>
             <tr>

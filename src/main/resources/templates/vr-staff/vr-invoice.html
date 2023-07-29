@@ -333,7 +333,7 @@ font-size: 35px!important;
                         <div class="well">
                             <ul class="list-unstyled">
                                 <li><strong>Invoice </strong><span th:text="${invoiceDetails.getInvoiceNum()}"></span></li>
-                                <li><strong>Invoice Date: </strong><span th:text="${invoiceDetails.getDateCreated()}"></span></li>
+                                <li><strong>Invoice Date: </strong><span th:text="${invoiceDetails.getSaleInvoiceDate()}"></span></li>
                                 <li><strong>Invoice total: </strong><span th:text="${invoiceDetails.getGrandTotal()}"></span></li>
                                 <!-- <li style="color: red"><strong>Status:</strong> <span class="label label-danger"  th:text="${invoiceDetails.getStatus()}"></span></li> -->
                                 <li>

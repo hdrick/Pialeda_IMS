@@ -56,6 +56,7 @@ public class MarketingController {
     @PostMapping("/createInvoice")
     public String createInvoice(@ModelAttribute("invoiceInfo") InvoiceInfo invoiceInfo,
                                 @RequestParam("invDate") String date,
+                                @RequestParam("saleInvoiceDate") String saleInvoiceDateStr,
                                 @RequestParam("qty") List<String> qtyList,
                                 @RequestParam("unit") List<String> unitList,
                                 @RequestParam("article") List<String> articlesList,
@@ -70,7 +71,7 @@ public class MarketingController {
 
         if(ifInvExist == null){
             if(invoiceInfo.getGrandTotal() <= remainingLimit){
-                invoiceService.createInvoice(invoiceInfo, date, qtyList, unitList,articlesList,unitPriceList,amountList);
+                invoiceService.createInvoice(invoiceInfo, date, saleInvoiceDateStr, qtyList, unitList,articlesList,unitPriceList,amountList);
                 boolean hideDivSuccess = true;
                 redirectAttributes.addFlashAttribute("hideDivSuccess", hideDivSuccess);
                 updateInvoiceAmount(invoiceInfo.getInvoiceNum());

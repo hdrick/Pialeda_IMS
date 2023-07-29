@@ -16,11 +16,20 @@
 
     <!--        Header starts-->
     <div class="header-con">
-        <div id="bx1">
-            <img id="h-logo" th:src="@{/icon/LOGO.png}" alt="Logo">
+        <div class="left-con">
+            <div id="bx1">
+                <img id="h-logo" th:src="@{/icon/LOGO.png}" alt="Logo">
+            </div>
+            <div id="bx2">
+                <label id="logo-name">PIALEDA</label>
+            </div>
         </div>
-        <div id="bx2">
-            <label id="logo-name">PIALEDA</label>
+
+        <div class="right-con">
+            <div>
+                <button type="button" class="btn btn-danger" id="btn-terminate">Shutdown</button>
+            </div>
+
         </div>
     </div>
     <!--        Login starts-->
@@ -64,8 +73,19 @@
         if (event.ctrlKey && event.shiftKey && event.key === 'Q') {
             // Terminate the program
             window.location.href = '/terminate';
+            window.close();
         }
     });
+</script>
+<script>
+  const shutdownButton = document.getElementById('btn-terminate');
+
+  // Add a click event listener to the button
+  shutdownButton.addEventListener('click', () => {
+    // Terminate the program
+    window.location.href = '/terminate';
+
+  });
 </script>
 </body>
 </html>

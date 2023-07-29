@@ -60,7 +60,7 @@
                 <a id="delete-row-btn" class="btn">Delete Item</a>
             </div>
         </div>
-        <div id="inv-con" class="" style="background-color: white; width: 8.5in; height: 11in; margin-bottom: 0.5in;">
+        <div id="inv-con" class="" style="background-color: white;width: 8.5in;min-height: 8in;max-height: 11in;margin-bottom: 0.5in;">
             <!--Supplier information  -->
             <div id="header">
                 <div class="col-12 text-center mb-3">
@@ -109,7 +109,7 @@
                             <input type="hidden" th:field="*{clientAddress}" id="client-address-input">
                         </div>
                         <div id="bs-con">
-                            <div id="bs-title" style="font-weight: bolder; margin-right: 1%; color:green;">Bus. Style:</div>
+                            <div id="bs-title" style="font-weight: bolder; margin-right: 1%; color:green;">Business Style:</div>
                             <div id="bs-value"><span  id="client-busStyle" contenteditable="true"></span></div>
                             <input type="hidden" th:field="*{clientBusStyle}" id="client-busStyle-input">
                         </div>
@@ -117,7 +117,7 @@
                     </div>
                     <div class="col-6 text-right">
                         <div id="d-con">
-                            <div id="d-title" style="font-weight: bolder; margin-right: 15%; color:green;">Date:</div>
+                            <div id="d-title" style="font-weight: bolder; margin-right: 15%; color:green;">Order Date:</div>
                             <div id="d-value"><span  id="client-date" contenteditable="true"></span></div>
                             <input type="hidden" th:field="*{dateCreated}" id="client-date-input">
                         </div>
@@ -132,7 +132,7 @@
                             <input type="hidden"  th:field="*{poNum}" id="client-poNumber-input">
                         </div>
                         <div id="cp-con">
-                            <div id="cp-title" style="font-weight: bolder; margin-right: 1%; color:green;">Con. Person:</div>
+                            <div id="cp-title" style="font-weight: bolder; margin-right: 1%; color:green;">Contact Person:</div>
                             <div id="cp-value"><span  id="client-conPerson" contenteditable="true"></span></div>
                             <input type="hidden"  th:field="*{clientContactPerson}" id="client-conPerson-input">
                         </div>
@@ -141,7 +141,7 @@
             </div>
             <div id="body">
                 <div class="row">
-                    <div class="col-12 table-responsive" style="height: 650px;">
+                    <div class="col-12 table-responsive" style="max-height: 650px;min-height: 350px;margin-bottom: 20px;">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
