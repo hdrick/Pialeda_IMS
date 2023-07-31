@@ -12,16 +12,16 @@ public class CurrentInvoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private String invoiceNum;
     public CurrentInvoice() { }
     public CurrentInvoice(String invoiceNum) {
         this.invoiceNum = invoiceNum;
     }
-    public int getId() {
+    public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
     public String getInvoiceNum() {

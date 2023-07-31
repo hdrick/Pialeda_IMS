@@ -45,8 +45,8 @@ public class UserService {
         return userRepo.count();
     }
 
-    public void deleteUser(int id){
-        userRepo.deleteById(id);
+    public void deleteUser(long id){
+        userRepo.deleteById((int) id);
     }
 
     public String authenticate(String email) throws AuthenticationException {

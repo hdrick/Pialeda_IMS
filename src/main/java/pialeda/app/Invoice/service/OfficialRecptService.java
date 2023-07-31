@@ -1,7 +1,6 @@
 package pialeda.app.Invoice.service;
 
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,7 +31,7 @@ public class OfficialRecptService {
     @Autowired
     private InvoiceRepository invoiceRepository;
 
-    public void createOR(int orNum,
+    public void createOR(long orNum,
                          String totalSales,
                          String addVat,
                          String lwTax,
@@ -140,11 +139,11 @@ public class OfficialRecptService {
         return officialRecptRepository.findById(id);
     }
 
-    public List<OfficialReceiptInvoices> getInvoiceByOrNum(int orNum ){
+    public List<OfficialReceiptInvoices> getInvoiceByOrNum(long orNum ){
         return officialRecptInvoicesRepo.findByOfficialReceiptNum(orNum);
     }
 
-    public OfficialReceipt getOrNumByOrNum(int orNum){
+    public OfficialReceipt getOrNumByOrNum(long orNum){
         return officialRecptRepository.findByOfficialReceiptNum(orNum);
     }
 

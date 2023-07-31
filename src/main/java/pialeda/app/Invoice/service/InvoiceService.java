@@ -6,7 +6,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import pialeda.app.Invoice.config.DateUtils;
 import pialeda.app.Invoice.model.*;
 import pialeda.app.Invoice.repository.*;
 import pialeda.app.Invoice.dto.InvoiceInfo;
@@ -297,7 +296,7 @@ public class InvoiceService {
         return invoiceRepository.findAll(p);
     }
 
-    public Invoice getInvByIdAndFillFields(int id){
+    public Invoice getInvByIdAndFillFields(long id){
         return invoiceRepository.findById(id);
     }
 

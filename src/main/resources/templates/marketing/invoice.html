@@ -106,7 +106,7 @@
                                                 th:text="${generateInvNum}" contenteditable="true"></span>
                                             <!-- <label id="invoice-number" style="color: red;" th:text="${generateInvNum}"></label> -->
                                             <!--                                        <input type="text" th:field="*{invoiceNum}" placeholder="Invoice # here" style="text-align: center; color: red; font-weight: bolder;" id="invoice-number-input" >-->
-                                            <input type="text" th:field="*{invoiceNum}" placeholder="Invoice # here"
+                                            <input type="text" th:field="*{invoiceNum}" placeholder="Invoice # here" onkeyup="validateInput()"
                                                 style="text-align: center; color: red; font-weight: bolder;"
                                                 id="invoice-number-input" required>
                                         </div>
@@ -598,6 +598,30 @@
     <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
     <script th:src="@{/custom-js/marketing/marketing-main.js}"></script>
     <script th:src="@{/custom-js/marketing/modal-alert.js}"></script>
+    <script>
+      function validateInput()
+      {
+        const numberInput = document.getElementById("invoice-number-input");
+        const userInput = numberInput.value.trim();
+        const sanitizedInput = userInput.replace(/[^\d]/g, ""); // Remove non-digit characters
+
+        // Ensure only digits (integers) are entered
+        if (userInput !== sanitizedInput)
+        {
+          numberInput.value = sanitizedInput;
+        }
+
+        const maxValue = 500000000;
+        const intValue = parseInt(sanitizedInput, 10);
+
+        // If the input value is greater than the maxValue, revert to previous value
+        if (!isNaN(intValue) && intValue > maxValue) {
+          numberInput.value = numberInput.dataset.previousValue || "";
+        } else {
+          numberInput.dataset.previousValue = sanitizedInput; // Store the valid input as the previous value
+        }
+      }
+    </script>
     <script>
         $(document).ready(function () {
             $('#invoiceLimitModal').modal('show');

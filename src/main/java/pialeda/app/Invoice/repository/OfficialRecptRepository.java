@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface OfficialRecptRepository extends JpaRepository<OfficialReceipt, Integer> {
     OfficialReceipt findById(int orId);
-    OfficialReceipt findByOfficialReceiptNum(int orNum);
+    OfficialReceipt findByOfficialReceiptNum(long orNum);
 
     List<OfficialReceipt> findBySupplierName(String supplierName);
 

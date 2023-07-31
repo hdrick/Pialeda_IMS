@@ -10,9 +10,9 @@ import java.util.List;
 public interface CollectionRecptInvoicesRepo extends JpaRepository<CollectionReceiptInvoices, Integer>{
 
     CollectionReceiptInvoices findByInvoice(String invoiceNum);
-    List<CollectionReceiptInvoices> findByCollectionReceiptNum(int crNum);
+    List<CollectionReceiptInvoices> findByCollectionReceiptNum(long crNum);
     List<CollectionReceiptInvoices> getAllByInvoice(String invoiceNum);
 //    long findByCollectionReceiptNumCountAll(Long id);
-    List<CollectionReceiptInvoices> findAllByCollectionReceiptNum(int crNum);
+    List<CollectionReceiptInvoices> findAllByCollectionReceiptNum(long crNum);
 
 }

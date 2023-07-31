@@ -14,7 +14,7 @@ public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @Column(nullable = false, name="supplier_invoice_number")
     private String invoiceNum;
@@ -131,10 +131,10 @@ public class Invoice {
         this.saleInvoiceDate = saleInvoiceDate;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
     public String getInvoiceNum() {

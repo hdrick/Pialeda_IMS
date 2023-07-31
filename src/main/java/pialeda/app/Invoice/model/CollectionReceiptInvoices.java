@@ -7,24 +7,24 @@ import javax.persistence.*;
 public class CollectionReceiptInvoices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    private int collectionReceiptNum;
+    private long id;
+    private long collectionReceiptNum;
     // @OneToOne
     // @JoinColumn(name = "invoiceNum", referencedColumnName = "supplier_invoice_number")
     // private Invoice invoice;
     private String invoice;
     private double invoiceAmount;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
-    public int getCollectionReceiptNum() {
+    public long getCollectionReceiptNum() {
         return collectionReceiptNum;
     }
-    public void setCollectionReceiptNum(int collectionReceiptNum) {
+    public void setCollectionReceiptNum(long collectionReceiptNum) {
         this.collectionReceiptNum = collectionReceiptNum;
     }
     public String getInvoice() {

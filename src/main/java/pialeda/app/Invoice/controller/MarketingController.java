@@ -140,7 +140,7 @@ public class MarketingController {
     }
 
     @PostMapping("/createOfficialReceipt")
-    public String createOfficialReceipt(@RequestParam("orNumber") int orNumber,
+    public String createOfficialReceipt(@RequestParam("orNumber") long orNumber,
                                         @RequestParam("totalSales") String totalSales,
                                         @RequestParam("addVat") String addVat,
                                         @RequestParam("lwTax") String lwTax,
@@ -174,7 +174,7 @@ public class MarketingController {
 
 
     @PostMapping("/createCollectionReceipt")
-    public String createCollectionReceipt(@RequestParam("orNumber") int orNumber,
+    public String createCollectionReceipt(@RequestParam("orNumber") long orNumber,
                                         @RequestParam("amtDue") String amtDue,
                                         @RequestParam("ewt") String ewt,
                                         @RequestParam("total") String total,
@@ -335,7 +335,7 @@ public class MarketingController {
 
     @GetMapping("/specific-inv")
     @ResponseBody
-    public Map<String, Object> getInvById(@RequestParam("id") int id){
+    public Map<String, Object> getInvById(@RequestParam("id") long id){
         Invoice inv= invoiceService.getInvByIdAndFillFields(id);
         List<InvoiceProductInfo> prodList = invoiceService.getAllProdByInvNum(inv.getInvoiceNum());
 

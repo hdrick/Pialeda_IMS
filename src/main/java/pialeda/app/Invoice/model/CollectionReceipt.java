@@ -11,11 +11,11 @@ import javax.persistence.Table;
 public class CollectionReceipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     private String supplierName;
     private String supplierAddress;
-    private int collectionReceiptNum;
+    private long collectionReceiptNum;
     private String supplierTin;
 
     private double amountDue;
@@ -37,11 +37,11 @@ public class CollectionReceipt {
 
     private String cashierName;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -61,11 +61,11 @@ public class CollectionReceipt {
         this.supplierAddress = supplierAddress;
     }
 
-    public int getCollectionReceiptNum() {
+    public long getCollectionReceiptNum() {
         return collectionReceiptNum;
     }
 
-    public void setCollectionReceiptNum(int collectionReceiptNum) {
+    public void setCollectionReceiptNum(long collectionReceiptNum) {
         this.collectionReceiptNum = collectionReceiptNum;
     }
 

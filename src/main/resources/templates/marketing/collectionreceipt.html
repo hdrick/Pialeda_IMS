@@ -179,7 +179,7 @@
               <div style="font-weight: bolder;">
                 <div id="s-invo-con">
                   <!-- <label id="or-number" style="width: 150px; color:red;" th:text="${generateORNumber}"></label> -->
-                  <input type="textt" name="orNumber" id="invoice-number-input" placeholder="Enter CR number.." required style="color: red; font-weight: bolder; text-align: center;">
+                  <input type="textt" name="orNumber" id="invoice-number-input" placeholder="Enter CR number.." required style="color: red; font-weight: bolder; text-align: center;" onkeyup="validateInput()">
                 </div>
               </div>
             </div>
@@ -310,6 +310,30 @@
 <script th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
 <script th:src="@{/custom-js/marketing/cr-main.js}"></script>
 <script th:src="@{/custom-js/marketing/modal-alert.js}"></script>
+<script>
+  function validateInput()
+  {
+    const numberInput = document.getElementById("invoice-number-input");
+    const userInput = numberInput.value.trim();
+    const sanitizedInput = userInput.replace(/[^\d]/g, ""); // Remove non-digit characters
+
+    // Ensure only digits (integers) are entered
+    if (userInput !== sanitizedInput)
+    {
+      numberInput.value = sanitizedInput;
+    }
+
+    const maxValue = 500000000;
+    const intValue = parseInt(sanitizedInput, 10);
+
+    // If the input value is greater than the maxValue, revert to previous value
+    if (!isNaN(intValue) && intValue > maxValue) {
+      numberInput.value = numberInput.dataset.previousValue || "";
+    } else {
+      numberInput.dataset.previousValue = sanitizedInput; // Store the valid input as the previous value
+    }
+  }
+</script>
 <script>
   $(document).ready(function () {
 

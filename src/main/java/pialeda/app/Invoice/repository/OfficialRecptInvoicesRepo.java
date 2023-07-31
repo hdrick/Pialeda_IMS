@@ -8,6 +8,6 @@ import pialeda.app.Invoice.model.OfficialReceiptInvoices;
 
 @Repository
 public interface OfficialRecptInvoicesRepo extends JpaRepository<OfficialReceiptInvoices, Integer>{
-    List<OfficialReceiptInvoices> findByOfficialReceiptNum(int orNum);
+    List<OfficialReceiptInvoices> findByOfficialReceiptNum(long orNum);
     OfficialReceiptInvoices findByInvoiceNo(String invNum);
 }

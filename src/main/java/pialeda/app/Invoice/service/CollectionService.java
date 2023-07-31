@@ -28,7 +28,7 @@ public class CollectionService {
     private CollectionRecptInvoicesRepo collectionRecptInvoicesRepo;
 
 
-    public void createCR(int orNum,
+    public void createCR(long orNum,
                          String amtDue,
                          String ewt,
                          String total,
@@ -37,10 +37,13 @@ public class CollectionService {
                          String cashierName,
                          Map<String, String> requestParams,
                          CollectionReceiptInfo crDTO){
-        CollectionReceipt cr = new CollectionReceipt();                       
+        CollectionReceipt cr = new CollectionReceipt();
+
+        String formattedString = total.replace(",", "");
+
 
         List<CollectionReceiptInvoices> items = new ArrayList<>();
-        double converted_Total = Double.parseDouble(total);                             
+        double converted_Total = Double.parseDouble(formattedString);
         double roundedAmount = Math.round(converted_Total * 100.0) / 100.0;
         for (int i = 1; i <= 8; i++) {
             String invoice = requestParams.get("inv" + i);
@@ -137,18 +140,18 @@ public class CollectionService {
         return collectionRecptRepository.count();
     }
 
-    public CollectionReceipt getSpecificCollectionReceipt(int id){
+    public CollectionReceipt getSpecificCollectionReceipt(long id){
         return collectionRecptRepository.findById(id);
     }
-    public List<CollectionReceiptInvoices> getInvoiceByCrNum(int orNum ){
+    public List<CollectionReceiptInvoices> getInvoiceByCrNum(long orNum ){
         return collectionRecptInvoicesRepo.findByCollectionReceiptNum(orNum);
     }
 
-    public CollectionReceipt getCrNumByCrNum(int crNum){
+    public CollectionReceipt getCrNumByCrNum(long crNum){
         return collectionRecptRepository.findByCollectionReceiptNum(crNum);
     }
 
-    public Boolean updateCr(int id, String clientName, String clientAddress,
+    public Boolean updateCr(long id, String clientName, String clientAddress,
                             String clientTIN, String busStyle,
                             String wPayment, Double nPayment,
                             String partialP, String suppName,
@@ -190,13 +193,13 @@ public class CollectionService {
         return collectionRecptInvoicesRepo.findByInvoice(invoiceNum);
     }
 
-    public List<CollectionReceiptInvoices> getAllInvoicesByCollectionReceiptId(int crNum) {
+    public List<CollectionReceiptInvoices> getAllInvoicesByCollectionReceiptId(long crNum) {
         return collectionRecptInvoicesRepo.findAllByCollectionReceiptNum(crNum);
     }
-    public List<CollectionReceiptInvoices> getAllInvoicesByCollectionReceipt(int crNum) {
+    public List<CollectionReceiptInvoices> getAllInvoicesByCollectionReceipt(long crNum) {
         return collectionRecptInvoicesRepo.findAllByCollectionReceiptNum(crNum);
     }
-    public CollectionReceipt getCollectionReceiptDetails(int crNum)
+    public CollectionReceipt getCollectionReceiptDetails(long crNum)
     {
         return collectionRecptRepository.findByCollectionReceiptNum(crNum);
     }
