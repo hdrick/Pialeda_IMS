@@ -194,7 +194,7 @@ public class MarketingController {
         redirectAttributes.addFlashAttribute("hideDivDuplicateCR", hideDivDuplicateCR);
         return "redirect:/marketing-collectionreceipt";
       }else{
-        collectionService.createCR(orNumber, amtDue, ewt, total, cash, chckNo, crAmount, cashierName, requestParams, collectionReceiptInfo);
+        collectionService.createCR(orNumber, amtDue, ewt, total, cash, chckNo, cashierName, requestParams, collectionReceiptInfo);
         boolean hideDivSuccessOR = true;
         redirectAttributes.addFlashAttribute("hideDivSuccessOR", hideDivSuccessOR);
         return "redirect:/marketing-collectionreceipt";

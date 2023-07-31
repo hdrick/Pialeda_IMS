@@ -48,7 +48,7 @@
                             <strong>TIN: </strong><input name="suppTIN" th:value="${specificId.getSupplierTin}" autocomplete="no-autocomplete" size="50" required><br>
                             <strong>Cash: </strong><input name="cash" th:value="${specificId.getCash}" autocomplete="no-autocomplete" size="50" required><br>
                             <strong>Check no.: </strong><input name="chckNo" th:value="${specificId.getCheckNo}" autocomplete="no-autocomplete" size="50" required><br>
-                            <strong>Amount: </strong><input name="amount" th:value="${specificId.getAmount}" autocomplete="no-autocomplete" size="50" required><br>
+                            <strong>Amount: </strong><input name="amount" th:value="${#numbers.formatDecimal(specificId.getAmount, 0, 'COMMA', 2, 'POINT')}" autocomplete="no-autocomplete" size="50" required><br>
                         </address>
                     </div>
                 </div>
@@ -89,33 +89,33 @@
                                     <!-- foreach ($order->lineItems as $line) or some such thing here -->
                                     <tr th:each="orInvoiceInfo: ${orInvoiceInfo}">
                                         <td class="text-left" th:text="${orInvoiceInfo.invoiceNo}"></td>
-                                        <td class="text-center" th:text="${orInvoiceInfo.invoiceAmount}"></td>
+                                        <td class="text-center" th:text="${#numbers.formatDecimal(orInvoiceInfo.invoiceAmount, 0, 'COMMA', 2, 'POINT')}"></td>
                                     </tr>
                                     </tbody>
                                     <tfoot>
                                         <tr>
                                             <th class="text-right">Total Sales:</th>
-                                            <th class="text-center val" th:text="${specificId.getTotalSales}"></th>
+                                            <th class="text-center val" th:text="${#numbers.formatDecimal(specificId.getTotalSales, 0, 'COMMA', 2, 'POINT')}"></th>
                                         </tr>
                                         <tr>
                                             <th class="text-right">Add VAT:</th>
-                                            <th class="text-center val" th:text="${specificId.getAddVat}"></th>
+                                            <th class="text-center val" th:text="${#numbers.formatDecimal(specificId.getAddVat, 0, 'COMMA', 2, 'POINT')}"></th>
                                         </tr>
                                         <tr>
                                             <th class="text-right">Net Of VAT: </th>
-                                            <th class="text-center val" th:text="${specificId.getLessWithHoldTax}"></th>
+                                            <th class="text-center val" th:text="${#numbers.formatDecimal(specificId.getLessWithHoldTax, 0, 'COMMA', 2, 'POINT')}"></th>
                                         </tr>
                                         <tr>
                                             <th class="text-right">Amount Due:</th>
-                                            <th class="text-center val" th:text="${specificId.getAmountDue}"></th>
+                                            <th class="text-center val" th:text="${#numbers.formatDecimal(specificId.getAmountDue, 0, 'COMMA', 2, 'POINT')}"></th>
                                         </tr>
                                         <tr>
                                             <th class="text-right">EWT:</th>
-                                            <th class="text-center val" th:text="${specificId.getEwt}"></th>
+                                            <th class="text-center val" th:text="${#numbers.formatDecimal(specificId.getEwt, 0, 'COMMA', 2, 'POINT')}"></th>
                                         </tr>
                                         <tr>
                                             <th class="text-right">Total:</th>
-                                            <th class="text-center val" th:text="${specificId.getTotal}"></th>
+                                            <th class="text-center val" th:text="${#numbers.formatDecimal(specificId.getTotal, 0, 'COMMA', 2, 'POINT')}"></th>
                                         </tr>
                                     </tfoot>
                                 </table>

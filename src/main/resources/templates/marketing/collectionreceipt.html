@@ -118,7 +118,7 @@
               <td>Amount Due</td>
               <td style="display: flex; border:0; justify-content: center;">₱
                 <!-- <label id="lbl-amtDue" style="color:red; font-weight: bolder; text-align: center;">1200</label> -->
-                <input  name="amtDue" id="amt-due"  th:value="${curAmount}" type="text" style="color:red; font-weight: bolder;" readonly></td>
+                <input  name="amtDue" id="amt-due"  th:value="${#numbers.formatDecimal(curAmount, 0, 'COMMA', 2, 'POINT')}" type="text" style="color:red; font-weight: bolder;" readonly></td>
               <td class="amt-r3"><input></td>
             </tr>
             <tr>

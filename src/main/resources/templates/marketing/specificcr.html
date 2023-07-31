@@ -36,7 +36,7 @@
                             <strong>TIN: </strong><input name="clientTIN" th:value="${specificId.getClientTin}" autocomplete="no-autocomplete" required><br>
                             <strong>Bus.Style: </strong><input name="busStyle" th:value="${specificId.getClientBus}" autocomplete="no-autocomplete" required><br>
                             <strong>Payment: </strong><input name="wPayment" th:value="${specificId.getClientSumOf}" size="50" autocomplete="no-autocomplete" required><br>
-                            <strong>Payment: </strong><input name="nPayment" th:value="${specificId.getClientPayment}" autocomplete="no-autocomplete" style="color: red;" required><br>
+                            <strong>Payment: </strong><input name="nPayment" th:value="${#numbers.formatDecimal(specificId.getClientPayment, 0, 'COMMA', 2, 'POINT')}" autocomplete="no-autocomplete" style="color: red;" required><br>
                             <strong>Partial Payment: </strong><input name="partialP" th:value="${specificId.getPartialPaymentFor}" autocomplete="no-autocomplete" required><br>
                         </address>
                     </div>
@@ -48,7 +48,7 @@
                             <strong>TIN: </strong><input name="suppTIN" th:value="${specificId.getSupplierTin}" autocomplete="no-autocomplete" size="50" required><br>
                             <strong>Cash: </strong><input name="cash" th:value="${specificId.getCash}" autocomplete="no-autocomplete" size="50" required><br>
                             <strong>Check no.: </strong><input name="chckNo" th:value="${specificId.getCheckNo}" autocomplete="no-autocomplete" size="50" required><br>
-                            <strong>Amount: </strong><input name="amount" th:value="${specificId.getAmount}" autocomplete="no-autocomplete" size="50" required><br>
+                            <strong>Amount: </strong><input name="amount" th:value="${#numbers.formatDecimal(specificId.getAmount, 0, 'COMMA', 2, 'POINT')}" autocomplete="no-autocomplete" size="50" required><br>
                         </address>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><strong>CR summary</strong></h3>
+                        <h3 class="panel-title"><strong>CR Summary</strong></h3>
                     </div>
                     <div class="panel-body">
                         <div class="table-responsive">
@@ -95,15 +95,15 @@
                                     <tfoot>
                                         <tr>
                                             <th class="text-right">Total Sales:</th>
-                                            <th class="text-center val" th:text="${specificId.amountDue}"></th>
+                                            <th class="text-center val" th:text="${#numbers.formatDecimal(specificId.getAmount, 0, 'COMMA', 2, 'POINT')}"></th>
                                         </tr>
                                         <tr>
                                             <th class="text-right">EWT:</th>
-                                            <th class="text-center val" th:text="${specificId.getEwt}"></th>
+                                            <th class="text-center val" th:text="${#numbers.formatDecimal(specificId.getEwt, 0, 'COMMA', 2, 'POINT')}"></th>
                                         </tr>
                                         <tr>
                                             <th class="text-right">Total:</th>
-                                            <th class="text-center val" th:text="${specificId.getTotal}"></th>
+                                            <th class="text-center val" th:text="${#numbers.formatDecimal(specificId.getTotal, 0, 'COMMA', 2, 'POINT')}"></th>
                                         </tr>
                                     </tfoot>
                                 </table>

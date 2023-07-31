@@ -34,16 +34,14 @@ public class CollectionService {
                          String total,
                          String cash,
                          String chckNo,
-                         String crAmount,
                          String cashierName,
                          Map<String, String> requestParams,
                          CollectionReceiptInfo crDTO){
         CollectionReceipt cr = new CollectionReceipt();                       
 
-        List<CollectionReceiptInvoices> items = new ArrayList<>();      
-        double converted_crAmount = Double.parseDouble(crAmount);
+        List<CollectionReceiptInvoices> items = new ArrayList<>();
         double converted_Total = Double.parseDouble(total);                             
-        double roundedAmount = Math.round(converted_crAmount * 100.0) / 100.0;
+        double roundedAmount = Math.round(converted_Total * 100.0) / 100.0;
         for (int i = 1; i <= 8; i++) {
             String invoice = requestParams.get("inv" + i);
             String amount = requestParams.get("inv" + i + "-amt");
@@ -109,7 +107,7 @@ public class CollectionService {
         }else{
             cr.setCheckNo(chckNo);
         }
-        cr.setAmount(formatStringToDouble(crAmount));
+        cr.setAmount(formatStringToDouble(total));
 
         cr.setRecvFrom(crDTO.getRecvFrom());
         cr.setCollectionReceiptDate(crDTO.getOfficialReceiptDate());

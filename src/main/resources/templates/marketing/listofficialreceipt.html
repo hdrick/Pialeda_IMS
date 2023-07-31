@@ -38,7 +38,7 @@
               <td th:text="${orrcpt.clientAddress}"></td>
               <td th:text="${orrcpt.clientTin}"></td>
               <td th:text="${orrcpt.clientBus}"></td>
-              <td th:text="${orrcpt.total}" style="font-weight: bolder; color:red;"></td>
+              <td th:text="${#numbers.formatDecimal(orrcpt.total, 0, 'COMMA', 2, 'POINT')}" style="font-weight: bolder; color:red;"></td>
               <td th:text="${orrcpt.partialPaymentFor}"></td>
               <td>
                 <!-- <a class="btn btn-primary"  th:href="@{'official-receipt-view/' + ${orrcpt.id}}"> View </a> -->
