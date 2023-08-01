@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class InvoiceProductInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     private String invoiceNumber;
     private String purchaseOrderNumber;
 
@@ -41,11 +41,11 @@ public class InvoiceProductInfo {
         this.amount = amount;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

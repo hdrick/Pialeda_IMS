@@ -11,16 +11,16 @@ import javax.persistence.Table;
 public class OfficialReceiptInvoices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     private long officialReceiptNum;
     private String invoiceNo;
     private double invoiceAmount;
     
-    public long getId() {
+    public int getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
     public long getOfficialReceiptNum() {

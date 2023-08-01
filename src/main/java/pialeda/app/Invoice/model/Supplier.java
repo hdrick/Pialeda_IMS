@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 public class Supplier {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     @Column(nullable = false, name="supplier_name")
     private String name;
 
@@ -72,11 +72,11 @@ public class Supplier {
         this.limit = limit;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

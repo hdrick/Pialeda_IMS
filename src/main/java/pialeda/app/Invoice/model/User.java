@@ -12,7 +12,7 @@ import javax.persistence.GenerationType;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     @Column(nullable = false, unique = true, length = 45, name="user_email")
     private String email;
 
@@ -37,10 +37,10 @@ public class User {
         this.token = token;
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

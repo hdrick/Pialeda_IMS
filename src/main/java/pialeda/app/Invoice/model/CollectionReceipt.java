@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class CollectionReceipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
     private String supplierName;
     private String supplierAddress;
@@ -37,11 +37,11 @@ public class CollectionReceipt {
 
     private String cashierName;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

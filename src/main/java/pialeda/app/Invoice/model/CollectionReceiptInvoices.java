@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class CollectionReceiptInvoices {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
     private long collectionReceiptNum;
     // @OneToOne
     // @JoinColumn(name = "invoiceNum", referencedColumnName = "supplier_invoice_number")
@@ -15,10 +15,10 @@ public class CollectionReceiptInvoices {
     private String invoice;
     private double invoiceAmount;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
     public long getCollectionReceiptNum() {

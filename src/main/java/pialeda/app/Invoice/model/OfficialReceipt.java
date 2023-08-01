@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class OfficialReceipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private int id;
 
 
     private String supplierName;
@@ -39,11 +39,11 @@ public class OfficialReceipt {
 
     private String cashierName;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
