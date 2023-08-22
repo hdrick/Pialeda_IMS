@@ -335,7 +335,7 @@ public class MarketingController {
 
     @GetMapping("/specific-inv")
     @ResponseBody
-    public Map<String, Object> getInvById(@RequestParam("id") long id){
+    public Map<String, Object> getInvById(@RequestParam("id") int id){
         Invoice inv= invoiceService.getInvByIdAndFillFields(id);
         List<InvoiceProductInfo> prodList = invoiceService.getAllProdByInvNum(inv.getInvoiceNum());
 

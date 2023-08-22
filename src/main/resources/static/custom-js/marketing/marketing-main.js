@@ -221,7 +221,7 @@ addRowBtn.addEventListener('click', () => {
 // Add a global event listener to the keydown event
 document.addEventListener('keydown', (event) => {
   // Check if the pressed key is the Tab key (key code 9)
-  if (event.keyCode === 9) {
+  if (event.shiftKey && event.key === 'Tab') {
     event.preventDefault(); // Prevent the default Tab behavior
     if (rowCounter < 40) {
         const newRow = document.createElement('tr');

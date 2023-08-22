@@ -17,7 +17,7 @@ import java.util.List;
 @Repository
 public interface InvoiceRepository extends JpaRepository<Invoice, Integer> {
 
-    Invoice findById(long id);
+    Invoice findById(int id);
     List<Invoice> findByClientNameContainingIgnoreCase(String query);
     List<Invoice> findBySupplierName(String supplierName);
     List<Invoice> findBySupplierNameAndClientNameAndStatus(String supplierName, String clientName, String status);

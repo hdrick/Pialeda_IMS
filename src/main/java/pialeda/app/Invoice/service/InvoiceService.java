@@ -296,7 +296,7 @@ public class InvoiceService {
         return invoiceRepository.findAll(p);
     }
 
-    public Invoice getInvByIdAndFillFields(long id){
+    public Invoice getInvByIdAndFillFields(int id){
         return invoiceRepository.findById(id);
     }
 
