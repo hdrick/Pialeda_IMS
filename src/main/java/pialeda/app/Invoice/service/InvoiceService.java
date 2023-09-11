@@ -533,7 +533,7 @@ public class InvoiceService {
      * @param clientBStyle         The new client business style for the invoice.
      * @return True if the invoice was successfully updated, false otherwise.
      */
-    public boolean updateInvoices(String invoiceNumber, LocalDate dateCreated,
+    public boolean updateInvoices(String invoiceNumber, LocalDate siCreated,LocalDate orderCreated,
                                  String supplierName, String clientName, String clientContactPerson,
                                  String totalAmt, String addVat, String amtNetVat, String totalSalesVatInc, List<String> qtyList, List<String> unitList, List<String> articlesList,
                                  List<String> unitPriceList, List<String> amountList, List<String> prodIdList, String clientTerms, String clientBStyle){
@@ -546,8 +546,8 @@ public class InvoiceService {
                Client client = clientRepository.findByName(clientName);
                List<InvoiceProductInfo> productInfo = invoiceProdInfoRepository.findByInvoiceNumber(invoiceNumber);
                String totalAmtNew = totalAmt.replace(",", "");
-               invDb.setDateCreated(dateCreated);
-
+               invDb.setDateCreated(orderCreated);
+               invDb.setSaleInvoiceDate(siCreated);
                invDb.setSupplierName(supplier.getName());
                invDb.setSupplierAddress(supplier.getAddress());
                invDb.setSupplierTin(supplier.getTin());

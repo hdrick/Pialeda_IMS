@@ -397,7 +397,8 @@ public class MarketingController {
     @PostMapping("/submit-form")
     public String handleSubmitForm(
             @RequestParam("inv-num") String invoiceNumber,
-            @RequestParam("date-created")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateCreated,
+            @RequestParam("si-created")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate siCreated,
+            @RequestParam("order-created")  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate orderCreated,
             @RequestParam("supp-name") String supplierName,
             @RequestParam("client-name") String clientName,
             @RequestParam("client-cp") String clientContactPerson,
@@ -417,7 +418,7 @@ public class MarketingController {
             RedirectAttributes redirectAttributes
     ) {
         try {
-            boolean ifSuccess = invoiceService.updateInvoices(invoiceNumber, dateCreated, supplierName, clientName,
+            boolean ifSuccess = invoiceService.updateInvoices(invoiceNumber, siCreated, orderCreated, supplierName, clientName,
                     clientContactPerson, totalAmt, addVat, amtNetVat, totalSalesVatInc, qtyList, unitList, articlesList,
                     unitPriceList, amountList, prodIdList, clientTerms, clientBStyle);
 

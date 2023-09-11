@@ -228,8 +228,8 @@ document.getElementById('btn-duplicate').addEventListener('click', function() {
   var invoiceId = document.getElementById('invoiceIdPlaceholder').textContent;
   var supdupInvoiceNumpName = document.getElementById('invoiceNumber').value;
   var dupPoNum = document.getElementById('poNumber').value;
-  var dupDate = document.getElementById('date').value;
-  
+  var dupDate = document.getElementById('si-date').value;
+  var dupDate2 = document.getElementById('date').value;
   // Check if any of the input fields are empty
   if (!supdupInvoiceNumpName || !dupPoNum || !dupDate) {
     // Display the error message within the modal
@@ -274,7 +274,7 @@ document.getElementById('btn-duplicate').addEventListener('click', function() {
       }
     }
   };
-  var params = 'd-invName=' + encodeURIComponent(supdupInvoiceNumpName) + '&d-poNum=' + encodeURIComponent(dupPoNum) + '&d-date=' + encodeURIComponent(dupDate);
+  var params = 'd-invName=' + encodeURIComponent(supdupInvoiceNumpName) + '&d-poNum=' + encodeURIComponent(dupPoNum) + '&d-date=' + encodeURIComponent(dupDate2)+ '&s-date=' + encodeURIComponent(dupDate);
   xhr.send(params);
 });
 
