@@ -1,0 +1,4 @@
+2023-09-10 03:38:26.081 [https-jsse-nio-192.168.1.2-8088-exec-3] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2023-09-10 03:38:26.083 [https-jsse-nio-192.168.1.2-8088-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2023-09-10 03:38:26.084 [https-jsse-nio-192.168.1.2-8088-exec-3] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 0 ms
+2023-09-10 03:38:26.110 [https-jsse-nio-192.168.1.2-8088-exec-3] INFO  p.a.I.controller.LoginController - User is not logged in. Redirecting to the login page.
