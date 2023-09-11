@@ -1,0 +1,31 @@
+<configuration>
+    <!-- Define the log file name pattern with a timestamp -->
+    <property name="logFileName" value="system_logs" />
+
+    <!-- Define the log file location -->
+    <property name="logFileLocation" value="F:/Dev/Client1/Logs/" />
+
+    <!-- Define the time-based rolling policy -->
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logFileLocation}${logFileName}.log</file>
+
+        <!-- Configure the rolling policy -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- Set the file name pattern with a timestamp -->
+            <fileNamePattern>${logFileLocation}${logFileName}_%d{yyyy-MM-dd_HH-mm}.log</fileNamePattern>
+
+            <!-- Define how often to rollover (every 30 minutes) -->
+            <maxHistory>48</maxHistory> <!-- Keep logs for 24 hours (2 logs per hour) -->
+        </rollingPolicy>
+
+        <!-- Specify the layout for log entries -->
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <!-- Set the root logger to use the ROLLING appender -->
+    <root level="INFO">
+        <appender-ref ref="ROLLING" />
+    </root>
+</configuration>

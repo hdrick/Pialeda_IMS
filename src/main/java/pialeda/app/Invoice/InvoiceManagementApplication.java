@@ -3,6 +3,7 @@ package pialeda.app.Invoice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import pialeda.app.Invoice.model.User;
 import pialeda.app.Invoice.repository.UserRepository;
@@ -13,6 +14,7 @@ import java.net.URI;
 import javax.annotation.PostConstruct;
 
 @SpringBootApplication
+@EnableScheduling
 public class InvoiceManagementApplication {
 	@Autowired
 	private UserRepository userRepository;

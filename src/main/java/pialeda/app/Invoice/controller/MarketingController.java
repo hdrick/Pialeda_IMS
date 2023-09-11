@@ -1,5 +1,8 @@
 package pialeda.app.Invoice.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -31,6 +34,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class MarketingController {
+    private static final Logger logger = LoggerFactory.getLogger(MarketingController.class);
     @Autowired
     private ClientService clientService;
     @Autowired
@@ -174,7 +178,7 @@ public class MarketingController {
 
 
     @PostMapping("/createCollectionReceipt")
-    public String createCollectionReceipt(@RequestParam("orNumber") long orNumber,
+    public String createCollectionReceipt(@RequestParam("crNumber") long crNumber,
                                         @RequestParam("amtDue") String amtDue,
                                         @RequestParam("ewt") String ewt,
                                         @RequestParam("total") String total,
@@ -187,14 +191,14 @@ public class MarketingController {
                                         RedirectAttributes redirectAttributes
         ) {
 
-      CollectionReceipt ifExist = collectionService.getCrNumByCrNum(orNumber);
+      CollectionReceipt ifExist = collectionService.getCrNumByCrNum(crNumber);
 
       if(ifExist !=null){
         boolean hideDivDuplicateCR = true;
         redirectAttributes.addFlashAttribute("hideDivDuplicateCR", hideDivDuplicateCR);
         return "redirect:/marketing-collectionreceipt";
       }else{
-        collectionService.createCR(orNumber, amtDue, ewt, total, cash, chckNo, cashierName, requestParams, collectionReceiptInfo);
+        collectionService.createCR(crNumber, amtDue, ewt, total, cash, chckNo, cashierName, requestParams, collectionReceiptInfo);
         boolean hideDivSuccessOR = true;
         redirectAttributes.addFlashAttribute("hideDivSuccessOR", hideDivSuccessOR);
         return "redirect:/marketing-collectionreceipt";
@@ -366,6 +370,30 @@ public class MarketingController {
         return result;
     }
 
+    /**
+     * Handles the submission of a form to update invoices.
+     *
+     * @param invoiceNumber       The invoice number.
+     * @param dateCreated         The date created.
+     * @param supplierName        The supplier name.
+     * @param clientName          The client name.
+     * @param clientContactPerson The client contact person.
+     * @param totalAmt            The total amount.
+     * @param addVat              The additional VAT.
+     * @param amtNetVat           The amount net of VAT.
+     * @param totalSalesVatInc    The total sales with VAT included.
+     * @param clientTerms         The client terms.
+     * @param clientBStyle        The client business style.
+     * @param qtyList             List of quantities.
+     * @param unitList            List of units.
+     * @param articlesList        List of articles.
+     * @param unitPriceList       List of unit prices.
+     * @param amountList          List of amounts.
+     * @param prodIdList          List of product IDs.
+     * @param model               The model.
+     * @param redirectAttributes  Redirect attributes.
+     * @return                    The redirection URL.
+     */
     @PostMapping("/submit-form")
     public String handleSubmitForm(
             @RequestParam("inv-num") String invoiceNumber,
@@ -388,20 +416,30 @@ public class MarketingController {
             Model model,
             RedirectAttributes redirectAttributes
     ) {
+        try {
+            boolean ifSuccess = invoiceService.updateInvoices(invoiceNumber, dateCreated, supplierName, clientName,
+                    clientContactPerson, totalAmt, addVat, amtNetVat, totalSalesVatInc, qtyList, unitList, articlesList,
+                    unitPriceList, amountList, prodIdList, clientTerms, clientBStyle);
 
-         boolean ifSuccess = invoiceService.updateInvoices(invoiceNumber, dateCreated, supplierName, clientName, 
-         clientContactPerson, totalAmt, addVat, amtNetVat, totalSalesVatInc, qtyList, unitList, articlesList, 
-         unitPriceList, amountList, prodIdList, clientTerms, clientBStyle);
+            if (ifSuccess) {
+                boolean hideDivSuccess = true;
+                redirectAttributes.addFlashAttribute("hideDivSuccess", hideDivSuccess);
+                return "redirect:/invoice-view";
+            } else {
+                boolean hideDivError = true;
+                redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
+                return "redirect:/invoice-view";
+            }
 
-         if(ifSuccess == true){
-             boolean hideDivSuccess = true;
-             redirectAttributes.addFlashAttribute("hideDivSuccess", hideDivSuccess);
-             return "redirect:/invoice-view";
-         }else{
-             boolean hideDivError = true;
-             redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
-             return "redirect:/invoice-view";
-         }
+        } catch (Exception e) {
+            // Log the error
+            logger.error("Error occurred while updating invoices: {}", e.getMessage(), e);
+
+            // Redirect with an error message
+            boolean hideDivError = true;
+            redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
+            return "redirect:/invoice-view";
+        }
     }
 
     // @GetMapping("/create-or")
@@ -597,11 +635,11 @@ public class MarketingController {
         if(result == true){
             boolean hideDivSuccess = true;
             redirectAttributes.addFlashAttribute("hideDivSuccess", hideDivSuccess);
-            return "redirect:/official-receipt-view/" + id;
+            return "redirect:/collection-receipt-view/" + id;
         }else{
             boolean hideDivError = true;
             redirectAttributes.addFlashAttribute("hideDivError", hideDivError);
-            return "redirect:/official-receipt-view/" + id;
+            return "redirect:/collection-receipt-view/" + id;
         } 
     }
 
@@ -795,6 +833,7 @@ public ResponseEntity<String> duplicateInvoice(@PathVariable("id") int id,
                                @RequestParam("d-invName") String invoiceNum,
                                @RequestParam("d-poNum") String poNum,
                                @RequestParam("d-date") String date,
+                               @RequestParam("s-date") String si_date,
                                RedirectAttributes redirectAttributes, Model model) {
   
     Invoice invoiceToDuplicate = invoiceRepository.findById(id);
@@ -804,7 +843,7 @@ public ResponseEntity<String> duplicateInvoice(@PathVariable("id") int id,
     double remainingLimit = supplierLimit - remainingLimitOfSupp;
 
      if(invoiceToDuplicate.getGrandTotal() <= remainingLimit){
-        String result = invoiceService.duplicateSpecificInvoice(id, invoiceNum, poNum, date);
+        String result = invoiceService.duplicateSpecificInvoice(id, invoiceNum, poNum, date, si_date);
         return ResponseEntity.ok(result);
      }else{
         String result2 = "supplierLimitExceed";

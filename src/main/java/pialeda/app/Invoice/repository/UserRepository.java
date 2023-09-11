@@ -6,7 +6,7 @@ import pialeda.app.Invoice.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    User findById(long id);
+    User findById(int id);
     User findByEmail(String email);
     User findTokenByEmail(String email);
 
